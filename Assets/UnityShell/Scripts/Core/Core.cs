@@ -34,7 +34,9 @@ public static class Core
 		}
 
 		Evaluator.Run("using UnityEngine;");
+		#if UNITY_EDITOR
 		Evaluator.Run("using UnityEditor;");
+		#endif
 	}
 
 	static public CompileResult Evaluate(string code)
@@ -82,6 +84,11 @@ public static class Core
 	static public string GetVars()
 	{
 		return Evaluator.GetVars();
+	}
+
+	static public string[] GetCompletions(string input, out string prefix)
+	{
+		return Evaluator.GetCompletions(input, out prefix);
 	}
 }
 
