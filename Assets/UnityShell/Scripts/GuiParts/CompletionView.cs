@@ -65,16 +65,16 @@ public class CompletionView : MonoBehaviour
 		scroll.verticalNormalizedPosition = scrollPos_;
 	}
 
-	public void UpdateCompletion(string[] completions, string prefix)
+	public void UpdateCompletion(CompletionInfo[] completions)
 	{
 		Reset();
 		if (completions.Length == 0) return;
-		foreach (var completion in completions.Reverse()) {
+		foreach (var info in completions.Reverse()) {
 			var itemObject = Instantiate(itemPrefab) as GameObject;
 			itemObject.transform.SetParent(content);
 			var item = itemObject.GetComponent<CompletionItem>();
-			item.SetCode(completion, prefix);
-			item.prefix = CompletionItem.Prefix.Type.MonoCSharp;
+			item.SetCode(info.code, info.prefix);
+			item.type = info.type;
 		}
 	}
 

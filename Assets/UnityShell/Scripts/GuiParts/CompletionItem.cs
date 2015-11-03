@@ -9,19 +9,13 @@ namespace UnityShell
 public class CompletionItem : MonoBehaviour
 {
 	[System.Serializable]
-	public struct Prefix
+	public struct Mark
 	{
-		public enum Type
-		{
-			MonoCSharp  = 0,
-			UserDefined = 1,
-			PreDefined  = 2,
-		}
+		public CompletionType type;
 		public string text;
-		public Type type;
 		public Color32 color;
 
-		public Prefix(Type type, string text, Color32 color)
+		public Mark(CompletionType type, string text, Color32 color)
 		{
 			this.type  = type;
 			this.text  = text;
@@ -29,28 +23,27 @@ public class CompletionItem : MonoBehaviour
 		}
 	}
 
-	private static readonly List<Prefix> prefixes_ = new List<Prefix>() {
-		new Prefix(Prefix.Type.MonoCSharp,  "M", new Color32(  0, 255,   0, 255)),
-		new Prefix(Prefix.Type.UserDefined, "U", new Color32(255,   0,   0, 255)),
-		new Prefix(Prefix.Type.PreDefined,  "P", new Color32(  0,   0, 255, 255)),
+	private static readonly List<Mark> marks_ = new List<Mark>() {
+		new Mark(CompletionType.Mono,    "M", new Color32(  0, 255,   0, 255)),
+		new Mark(CompletionType.Command, "C", new Color32(255,   0,   0, 255)),
 	};
 
-	public Text prefixText;
+	public Text markText;
 	public Text completionText;
 
 	public Color32 hitTextColor       = Color.white;
 	public Color32 bgColor            = Color.black;
 	public Color32 highlightedBgColor = new Color32(30, 30, 30, 200);
 
-	private Prefix.Type prefix_;
-	public Prefix.Type prefix
+	private CompletionType type_;
+	public CompletionType type
 	{
-		get { return prefix_;  }
+		get { return type_;  }
 		set {
-			prefix_ = value;
-			var info = prefixes_.Find(x => x.type == value);
-			prefixText.text  = info.text;
-			prefixText.color = info.color;
+			type_ = value;
+			var info = marks_.Find(x => x.type == value);
+			markText.text  = info.text;
+			markText.color = info.color;
 		}
 	}
 

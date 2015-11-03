@@ -14,6 +14,8 @@ namespace UnityShell
 public sealed class CommandAttribute : Attribute
 {
     private string description_;
+	public string command;
+
     public string description {
 		get { return description_; }
 		private set { description_ = value; }
@@ -25,23 +27,25 @@ public sealed class CommandAttribute : Attribute
 	}
 }
 
+public class CommandInfo
+{
+	public string methodName;
+	public string className;
+	public string description;
+	public string command;
+
+	public CommandInfo(string className, string methodName, string description, string command)
+	{
+		this.className   = className;
+		this.methodName  = methodName;
+		this.description = description;
+		this.command     = string.IsNullOrEmpty(command) ? methodName : command;
+	}
+}
+
 public static class Attributes
 {
-	public struct CommandInfo
-	{
-		public string methodName;
-		public string className;
-		public string description;
-
-		public CommandInfo(string className, string methodName, string description)
-		{
-			this.className   = className;
-			this.methodName  = methodName;
-			this.description = description;
-		}
-	}
-
-	static public List<CommandInfo> GetAllCommands()
+	static public CommandInfo[] GetAllCommands()
 	{
 		return System.AppDomain.CurrentDomain.GetAssemblies()
 			.SelectMany(asm => asm.GetTypes())
@@ -51,10 +55,14 @@ public static class Attributes
 					.GetCustomAttributes(typeof(CommandAttribute), false)
 					.Cast<CommandAttribute>()
 					.Select(attr => new CommandInfo(
-						type.Name,
+						type.FullName,
 						method.Name,
-						string.Format("{0} ({1}.{2})", attr.description, type.Name, method.Name)))))
-			.ToList();
+						string.Format("{0} ({1}.{2})",
+							attr.description,
+							type.FullName,
+							method.Name),
+						attr.command))))
+			.ToArray();
 	}
 }
 

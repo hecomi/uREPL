@@ -16,6 +16,7 @@ public class Gui : MonoBehaviour
 
 	public InputField input;
 	public Text output;
+	private Canvas canvas_;
 
 	public CompletionView completionView;
 	public float completionTimer = 0.5f;
@@ -27,7 +28,7 @@ public class Gui : MonoBehaviour
 	private string completionPrefix_ = "";
 
 	private Thread completionThread_;
-	private string[] completions_;
+	private CompletionInfo[] completions_;
 
 	private enum KeyOption {
 		None  = 0,
@@ -42,6 +43,7 @@ public class Gui : MonoBehaviour
 	void Awake()
 	{
 		instance = this;
+		canvas_ = GetComponent<Canvas>();
 	}
 
 	void Start()
@@ -65,6 +67,16 @@ public class Gui : MonoBehaviour
 		}
 
 		UpdateCompletion();
+	}
+
+	static public void Open()
+	{
+		instance.canvas_.enabled = true;
+	}
+
+	static public void Close()
+	{
+		instance.canvas_.enabled = false;
 	}
 
 	private void Prev()
@@ -219,7 +231,7 @@ public class Gui : MonoBehaviour
 
 		// update completion view if new completions set.
 		if (completions_ != null && completions_.Length > 0) {
-			completionView.UpdateCompletion(completions_, completionPrefix_);
+			completionView.UpdateCompletion(completions_);
 			completions_ = null;
 		}
 	}

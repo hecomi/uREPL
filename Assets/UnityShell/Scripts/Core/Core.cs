@@ -11,14 +11,36 @@ public class CompileResult
 {
 	public enum Type { Success, Error, Partial }
 
-	public Type   type  = Type.Success;
+	public Type type = Type.Success;
 	public string code  = null;
 	public string error = null;
 	public object value = null;
 }
 
+public enum CompletionType
+{
+	Mono    = 0,
+	Command = 1,
+}
+
+public struct CompletionInfo
+{
+	public CompletionType type;
+	public string prefix;
+	public string code;
+
+	public CompletionInfo(CompletionType type, string prefix, string code)
+	{
+		this.type = type;
+		this.prefix = prefix;
+		this.code = code;
+	}
+}
+
 public static class Core
 {
+	static private CommandInfo[] commands;
+
 	[RuntimeInitializeOnLoadMethod]
 	static public void Initialize()
 	{
@@ -37,6 +59,8 @@ public static class Core
 		// #if UNITY_EDITOR
 		// Evaluator.Run("using UnityEditor;");
 		// #endif
+
+		commands = Attributes.GetAllCommands();
 	}
 
 	static public CompileResult Evaluate(string code)
@@ -44,6 +68,13 @@ public static class Core
 		var result = new CompileResult();
 		result.code = code;
 
+		// find commands at first and if found, expand it.
+		var command = commands.FirstOrDefault(x => x.command == code.Replace(";", ""));
+		if (command != null) {
+			code = string.Format("{0}.{1}();", command.className, command.methodName);
+		}
+
+		// if not match, eval the code using Mono.
 		object ret = null;
 		bool hasReturnValue = false;
 
@@ -86,9 +117,21 @@ public static class Core
 		return Evaluator.GetVars();
 	}
 
-	static public string[] GetCompletions(string input, out string prefix)
+	static public CompletionInfo[] GetCompletions(string input, out string prefix)
 	{
-		return Evaluator.GetCompletions(input, out prefix);
+		// get context-based completions using Mono.
+		var completions = Evaluator.GetCompletions(input, out prefix);
+		var _prefix = prefix;
+		var monoCompletions = completions
+			.Select(x => new CompletionInfo(CompletionType.Mono, _prefix, x));
+
+		// get functions set a command attribute.
+		var commandCompletions = commands
+			.Where(x => x.command.IndexOf(input) == 0)
+			.Select(x => new CompletionInfo(CompletionType.Command, _prefix, x.command.Replace(_prefix, "")));
+
+		return monoCompletions.Concat(commandCompletions)
+			.OrderBy(x => x.code).ToArray();
 	}
 }
 
