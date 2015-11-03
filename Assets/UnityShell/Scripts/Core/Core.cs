@@ -34,9 +34,9 @@ public static class Core
 		}
 
 		Evaluator.Run("using UnityEngine;");
-		#if UNITY_EDITOR
-		Evaluator.Run("using UnityEditor;");
-		#endif
+		// #if UNITY_EDITOR
+		// Evaluator.Run("using UnityEditor;");
+		// #endif
 	}
 
 	static public CompileResult Evaluate(string code)
