@@ -12,12 +12,14 @@ static public class Meta
 	// Components
 	// --------------------------------------------------------------------------------
 
+	[UnityShell.Command("Get all components of given GameObject.")]
 	static public Component[] GetAllComponents(GameObject instance)
 	{
 		return instance.GetComponents<Component>();
 	}
 
 
+	[UnityShell.Command("Get names of all components attached to given GameObject.")]
 	static public string[] GetAllComponentsNames(GameObject instance)
 	{
 		return GetAllComponents(instance).Select(x => x.GetType().Name).ToArray();

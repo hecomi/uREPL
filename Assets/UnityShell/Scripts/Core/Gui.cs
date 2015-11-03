@@ -36,8 +36,8 @@ public class Gui : MonoBehaviour
 		Alt   = 1000000000
 	};
 	private Dictionary<int, int> keyPressingCounter_ = new Dictionary<int, int>();
-	public int continuousInputStartDelay = 30;
-	public int continuousInputFrameInterval = 5;
+	public int holdInputStartDelay = 30;
+	public int holdInputFrameInterval = 5;
 
 	void Awake()
 	{
@@ -129,7 +129,7 @@ public class Gui : MonoBehaviour
 
 		return
 			cnt == 1 ||
-			(cnt >= continuousInputStartDelay && cnt % continuousInputFrameInterval == 0);
+			(cnt >= holdInputStartDelay && cnt % holdInputFrameInterval == 0);
 	}
 
 	private void CheckCommands()
