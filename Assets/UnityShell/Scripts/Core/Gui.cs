@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
@@ -27,6 +28,16 @@ public class Gui : MonoBehaviour
 
 	private Thread completionThread_;
 	private string[] completions_;
+
+	private enum KeyOption {
+		None  = 0,
+		Ctrl  = 1000,
+		Shift = 1000000,
+		Alt   = 1000000000
+	};
+	private Dictionary<int, int> keyPressingCounter_ = new Dictionary<int, int>();
+	public int continuousInputStartDelay = 30;
+	public int continuousInputFrameInterval = 5;
 
 	void Awake()
 	{
@@ -79,15 +90,57 @@ public class Gui : MonoBehaviour
 		input.MoveTextEnd(false);
 	}
 
+	private bool CheckKey(KeyCode keyCode, KeyOption option = KeyOption.None)
+	{
+		var key = (int)keyCode + (int)option;
+		if (!keyPressingCounter_.ContainsKey(key)) {
+			keyPressingCounter_.Add(key, 0);
+		}
+
+		bool isOptionAcceptable = false;
+		switch (option) {
+			case KeyOption.None:
+				isOptionAcceptable = true;
+				break;
+			case KeyOption.Ctrl:
+				isOptionAcceptable =
+					Input.GetKey(KeyCode.LeftControl) ||
+					Input.GetKey(KeyCode.RightControl);
+				break;
+			case KeyOption.Shift:
+				isOptionAcceptable =
+					Input.GetKey(KeyCode.LeftShift) ||
+					Input.GetKey(KeyCode.RightShift);
+				break;
+			case KeyOption.Alt:
+				isOptionAcceptable =
+					Input.GetKey(KeyCode.LeftAlt) ||
+					Input.GetKey(KeyCode.RightAlt);
+				break;
+		}
+
+		var cnt = keyPressingCounter_[key];
+		if (Input.GetKey(keyCode) && isOptionAcceptable) {
+			++cnt;
+		} else {
+			cnt = 0;
+		}
+		keyPressingCounter_[key] = cnt;
+
+		return
+			cnt == 1 ||
+			(cnt >= continuousInputStartDelay && cnt % continuousInputFrameInterval == 0);
+	}
+
 	private void CheckCommands()
 	{
-		if (Input.GetKeyDown(KeyCode.UpArrow)) {
+		if (CheckKey(KeyCode.UpArrow)) {
 			Prev();
 		}
-		if (Input.GetKeyDown(KeyCode.DownArrow)) {
+		if (CheckKey(KeyCode.DownArrow)) {
 			Next();
 		}
-		if (Input.GetKeyDown(KeyCode.Tab)) {
+		if (CheckKey(KeyCode.Tab)) {
 			isCompletionStopped_ = false;
 			if (isComplementing_) {
 				DoCompletion();
@@ -95,54 +148,52 @@ public class Gui : MonoBehaviour
 				SetCompletions();
 			}
 		}
-		if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) {
+		if (CheckKey(KeyCode.Return) || CheckKey(KeyCode.KeypadEnter)) {
 			if (isComplementing_) {
 				DoCompletion();
 			} else {
 				OnSubmit(input.text);
 			}
 		}
-		if (Input.GetKeyDown(KeyCode.Escape)) {
+		if (CheckKey(KeyCode.Escape)) {
 			StopCompletion();
 		}
 	}
 
 	void CheckEmacsLikeCommands()
 	{
-		if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) {
-			if (Input.GetKeyDown(KeyCode.P)) {
-				Prev();
+		if (CheckKey(KeyCode.P, KeyOption.Ctrl)) {
+			Prev();
+		}
+		if (CheckKey(KeyCode.N, KeyOption.Ctrl)) {
+			Next();
+		}
+		if (CheckKey(KeyCode.F, KeyOption.Ctrl)) {
+			input.caretPosition = Mathf.Min(input.caretPosition + 1, input.text.Length);
+		}
+		if (CheckKey(KeyCode.B, KeyOption.Ctrl)) {
+			input.caretPosition = Mathf.Max(input.caretPosition - 1, 0);
+		}
+		if (CheckKey(KeyCode.A, KeyOption.Ctrl)) {
+			input.MoveTextStart(false);
+		}
+		if (CheckKey(KeyCode.E, KeyOption.Ctrl)) {
+			input.MoveTextEnd(false);
+		}
+		if (CheckKey(KeyCode.H, KeyOption.Ctrl)) {
+			if (input.caretPosition > 0) {
+				input.text = input.text.Remove(input.caretPosition - 1, 1);
+				--input.caretPosition;
 			}
-			if (Input.GetKeyDown(KeyCode.N)) {
-				Next();
+		}
+		if (CheckKey(KeyCode.D, KeyOption.Ctrl)) {
+			if (input.caretPosition < input.text.Length) {
+				input.text = input.text.Remove(input.caretPosition, 1);
 			}
-			if (Input.GetKeyDown(KeyCode.F)) {
-				input.caretPosition = Mathf.Min(input.caretPosition + 1, input.text.Length);
-			}
-			if (Input.GetKeyDown(KeyCode.B)) {
-				input.caretPosition = Mathf.Max(input.caretPosition - 1, 0);
-			}
-			if (Input.GetKeyDown(KeyCode.A)) {
-				input.MoveTextStart(false);
-			}
-			if (Input.GetKeyDown(KeyCode.E)) {
-				input.MoveTextEnd(false);
-			}
-			if (Input.GetKeyDown(KeyCode.H)) {
-				if (input.caretPosition > 0) {
-					input.text = input.text.Remove(input.caretPosition - 1, 1);
-					--input.caretPosition;
-				}
-			}
-			if (Input.GetKeyDown(KeyCode.D)) {
-				if (input.caretPosition < input.text.Length) {
-					input.text = input.text.Remove(input.caretPosition, 1);
-				}
-			}
-			if (Input.GetKeyDown(KeyCode.K)) {
-				if (input.caretPosition < input.text.Length) {
-					input.text = input.text.Remove(input.caretPosition);
-				}
+		}
+		if (CheckKey(KeyCode.K, KeyOption.Ctrl)) {
+			if (input.caretPosition < input.text.Length) {
+				input.text = input.text.Remove(input.caretPosition);
 			}
 		}
 	}
