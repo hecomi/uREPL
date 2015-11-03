@@ -12,11 +12,11 @@ namespace UnityShell
 public class Gui : MonoBehaviour
 {
 	static public Gui instance;
-	private History history_ = new History();
+	public KeyCode openKey = KeyCode.F1;
+	private bool isOpend_ = false;
 
 	public InputField input;
 	public Text output;
-	private Canvas canvas_;
 
 	public CompletionView completionView;
 	public float completionTimer = 0.5f;
@@ -26,6 +26,8 @@ public class Gui : MonoBehaviour
 
 	private string partial_ = "";
 	private string completionPrefix_ = "";
+
+	private History history_ = new History();
 
 	private Thread completionThread_;
 	private CompletionInfo[] completions_;
@@ -43,7 +45,7 @@ public class Gui : MonoBehaviour
 	void Awake()
 	{
 		instance = this;
-		canvas_ = GetComponent<Canvas>();
+		isOpend_ = GetComponent<Canvas>().enabled;
 	}
 
 	void Start()
@@ -54,6 +56,7 @@ public class Gui : MonoBehaviour
 
 	void OnDestroy()
 	{
+		instance = null;
 		AbortCompletion();
 		UnregisterListeners();
 		history_.Save();
@@ -61,22 +64,30 @@ public class Gui : MonoBehaviour
 
 	void Update()
 	{
-		if (input.isFocused) {
-			CheckCommands();
-			CheckEmacsLikeCommands();
+		if (Input.GetKeyDown(openKey)) {
+			Open();
 		}
 
-		UpdateCompletion();
+		if (isOpend_) {
+			if (input.isFocused) {
+				CheckCommands();
+				CheckEmacsLikeCommands();
+			}
+			UpdateCompletion();
+		}
 	}
 
-	static public void Open()
+	public void Open()
 	{
-		instance.canvas_.enabled = true;
+		GetComponent<Canvas>().enabled = true;
+		RunOnNextFrame(() => input.Select());
+		isOpend_ = true;
 	}
 
-	static public void Close()
+	public void Close()
 	{
-		instance.canvas_.enabled = false;
+		GetComponent<Canvas>().enabled = false;
+		isOpend_ = false;
 	}
 
 	private void Prev()
@@ -404,6 +415,18 @@ public class Gui : MonoBehaviour
 		}
 
 		isComplementing_ = false;
+	}
+
+	private void RunOnNextFrame(System.Action func)
+	{
+		StartCoroutine(_RunOnNextFrame(func));
+	}
+
+	private IEnumerator _RunOnNextFrame(System.Action func)
+	{
+		yield return new WaitForEndOfFrame();
+		yield return new WaitForEndOfFrame();
+		func();
 	}
 }
 

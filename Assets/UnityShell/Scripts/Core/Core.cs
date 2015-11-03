@@ -117,10 +117,25 @@ public static class Core
 		return Evaluator.GetVars();
 	}
 
+	static private string[] GetMonoCompletions(string input, out string prefix)
+	{
+		var completions = Evaluator.GetCompletions(input, out prefix);
+		if (completions == null) {
+			// support generic type completion.
+			var i1 = input.LastIndexOf(">");
+			var i2 = input.LastIndexOf("<");
+			if (i1 < i2 && i2 < input.Length) {
+				input = input.Substring(i2 + 1);
+				completions = Evaluator.GetCompletions(input, out prefix);
+			}
+		}
+		return completions;
+	}
+
 	static public CompletionInfo[] GetCompletions(string input, out string prefix)
 	{
 		// get context-based completions using Mono.
-		var completions = Evaluator.GetCompletions(input, out prefix);
+		var completions = GetMonoCompletions(input, out prefix);
 		var _prefix = prefix;
 		var monoCompletions = completions
 			.Select(x => new CompletionInfo(CompletionType.Mono, _prefix, x));

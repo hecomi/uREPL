@@ -9,13 +9,13 @@ static public class Commands
 	[Command("Close console.", command = "quit")]
 	static public void Quit()
 	{
-		Gui.Close();
+		Gui.instance.Close();
 	}
 
 	[Command("Open console.", command = "open")]
 	static public void Open()
 	{
-		Gui.Open();
+		Gui.instance.Open();
 	}
 }
 
