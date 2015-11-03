@@ -11,12 +11,15 @@ namespace UnityShell
 
 public class Gui : MonoBehaviour
 {
+	private const int resultMaxNum = 100;
+
 	static public Gui instance;
 	public KeyCode openKey = KeyCode.F1;
 	private bool isOpend_ = false;
 
 	public InputField input;
-	public Text output;
+	public Transform output;
+	public GameObject resultItemViewPrefab;
 
 	public CompletionView completionView;
 	public float completionTimer = 0.5f;
@@ -387,29 +390,40 @@ public class Gui : MonoBehaviour
 			code += ";";
 		}
 
-		// TODO: insert pre-defined commands evaluation here.
-
 		var result = Core.Evaluate(code);
+		ResultItemView view = null;
+		if (isPartial) {
+			view = output.GetChild(output.childCount - 1).GetComponent<ResultItemView>();
+		} else {
+			view = Instantiate(resultItemViewPrefab).GetComponent<ResultItemView>();
+			view.transform.SetParent(output);
+		}
+		if (output.childCount > resultMaxNum) {
+			Destroy(output.GetChild(0).gameObject);
+		}
 
 		switch (result.type) {
 			case CompileResult.Type.Success: {
 				input.text = "";
 				history_.Add(result.code);
 				history_.Reset();
-				output.text += string.Format("<color=white>{0}</color>\n", isPartial ? text : result.code);
-				output.text += string.Format("> <color=green>{0}</color>\n", result.value);
+				view.type   = CompileResult.Type.Success;
+				view.input  = result.code;
+				view.output = result.value.ToString();
 				break;
 			}
 			case CompileResult.Type.Partial: {
 				input.text = "";
 				partial_ += text;
-				output.text += string.Format("<color=white>{0}</color>\n", text);
-				output.text += string.Format(">> ", text);
+				view.type   = CompileResult.Type.Partial;
+				view.input  = result.code;
+				view.output = "...";
 				break;
 			}
 			case CompileResult.Type.Error: {
-				output.text += string.Format("<color=white>{0}</color>\n", result.code);
-				output.text += string.Format("> <color=red>{0}</color>\n", result.error);
+				view.type   = CompileResult.Type.Error;
+				view.input  = result.code;
+				view.output = result.error;
 				break;
 			}
 		}
