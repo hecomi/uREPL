@@ -131,6 +131,7 @@ public class Gui : MonoBehaviour
 			if (Input.GetKeyDown(KeyCode.H)) {
 				if (input.caretPosition > 0) {
 					input.text = input.text.Remove(input.caretPosition - 1, 1);
+					--input.caretPosition;
 				}
 			}
 			if (Input.GetKeyDown(KeyCode.D)) {
