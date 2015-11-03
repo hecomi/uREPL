@@ -8,8 +8,8 @@ namespace UnityShell
 
 public class History
 {
-	private const string key = "unityshell_command_history";
-	private const string separator = "<>";
+	private const string key = "unityshell-history";
+	private const string separator = "\r\n";
 	private const int maxNum = 100;
 
 	private List<string> codes_ = new List<string>();

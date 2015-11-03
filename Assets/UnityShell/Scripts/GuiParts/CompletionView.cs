@@ -9,7 +9,7 @@ namespace UnityShell
 public class CompletionView : MonoBehaviour
 {
 	private const string contentGameObjectName = "Content";
-	private const float scrollDamping = 0.3f;
+	private const float scrollDamping = 0.4f;
 
 	public GameObject itemPrefab;
 	public Vector3 offset = new Vector3(0, 10, 0);
@@ -18,6 +18,7 @@ public class CompletionView : MonoBehaviour
 	private RectTransform rect;
 
 	private int currentIndex_ = 0;
+	private float scrollPos_ = 0;
 
 	public int itemCount
 	{
@@ -52,14 +53,16 @@ public class CompletionView : MonoBehaviour
 
 	void Update()
 	{
-		var targetScrollPos = (itemCount <= 1) ? 0f : 1f * currentIndex_ / (itemCount - 1);
-		var scrollPos = scroll.verticalNormalizedPosition;
-		scrollPos += (targetScrollPos - scrollPos) * scrollDamping;
-		scroll.verticalNormalizedPosition = scrollPos;
-
 		for (int i = 0; i < itemCount; ++i) {
 			content.GetChild(i).GetComponent<CompletionItem>().SetHighlight(i == itemIndex);
 		}
+	}
+
+	void LateUpdate()
+	{
+		var targetScrollPos = (itemCount <= 1) ? 0f : 1f * currentIndex_ / (itemCount - 1);
+		scrollPos_ += (targetScrollPos - scrollPos_) * scrollDamping;
+		scroll.verticalNormalizedPosition = scrollPos_;
 	}
 
 	public void UpdateCompletion(string[] completions, string prefix)
@@ -69,7 +72,9 @@ public class CompletionView : MonoBehaviour
 		foreach (var completion in completions.Reverse()) {
 			var itemObject = Instantiate(itemPrefab) as GameObject;
 			itemObject.transform.SetParent(content);
-			itemObject.GetComponent<CompletionItem>().SetCode(completion, prefix);
+			var item = itemObject.GetComponent<CompletionItem>();
+			item.SetCode(completion, prefix);
+			item.prefix = CompletionItem.Prefix.Type.MonoCSharp;
 		}
 	}
 
@@ -106,7 +111,8 @@ public class CompletionView : MonoBehaviour
 	{
 		RemoveAllChildren();
 		currentIndex_ = 0;
-		scroll.verticalNormalizedPosition = 0f;
+		scrollPos_ = 0;
+		scroll.verticalNormalizedPosition = scrollPos_;
 	}
 }
 

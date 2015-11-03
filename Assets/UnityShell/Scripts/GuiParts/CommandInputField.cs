@@ -10,27 +10,24 @@ public class CommandInputField : InputField
 		if (!isFocused) return;
 
 		bool consumedEvent = false;
-		Event e = new Event();
+		var e = new Event();
 		while (Event.PopEvent(e)) {
 			if (e.rawType == EventType.KeyDown) {
 				consumedEvent = true;
+				// Skip
+				switch (e.keyCode) {
+					case KeyCode.Return:
+					case KeyCode.KeypadEnter:
+					case KeyCode.Escape:
+					case KeyCode.UpArrow:
+					case KeyCode.DownArrow:
+						continue;
+				}
 				var shouldContinue = KeyPressed(e);
 				if (shouldContinue == EditState.Finish) {
-					// DeactivateInputField();
+					DeactivateInputField();
 					break;
 				}
-			}
-
-			switch (e.type) {
-				case EventType.ValidateCommand:
-				case EventType.ExecuteCommand:
-					switch (e.commandName) {
-						case "SelectAll":
-							SelectAll();
-							consumedEvent = true;
-							break;
-					}
-					break;
 			}
 		}
 

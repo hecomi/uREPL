@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Linq;
+using System.Threading;
 
 namespace UnityShell
 {
@@ -24,6 +25,9 @@ public class Gui : MonoBehaviour
 	private string partial_ = "";
 	private string completionPrefix_ = "";
 
+	private Thread completionThread_;
+	private string[] completions_;
+
 	void Awake()
 	{
 		instance = this;
@@ -37,6 +41,7 @@ public class Gui : MonoBehaviour
 
 	void OnDestroy()
 	{
+		AbortCompletion();
 		UnregisterListeners();
 		history_.Save();
 	}
@@ -51,26 +56,36 @@ public class Gui : MonoBehaviour
 		UpdateCompletion();
 	}
 
-	void CheckCommands()
+	private void Prev()
+	{
+		if (isComplementing_) {
+			completionView.Next();
+		} else {
+			if (history_.IsFirst()) history_.SetInputting(input.text);
+			input.text = history_.Prev();
+			isCompletionStopped_ = true;
+		}
+		input.MoveTextEnd(false);
+	}
+
+	private void Next()
+	{
+		if (isComplementing_) {
+			completionView.Prev();
+		} else {
+			input.text = history_.Next();
+			isCompletionStopped_ = true;
+		}
+		input.MoveTextEnd(false);
+	}
+
+	private void CheckCommands()
 	{
 		if (Input.GetKeyDown(KeyCode.UpArrow)) {
-			if (isComplementing_) {
-				completionView.Next();
-				input.MoveTextEnd(false);
-			} else {
-				if (history_.IsFirst()) history_.SetInputting(input.text);
-				input.text = history_.Prev();
-				input.MoveTextEnd(false);
-			}
+			Prev();
 		}
 		if (Input.GetKeyDown(KeyCode.DownArrow)) {
-			if (isComplementing_) {
-				completionView.Prev();
-				input.MoveTextEnd(false);
-			} else {
-				input.text = history_.Next();
-				input.MoveTextEnd(false);
-			}
+			Next();
 		}
 		if (Input.GetKeyDown(KeyCode.Tab)) {
 			isCompletionStopped_ = false;
@@ -96,21 +111,10 @@ public class Gui : MonoBehaviour
 	{
 		if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) {
 			if (Input.GetKeyDown(KeyCode.P)) {
-				if (isComplementing_) {
-					completionView.Next();
-				} else {
-					if (history_.IsFirst()) history_.SetInputting(input.text);
-					input.text = history_.Prev();
-					input.MoveTextEnd(false);
-				}
+				Prev();
 			}
 			if (Input.GetKeyDown(KeyCode.N)) {
-				if (isComplementing_) {
-					completionView.Prev();
-				} else {
-					input.text = history_.Next();
-					input.MoveTextEnd(false);
-				}
+				Next();
 			}
 			if (Input.GetKeyDown(KeyCode.F)) {
 				input.caretPosition = Mathf.Min(input.caretPosition + 1, input.text.Length);
@@ -144,9 +148,15 @@ public class Gui : MonoBehaviour
 
 	private void UpdateCompletion()
 	{
+		elapsedTimeFromLastInput_ += Time.deltaTime;
+
+		// stop completion thread if it is running to avoid hang.
+		if (elapsedTimeFromLastInput_ > completionTimer + 0.5f /* margin */) {
+			AbortCompletion();
+		}
+
 		// show completion view after waiting for completionTimer.
-		if (!isCompletionStopped_ && !isComplementing_) {
-			elapsedTimeFromLastInput_ += Time.deltaTime;
+		if (!isCompletionStopped_ && !isComplementing_ && !IsCompletionThreadAlive()) {
 			if (elapsedTimeFromLastInput_ >= completionTimer) {
 				SetCompletions();
 			}
@@ -154,17 +164,30 @@ public class Gui : MonoBehaviour
 
 		// update completion view position.
 		completionView.position = GetCompletionPosition();
+
+		// update completion view if new completions set.
+		if (completions_ != null && completions_.Length > 0) {
+			completionView.UpdateCompletion(completions_, completionPrefix_);
+			completions_ = null;
+		}
 	}
 
 	private void SetCompletions()
 	{
 		if (string.IsNullOrEmpty(input.text)) return;
 
-		var completions = Core.GetCompletions(input.text, out completionPrefix_);
-		if (completions != null && completions.Length > 0) {
-			completionView.UpdateCompletion(completions, completionPrefix_);
-			isComplementing_ = true;
+		// avoid undesired hang caused by Mono.CSharp.GetCompletions,
+		// run it on anothre thread and stop if hang in UpdateCompletion().
+		if (completionThread_ != null) {
+			completionThread_.Abort();
 		}
+		completionThread_ = new Thread(() => {
+			completions_ = Core.GetCompletions(input.text, out completionPrefix_);
+			if (completions_ != null && completions_.Length > 0) {
+				isComplementing_ = true;
+			}
+		});
+		completionThread_.Start();
 	}
 
 	private void DoCompletion()
@@ -192,6 +215,18 @@ public class Gui : MonoBehaviour
 		isCompletionStopped_ = true;
 		completionView.Reset();
 		// completionView.Hide();
+	}
+
+	private bool IsCompletionThreadAlive()
+	{
+		return completionThread_ != null && completionThread_.IsAlive;
+	}
+
+	private void AbortCompletion()
+	{
+		if (IsCompletionThreadAlive()) {
+			completionThread_.Abort();
+		}
 	}
 
 	private void RegisterListeners()
@@ -222,7 +257,7 @@ public class Gui : MonoBehaviour
 
 	public Vector3 GetCompletionPosition()
 	{
-		if (input.isFocused) {
+		if (input.isFocused && input.caretPosition == input.text.Length) {
 			var generator = input.textComponent.cachedTextGenerator;
 			if (input.caretPosition < generator.characters.Count) {
 				var len = input.text.Length;
@@ -244,17 +279,26 @@ public class Gui : MonoBehaviour
 
 	private void OnValueChanged(string text)
 	{
+		text = text.Replace("\n", "");
+		text = text.Replace("\r", "");
+		input.text = text;
 		ResetCompletion();
 	}
 
 	private void OnSubmit(string text)
 	{
+		text = text.Trim();
+
 		// do nothing if following states:
 		// - the input text is empty.
 		// - receive the endEdit event without the enter key (e.g. lost focus).
 		// - the completion box is active.
 		if (string.IsNullOrEmpty(text) || !IsEnterPressing() || isComplementing_) return;
 
+		// stop completion to avoid hang.
+		AbortCompletion();
+
+		// use the partial code previously input if it exists.
 		var isPartial = false;
 		var code = text;
 		if (!string.IsNullOrEmpty(partial_)) {
@@ -263,11 +307,13 @@ public class Gui : MonoBehaviour
 			isPartial = true;
 		}
 
+		// auto-complete semicolon.
 		if ((code.Substring(code.Length - 1) != ";") && !IsInputContinuously()) {
 			code += ";";
 		}
 
 		// TODO: insert pre-defined commands evaluation here.
+
 		var result = Core.Evaluate(code);
 
 		switch (result.type) {
@@ -293,8 +339,6 @@ public class Gui : MonoBehaviour
 			}
 		}
 
-		input.ActivateInputField();
-		input.Select();
 		isComplementing_ = false;
 	}
 }

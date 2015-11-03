@@ -77,7 +77,7 @@ public static class Core
 		}
 
 		result.type = CompileResult.Type.Success;
-		result.value = hasReturnValue ? ret : "null";
+		result.value = (hasReturnValue && ret != null) ? ret : "null";
 		return result;
 	}
 

@@ -13,10 +13,9 @@ public class CompletionItem : MonoBehaviour
 	{
 		public enum Type
 		{
-			Field    = 0,
-			Method   = 1,
-			Property = 2,
-			Local    = 3
+			MonoCSharp  = 0,
+			UserDefined = 1,
+			PreDefined  = 2,
 		}
 		public string text;
 		public Type type;
@@ -30,11 +29,10 @@ public class CompletionItem : MonoBehaviour
 		}
 	}
 
-	public List<Prefix> prefixes = new List<Prefix>() {
-		new Prefix(Prefix.Type.Field,    "F", new Color32(  0,   0, 255, 255)),
-		new Prefix(Prefix.Type.Method,   "M", new Color32(255,   0,   0, 255)),
-		new Prefix(Prefix.Type.Property, "P", new Color32(  0, 255,   0, 255)),
-		new Prefix(Prefix.Type.Local,    "L", new Color32(128, 128, 128, 255)),
+	private static readonly List<Prefix> prefixes_ = new List<Prefix>() {
+		new Prefix(Prefix.Type.MonoCSharp,  "M", new Color32(  0, 255,   0, 255)),
+		new Prefix(Prefix.Type.UserDefined, "U", new Color32(255,   0,   0, 255)),
+		new Prefix(Prefix.Type.PreDefined,  "P", new Color32(  0,   0, 255, 255)),
 	};
 
 	public Text prefixText;
@@ -50,7 +48,7 @@ public class CompletionItem : MonoBehaviour
 		get { return prefix_;  }
 		set {
 			prefix_ = value;
-			var info = prefixes.Find(x => x.type == value);
+			var info = prefixes_.Find(x => x.type == value);
 			prefixText.text  = info.text;
 			prefixText.color = info.color;
 		}
