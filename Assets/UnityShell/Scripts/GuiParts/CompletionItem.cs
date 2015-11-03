@@ -26,6 +26,7 @@ public class CompletionItem : MonoBehaviour
 	private static readonly List<Mark> marks_ = new List<Mark>() {
 		new Mark(CompletionType.Mono,    "M", new Color32(  0, 255,   0, 255)),
 		new Mark(CompletionType.Command, "C", new Color32(255,   0,   0, 255)),
+		new Mark(CompletionType.Path,    "P", new Color32(  0,   0, 255, 255)),
 	};
 
 	public Text markText;
@@ -47,7 +48,7 @@ public class CompletionItem : MonoBehaviour
 		}
 	}
 
-	public string code_;
+	private string code_;
 	public string code
 	{
 		get { return code_;  }

@@ -21,6 +21,7 @@ public enum CompletionType
 {
 	Mono    = 0,
 	Command = 1,
+	Path    = 2,
 }
 
 public struct CompletionInfo
@@ -40,6 +41,7 @@ public struct CompletionInfo
 public static class Core
 {
 	static private CommandInfo[] commands;
+	static private string[] allGameObjectPaths;
 
 	[RuntimeInitializeOnLoadMethod]
 	static public void Initialize()
@@ -60,7 +62,16 @@ public static class Core
 		// Evaluator.Run("using UnityEditor;");
 		// #endif
 
+		// set commands.
 		commands = Attributes.GetAllCommands();
+
+		// set gameobject paths.
+		UpdateAllGameObjectPaths();
+	}
+
+	static public void UpdateAllGameObjectPaths()
+	{
+		allGameObjectPaths = Utility.GetAllGameObjectPaths();
 	}
 
 	static public CompileResult Evaluate(string code)
@@ -119,17 +130,26 @@ public static class Core
 
 	static private string[] GetMonoCompletions(string input, out string prefix)
 	{
-		var completions = Evaluator.GetCompletions(input, out prefix);
-		if (completions == null) {
-			// support generic type completion.
-			var i1 = input.LastIndexOf(">");
-			var i2 = input.LastIndexOf("<");
-			if (i1 < i2 && i2 < input.Length) {
-				input = input.Substring(i2 + 1);
-				completions = Evaluator.GetCompletions(input, out prefix);
-			}
+		int i1, i2;
+
+		// support generic type completion.
+		i1 = input.LastIndexOf("<");
+		i2 = input.LastIndexOf(">");
+		if (i1 > i2 && i2 < input.Length) {
+			input = input.Substring(i1 + 1);
+			return Evaluator.GetCompletions(input, out prefix);
 		}
-		return completions;
+
+		// support completion inner parenthesis
+		i1 = input.LastIndexOf("(");
+		i2 = input.LastIndexOf(")");
+		if (i1 > i2 && i2 < input.Length) {
+			input = input.Substring(i1 + 1);
+			return Evaluator.GetCompletions(input, out prefix);
+		}
+
+		// otherwise
+		return Evaluator.GetCompletions(input, out prefix);
 	}
 
 	static public CompletionInfo[] GetCompletions(string input, out string prefix)
@@ -137,15 +157,33 @@ public static class Core
 		// get context-based completions using Mono.
 		var completions = GetMonoCompletions(input, out prefix);
 		var _prefix = prefix;
-		var monoCompletions = completions
-			.Select(x => new CompletionInfo(CompletionType.Mono, _prefix, x));
+		var monoCompletions = (completions == null) ?
+			new List<CompletionInfo>() :
+			completions
+				.Select(x => new CompletionInfo(CompletionType.Mono, _prefix, x))
+				.ToList();
 
-		// get functions set a command attribute.
-		var commandCompletions = commands
-			.Where(x => x.command.IndexOf(input) == 0)
-			.Select(x => new CompletionInfo(CompletionType.Command, _prefix, x.command.Replace(_prefix, "")));
+		// get functions with a command attribute.
+		var commandCompletions = (commands == null) ?
+			new List<CompletionInfo>() :
+			commands
+				.Where(x => x.command.IndexOf(input) == 0)
+				.Select(x => new CompletionInfo(CompletionType.Command, _prefix, x.command.Replace(_prefix, "")))
+				.ToList();
 
-		return monoCompletions.Concat(commandCompletions)
+		// get gameobjects paths
+		var pathCompletions = new List<CompletionInfo>();
+		var i1 = input.LastIndexOf("\"/");
+		var i2 = input.LastIndexOf("\"");
+		if (i1 != -1 && i1 == i2) {
+			var partialPath = input.Substring(i1 + 1);
+			pathCompletions = allGameObjectPaths
+				.Where(x => x.IndexOf(partialPath) == 0)
+				.Select(x => new CompletionInfo(CompletionType.Path, partialPath, x.Replace(partialPath, "")))
+				.ToList();
+		}
+
+		return monoCompletions.Concat(commandCompletions).Concat(pathCompletions)
 			.OrderBy(x => x.code).ToArray();
 	}
 }
