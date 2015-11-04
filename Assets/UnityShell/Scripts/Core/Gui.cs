@@ -182,7 +182,7 @@ public class Gui : MonoBehaviour
 			}
 		}
 		if (IsEnterPressing()) {
-			if (isComplementing_) {
+			if (isComplementing_ && !IsInputContinuously()) {
 				DoCompletion();
 			} else {
 				OnSubmit(input.text);
@@ -273,7 +273,8 @@ public class Gui : MonoBehaviour
 			completionThread_.Abort();
 		}
 		completionThread_ = new Thread(() => {
-			completions_ = Core.GetCompletions(input.text, out completionPrefix_);
+			var code = partial_ + input.text;
+			completions_ = Core.GetCompletions(code, out completionPrefix_);
 			if (completions_ != null && completions_.Length > 0) {
 				isComplementing_ = true;
 			}
@@ -305,7 +306,6 @@ public class Gui : MonoBehaviour
 		isComplementing_ = false;
 		isCompletionStopped_ = true;
 		completionView.Reset();
-		// completionView.Hide();
 	}
 
 	private bool IsCompletionThreadAlive()
@@ -373,7 +373,9 @@ public class Gui : MonoBehaviour
 		text = text.Replace("\n", "");
 		text = text.Replace("\r", "");
 		input.text = text;
-		RunOnEndOfFrame(() => { ResetCompletion(); });
+		if (!IsEnterPressing()) {
+			RunOnEndOfFrame(() => { ResetCompletion(); });
+		}
 	}
 
 	private void OnSubmit(string text)
@@ -383,8 +385,7 @@ public class Gui : MonoBehaviour
 		// do nothing if following states:
 		// - the input text is empty.
 		// - receive the endEdit event without the enter key (e.g. lost focus).
-		// - the completion box is active.
-		if (string.IsNullOrEmpty(text) || !IsEnterPressing() || isComplementing_) return;
+		if (string.IsNullOrEmpty(text) || !IsEnterPressing()) return;
 
 		// stop completion to avoid hang.
 		AbortCompletion();
