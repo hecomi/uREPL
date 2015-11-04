@@ -16,14 +16,19 @@ public class CommandInputField : InputField
 				consumedEvent = true;
 				// Skip
 				switch (e.keyCode) {
-					case KeyCode.Return:
-					case KeyCode.KeypadEnter:
-					case KeyCode.Escape:
 					case KeyCode.UpArrow:
 					case KeyCode.DownArrow:
 						continue;
 				}
 				var shouldContinue = KeyPressed(e);
+				// Prevent finish
+				switch (e.keyCode) {
+					case KeyCode.Return:
+					case KeyCode.KeypadEnter:
+					case KeyCode.Escape:
+						shouldContinue = EditState.Continue;
+						break;
+				}
 				if (shouldContinue == EditState.Finish) {
 					DeactivateInputField();
 					break;

@@ -181,7 +181,7 @@ public class Gui : MonoBehaviour
 				SetCompletions();
 			}
 		}
-		if (CheckKey(KeyCode.Return) || CheckKey(KeyCode.KeypadEnter)) {
+		if (IsEnterPressing()) {
 			if (isComplementing_) {
 				DoCompletion();
 			} else {
@@ -215,8 +215,11 @@ public class Gui : MonoBehaviour
 		}
 		if (CheckKey(KeyCode.H, KeyOption.Ctrl)) {
 			if (input.caretPosition > 0) {
+				var isCaretPositionLast = input.caretPosition == input.text.Length;
 				input.text = input.text.Remove(input.caretPosition - 1, 1);
-				--input.caretPosition;
+				if (!isCaretPositionLast) {
+					--input.caretPosition;
+				}
 			}
 		}
 		if (CheckKey(KeyCode.D, KeyOption.Ctrl)) {
@@ -370,7 +373,7 @@ public class Gui : MonoBehaviour
 		text = text.Replace("\n", "");
 		text = text.Replace("\r", "");
 		input.text = text;
-		ResetCompletion();
+		RunOnEndOfFrame(() => { ResetCompletion(); });
 	}
 
 	private void OnSubmit(string text)
@@ -439,6 +442,17 @@ public class Gui : MonoBehaviour
 		}
 
 		isComplementing_ = false;
+	}
+
+	private void RunOnEndOfFrame(System.Action func)
+	{
+		StartCoroutine(_RunOnEndOfFrame(func));
+	}
+
+	private IEnumerator _RunOnEndOfFrame(System.Action func)
+	{
+		yield return new WaitForEndOfFrame();
+		func();
 	}
 
 	private void RunOnNextFrame(System.Action func)
