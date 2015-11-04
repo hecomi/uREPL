@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace UnityShell
 {
 
-public class ResultItemView : MonoBehaviour
+public class ResultItem : MonoBehaviour
 {
 	private CompileResult.Type type_ = CompileResult.Type.Success;
 	public CompileResult.Type type

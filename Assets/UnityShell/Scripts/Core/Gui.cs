@@ -19,7 +19,8 @@ public class Gui : MonoBehaviour
 
 	public InputField input;
 	public Transform output;
-	public GameObject resultItemViewPrefab;
+	public GameObject resultItemPrefab;
+	public GameObject logItemPrefab;
 
 	public CompletionView completionView;
 	public float completionTimer = 0.5f;
@@ -417,16 +418,14 @@ public class Gui : MonoBehaviour
 		}
 
 		var result = Core.Evaluate(code);
-		ResultItemView view = null;
+		ResultItem view = null;
 		if (isPartial) {
-			view = output.GetChild(output.childCount - 1).GetComponent<ResultItemView>();
+			view = output.GetChild(output.childCount - 1).GetComponent<ResultItem>();
 		} else {
-			view = Instantiate(resultItemViewPrefab).GetComponent<ResultItemView>();
+			view = Instantiate(resultItemPrefab).GetComponent<ResultItem>();
 			view.transform.SetParent(output);
 		}
-		if (output.childCount > resultMaxNum) {
-			Destroy(output.GetChild(0).gameObject);
-		}
+		RemoveExceededItem();
 
 		switch (result.type) {
 			case CompileResult.Type.Success: {
@@ -455,6 +454,23 @@ public class Gui : MonoBehaviour
 		}
 
 		isComplementing_ = false;
+	}
+
+	private void RemoveExceededItem()
+	{
+		if (output.childCount > resultMaxNum) {
+			Destroy(output.GetChild(0).gameObject);
+		}
+	}
+
+	public void OutputLog(string log, string meta, Log.Level level)
+	{
+		var item = Instantiate(logItemPrefab).GetComponent<LogItem>();
+		item.transform.SetParent(output);
+		item.level = level;
+		item.log   = log;
+		item.meta  = meta;
+		RemoveExceededItem();
 	}
 
 	private void RunOnEndOfFrame(System.Action func)
