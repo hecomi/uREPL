@@ -178,7 +178,7 @@ public class Gui : MonoBehaviour
 			if (isComplementing_) {
 				DoCompletion();
 			} else {
-				SetCompletions();
+				StartCompletion();
 			}
 		}
 		if (IsEnterPressing()) {
@@ -249,7 +249,7 @@ public class Gui : MonoBehaviour
 		// show completion view after waiting for completionTimer.
 		if (!isCompletionStopped_ && !isComplementing_ && !IsCompletionThreadAlive()) {
 			if (elapsedTimeFromLastInput_ >= completionTimer) {
-				SetCompletions();
+				StartCompletion();
 			}
 		}
 
@@ -263,15 +263,18 @@ public class Gui : MonoBehaviour
 		}
 	}
 
-	private void SetCompletions()
+	private void StartCompletion()
 	{
 		if (string.IsNullOrEmpty(input.text)) return;
 
 		// avoid undesired hang caused by Mono.CSharp.GetCompletions,
 		// run it on anothre thread and stop if hang in UpdateCompletion().
-		if (completionThread_ != null) {
-			completionThread_.Abort();
-		}
+		StopCompletionThread();
+		StartCompletionThread();
+	}
+
+	private void StartCompletionThread()
+	{
 		completionThread_ = new Thread(() => {
 			var code = partial_ + input.text;
 			completions_ = Core.GetCompletions(code, out completionPrefix_);
@@ -280,6 +283,13 @@ public class Gui : MonoBehaviour
 			}
 		});
 		completionThread_.Start();
+	}
+
+	private void StopCompletionThread()
+	{
+		if (completionThread_ != null) {
+			completionThread_.Abort();
+		}
 	}
 
 	private void DoCompletion()
@@ -296,9 +306,9 @@ public class Gui : MonoBehaviour
 	private void ResetCompletion()
 	{
 		isComplementing_ = false;
-		isCompletionStopped_ = false;
 		elapsedTimeFromLastInput_ = 0;
 		completionView.Reset();
+		StopCompletionThread();
 	}
 
 	private void StopCompletion()
@@ -306,6 +316,7 @@ public class Gui : MonoBehaviour
 		isComplementing_ = false;
 		isCompletionStopped_ = true;
 		completionView.Reset();
+		StopCompletionThread();
 	}
 
 	private bool IsCompletionThreadAlive()
@@ -374,6 +385,7 @@ public class Gui : MonoBehaviour
 		text = text.Replace("\r", "");
 		input.text = text;
 		if (!IsEnterPressing()) {
+			isCompletionStopped_ = false;
 			RunOnEndOfFrame(() => { ResetCompletion(); });
 		}
 	}
