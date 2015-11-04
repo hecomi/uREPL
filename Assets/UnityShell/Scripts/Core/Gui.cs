@@ -68,7 +68,7 @@ public class Gui : MonoBehaviour
 	void Update()
 	{
 		if (Input.GetKeyDown(openKey)) {
-			Open();
+			OpenWindow();
 		}
 
 		if (isOpend_) {
@@ -80,17 +80,24 @@ public class Gui : MonoBehaviour
 		}
 	}
 
-	public void Open()
+	public void OpenWindow()
 	{
 		GetComponent<Canvas>().enabled = true;
 		RunOnNextFrame(() => input.Select());
 		isOpend_ = true;
 	}
 
-	public void Close()
+	public void CloseWindow()
 	{
 		GetComponent<Canvas>().enabled = false;
 		isOpend_ = false;
+	}
+
+	public void ClearOutputView()
+	{
+		for (int i = 0; i < output.childCount; ++i) {
+			Destroy(output.GetChild(i).gameObject);
+		}
 	}
 
 	private void Prev()
@@ -221,6 +228,9 @@ public class Gui : MonoBehaviour
 			if (input.caretPosition < input.text.Length) {
 				input.text = input.text.Remove(input.caretPosition);
 			}
+		}
+		if (CheckKey(KeyCode.L, KeyOption.Ctrl)) {
+			ClearOutputView();
 		}
 	}
 
@@ -441,6 +451,34 @@ public class Gui : MonoBehaviour
 		yield return new WaitForEndOfFrame();
 		yield return new WaitForEndOfFrame();
 		func();
+	}
+
+	[Command("Close console.", command = "quit")]
+	static public void QuitCommand()
+	{
+		instance.CloseWindow();
+	}
+
+	[Command("Open console.", command = "open window")]
+	static public void OpenCommand()
+	{
+		instance.OpenWindow();
+	}
+
+	[Command("Clear output view.", command = "clear outputs")]
+	static public void ClearOutputCommand()
+	{
+		instance.RunOnNextFrame(() => {
+			instance.ClearOutputView();
+		});
+	}
+
+	[Command("Clear all input histories.", command = "clear histories")]
+	static public void ClearHistoryCommand()
+	{
+		instance.RunOnNextFrame(() => {
+			instance.history_.Clear();
+		});
 	}
 }
 
