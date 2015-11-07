@@ -73,8 +73,8 @@ public class CompletionView : MonoBehaviour
 			var itemObject = Instantiate(itemPrefab) as GameObject;
 			itemObject.transform.SetParent(content);
 			var item = itemObject.GetComponent<CompletionItem>();
-			item.SetCode(info.code, info.prefix);
-			item.type = info.type;
+			item.SetMark(info.mark, info.color);
+			item.SetCompletion(info.code, info.prefix);
 		}
 #if UNITY_5_2 || UNITY_5_3
 		LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
