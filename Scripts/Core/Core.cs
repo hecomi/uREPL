@@ -50,6 +50,9 @@ public static class Core
 			instance.Initialize();
 			completionPlugins.Add(instance);
 		}
+
+		// setup log
+		Log.Initialize();
 	}
 
 	static public CompileResult Evaluate(string code)

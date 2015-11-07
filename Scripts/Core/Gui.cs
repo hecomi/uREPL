@@ -46,6 +46,8 @@ public class Gui : MonoBehaviour
 	public int holdInputStartDelay = 30;
 	public int holdInputFrameInterval = 5;
 
+	public Queue<Log.Data> logData_ = new Queue<Log.Data>();
+
 	void Awake()
 	{
 		instance = this;
@@ -80,6 +82,8 @@ public class Gui : MonoBehaviour
 			}
 			UpdateCompletion();
 		}
+
+		UpdateLogs();
 	}
 
 	public void OpenWindow()
@@ -465,13 +469,21 @@ public class Gui : MonoBehaviour
 		}
 	}
 
-	public void OutputLog(string log, string meta, Log.Level level)
+	public void OutputLog(Log.Data data)
 	{
-		var item = Instantiate(logItemPrefab).GetComponent<LogItem>();
-		item.transform.SetParent(output);
-		item.level = level;
-		item.log   = log;
-		item.meta  = meta;
+		logData_.Enqueue(data);
+	}
+
+	private void UpdateLogs()
+	{
+		while (logData_.Count > 0) {
+			var data = logData_.Dequeue();
+			var item = Instantiate(logItemPrefab).GetComponent<LogItem>();
+			item.transform.SetParent(output);
+			item.level = data.level;
+			item.log   = data.log;
+			item.meta  = data.meta;
+		}
 		RemoveExceededItem();
 	}
 
