@@ -4,7 +4,7 @@ using UnityEngine.UI;
 namespace uREPL
 {
 
-public class Annotation : MonoBehaviour
+public class AnnotationView : MonoBehaviour
 {
 	public Text description;
 	public string text

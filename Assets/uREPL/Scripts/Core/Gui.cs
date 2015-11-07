@@ -19,7 +19,7 @@ public class Gui : MonoBehaviour
 
 	public InputField inputField;
 	public Transform outputContent;
-	public Annotation annotation;
+	public AnnotationView annotation;
 	public GameObject resultItemPrefab;
 	public GameObject logItemPrefab;
 
