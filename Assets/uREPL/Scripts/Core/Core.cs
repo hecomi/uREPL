@@ -105,11 +105,6 @@ public static class Core
 		return result;
 	}
 
-	static public string GetVars()
-	{
-		return Evaluator.GetVars();
-	}
-
 	static public CompletionInfo[] GetCompletions(string input)
 	{
 		var result = new CompletionInfo[] {};
@@ -122,6 +117,29 @@ public static class Core
 		}
 
 		return result.OrderBy(x => x.code).ToArray();
+	}
+
+	static public string GetVars()
+	{
+		return Evaluator.GetVars();
+	}
+
+	static public string GetUsing()
+	{
+		return Evaluator.GetUsing();
+	}
+
+	[Command("Show all local variables", command = "show vars")]
+	static public void ShowVars()
+	{
+		Debug.Log(GetVars());
+		Log.Output(GetVars());
+	}
+
+	[Command("Show all using", command = "show using")]
+	static public void ShowUsing()
+	{
+		Log.Output(GetUsing());
 	}
 }
 
