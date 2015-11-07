@@ -19,6 +19,7 @@ public class Gui : MonoBehaviour
 
 	public InputField inputField;
 	public Transform outputContent;
+	public Annotation annotation;
 	public GameObject resultItemPrefab;
 	public GameObject logItemPrefab;
 
@@ -28,6 +29,9 @@ public class Gui : MonoBehaviour
 	private bool isCompletionFinished_ = false;
 	private bool isCompletionStopped_ = false;
 	private float elapsedTimeFromLastInput_ = 0f;
+
+	public float annotationTimer = 1f;
+	private float elapsedTimeFromLastSelect_ = 0f;
 
 	private string partial_ = "";
 	private string currentComletionPrefix_ = "";
@@ -85,6 +89,7 @@ public class Gui : MonoBehaviour
 		}
 
 		UpdateLogs();
+		UpdateAnnotation();
 	}
 
 	public void OpenWindow()
@@ -111,6 +116,7 @@ public class Gui : MonoBehaviour
 	{
 		if (isComplementing_) {
 			completionView.Next();
+			ResetAnnotation();
 		} else {
 			if (history_.IsFirst()) history_.SetInputtingCommand(inputField.text);
 			inputField.text = history_.Prev();
@@ -123,6 +129,7 @@ public class Gui : MonoBehaviour
 	{
 		if (isComplementing_) {
 			completionView.Prev();
+			ResetAnnotation();
 		} else {
 			inputField.text = history_.Next();
 			isCompletionStopped_ = true;
@@ -268,6 +275,7 @@ public class Gui : MonoBehaviour
 		if (completions_ != null && completions_.Length > 0) {
 			completionView.SetCompletions(completions_);
 			completions_ = null;
+			ResetAnnotation();
 		}
 	}
 
@@ -482,6 +490,26 @@ public class Gui : MonoBehaviour
 			item.meta  = data.meta;
 		}
 		RemoveExceededItem();
+	}
+
+	private void ResetAnnotation()
+	{
+		elapsedTimeFromLastSelect_ = 0f;
+	}
+
+	private void UpdateAnnotation()
+	{
+		elapsedTimeFromLastSelect_ += Time.deltaTime;
+
+		var item = completionView.selectedItem;
+		var hasDescription = (item != null) && item.hasDescription;
+		if (hasDescription) annotation.text = item.description;
+
+		var isAnnotationVisible = elapsedTimeFromLastSelect_ >= annotationTimer;
+		annotation.gameObject.SetActive(isAnnotationVisible && isComplementing_ && hasDescription);
+
+		annotation.transform.position =
+			completionView.selectedPosition + Vector3.right * (completionView.width + 4f);
 	}
 
 	private void RunOnEndOfFrame(System.Action func)

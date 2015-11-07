@@ -13,17 +13,20 @@ public class CompletionInfo
 	public string code;
 	public string mark;
 	public Color32 color;
+	public string description;
 
 	public CompletionInfo(
 		string prefix,
 		string code,
 		string mark,
-		Color32 color)
+		Color32 color,
+		string description = "")
 	{
 		this.prefix = prefix;
-		this.code   = code;
-		this.mark   = mark;
-		this.color  = color;
+		this.code = code;
+		this.mark = mark;
+		this.color = color;
+		this.description = description;
 	}
 }
 
@@ -117,7 +120,8 @@ public class CommandCompletion : CompletionPlugin
 					input,
 					x.command.Replace(input, ""),
 					"C",
-					new Color32(200, 50, 30, 255)))
+					new Color32(200, 50, 30, 255),
+					x.description))
 				.ToArray();
 	}
 

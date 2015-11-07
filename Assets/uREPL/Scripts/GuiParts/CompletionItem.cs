@@ -10,11 +10,19 @@ public class CompletionItem : MonoBehaviour
 {
 	public Text markText;
 	public Text completionText;
+	public Image colorIndicator;
 
-	public Color32 markColor          = Color.gray;
-	public Color32 hitTextColor       = Color.white;
-	public Color32 bgColor            = Color.black;
-	public Color32 highlightedBgColor = new Color32(30, 30, 30, 200);
+	public Color32 hasDescriptionColor = new Color32(200, 30, 70, 255);
+	public Color32 markColor           = Color.gray;
+	public Color32 hitTextColor        = Color.white;
+	public Color32 bgColor             = Color.black;
+	public Color32 highlightedBgColor  = new Color32(30, 30, 30, 200);
+
+	public string description = "";
+	public bool hasDescription
+	{
+		get { return !string.IsNullOrEmpty(description); }
+	}
 
 	private string code_;
 	public string code
@@ -27,6 +35,13 @@ public class CompletionItem : MonoBehaviour
 	void Awake()
 	{
 		image_ = GetComponent<Image>();
+	}
+
+	void Update()
+	{
+		if (hasDescription) {
+			colorIndicator.color = hasDescriptionColor;
+		}
 	}
 
 	public void SetHighlight(bool isHighlighted)

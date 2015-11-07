@@ -13,13 +13,8 @@ namespace uREPL
 )]
 public sealed class CommandAttribute : Attribute
 {
-    private string description_;
+    public string description;
 	public string command;
-
-    public string description {
-		get { return description_; }
-		private set { description_ = value; }
-	}
 
     public CommandAttribute(string description)
 	{
@@ -57,7 +52,7 @@ public static class Attributes
 					.Select(attr => new CommandInfo(
 						type.FullName,
 						method.Name,
-						string.Format("{0} ({1}.{2})",
+						string.Format("{0} <color=#888888ff>({1}.{2})</color>",
 							attr.description,
 							type.FullName,
 							method.Name),
