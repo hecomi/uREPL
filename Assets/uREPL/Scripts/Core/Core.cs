@@ -17,32 +17,10 @@ public class CompileResult
 	public object value = null;
 }
 
-public enum CompletionType
-{
-	Mono    = 0,
-	Command = 1,
-	Path    = 2,
-}
-
-public struct CompletionInfo
-{
-	public CompletionType type;
-	public string prefix;
-	public string code;
-
-	public CompletionInfo(CompletionType type, string prefix, string code)
-	{
-		this.type = type;
-		this.prefix = prefix;
-		this.code = code;
-	}
-}
-
 public static class Core
 {
-	static private CommandInfo[] commands;
-	static private string[] allGameObjectPaths;
 	static private bool isInitialized = false;
+	static private List<CompletionPlugin> completionPlugins = new List<CompletionPlugin>();
 
 	static public void Initialize()
 	{
@@ -65,16 +43,13 @@ public static class Core
 		// Evaluator.Run("using UnityEditor;");
 		// #endif
 
-		// set commands.
-		commands = Attributes.GetAllCommands();
-
-		// set gameobject paths.
-		UpdateAllGameObjectPaths();
-	}
-
-	static public void UpdateAllGameObjectPaths()
-	{
-		allGameObjectPaths = Utility.GetAllGameObjectPaths();
+		// setup completion plugins
+		var pluginTypes = CompletionPlugin.GetAllCompletionPluginTypes();
+		foreach (var type in pluginTypes) {
+			var instance = System.Activator.CreateInstance(type) as CompletionPlugin;
+			instance.Initialize();
+			completionPlugins.Add(instance);
+		}
 	}
 
 	static public CompileResult Evaluate(string code)
@@ -83,6 +58,7 @@ public static class Core
 		result.code = code;
 
 		// find commands at first and if found, expand it.
+		var commands = CommandCompletion.instance.GetCommands();
 		var command = commands.FirstOrDefault(x => x.command == code.Replace(";", ""));
 		if (command != null) {
 			code = string.Format("{0}.{1}();", command.className, command.methodName);
@@ -131,63 +107,18 @@ public static class Core
 		return Evaluator.GetVars();
 	}
 
-	static private string[] GetMonoCompletions(string input, out string prefix)
+	static public CompletionInfo[] GetCompletions(string input)
 	{
-		int i1, i2;
+		var result = new CompletionInfo[] {};
 
-		// support generic type completion.
-		i1 = input.LastIndexOf("<");
-		i2 = input.LastIndexOf(">");
-		if (i1 > i2 && i2 < input.Length) {
-			input = input.Substring(i1 + 1);
-			return Evaluator.GetCompletions(input, out prefix);
+		foreach (var plugin in completionPlugins) {
+			var completions = plugin.Get(input);
+			if (completions != null) {
+				result = result.Concat(completions).ToArray();
+			}
 		}
 
-		// support completion inner parenthesis
-		i1 = input.LastIndexOf("(");
-		i2 = input.LastIndexOf(")");
-		if (i1 > i2 && i2 < input.Length) {
-			input = input.Substring(i1 + 1);
-			return Evaluator.GetCompletions(input, out prefix);
-		}
-
-		// otherwise
-		return Evaluator.GetCompletions(input, out prefix);
-	}
-
-	static public CompletionInfo[] GetCompletions(string input, out string prefix)
-	{
-		// get context-based completions using Mono.
-		var completions = GetMonoCompletions(input, out prefix);
-		var _prefix = prefix;
-		var monoCompletions = (completions == null) ?
-			new List<CompletionInfo>() :
-			completions
-				.Select(x => new CompletionInfo(CompletionType.Mono, _prefix, x))
-				.ToList();
-
-		// get functions with a command attribute.
-		var commandCompletions = (commands == null) ?
-			new List<CompletionInfo>() :
-			commands
-				.Where(x => x.command.IndexOf(input) == 0)
-				.Select(x => new CompletionInfo(CompletionType.Command, _prefix, x.command.Replace(_prefix, "")))
-				.ToList();
-
-		// get gameobjects paths
-		var pathCompletions = new List<CompletionInfo>();
-		var i1 = input.LastIndexOf("\"/");
-		var i2 = input.LastIndexOf("\"");
-		if (i1 != -1 && i1 == i2) {
-			var partialPath = input.Substring(i1 + 1);
-			pathCompletions = allGameObjectPaths
-				.Where(x => x.IndexOf(partialPath) == 0)
-				.Select(x => new CompletionInfo(CompletionType.Path, partialPath, x.Replace(partialPath, "")))
-				.ToList();
-		}
-
-		return monoCompletions.Concat(commandCompletions).Concat(pathCompletions)
-			.OrderBy(x => x.code).ToArray();
+		return result.OrderBy(x => x.code).ToArray();
 	}
 }
 

@@ -279,8 +279,9 @@ public class Gui : MonoBehaviour
 	{
 		completionThread_ = new Thread(() => {
 			var code = partial_ + input.text;
-			completions_ = Core.GetCompletions(code, out completionPrefix_);
+			completions_ = Core.GetCompletions(code);
 			if (completions_ != null && completions_.Length > 0) {
+				completionPrefix_ = completions_[0].prefix; // TODO: this is not smart...
 				isComplementing_ = true;
 			}
 		});
