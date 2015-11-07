@@ -11,11 +11,11 @@ namespace uREPL
 
 public class Gui : MonoBehaviour
 {
+	static public Gui instance;
 	private const int resultMaxNum = 100;
 
-	static public Gui instance;
 	public KeyCode openKey = KeyCode.F1;
-	private bool isOpend_ = false;
+	private bool isWindowOpened_ = false;
 
 	public InputField input;
 	public Transform output;
@@ -49,7 +49,8 @@ public class Gui : MonoBehaviour
 	void Awake()
 	{
 		instance = this;
-		isOpend_ = GetComponent<Canvas>().enabled;
+		Core.Initialize();
+		isWindowOpened_ = GetComponent<Canvas>().enabled;
 	}
 
 	void Start()
@@ -72,7 +73,7 @@ public class Gui : MonoBehaviour
 			OpenWindow();
 		}
 
-		if (isOpend_) {
+		if (isWindowOpened_) {
 			if (input.isFocused) {
 				CheckCommands();
 				CheckEmacsLikeCommands();
@@ -85,13 +86,13 @@ public class Gui : MonoBehaviour
 	{
 		GetComponent<Canvas>().enabled = true;
 		RunOnNextFrame(() => input.Select());
-		isOpend_ = true;
+		isWindowOpened_ = true;
 	}
 
 	public void CloseWindow()
 	{
 		GetComponent<Canvas>().enabled = false;
-		isOpend_ = false;
+		isWindowOpened_ = false;
 	}
 
 	public void ClearOutputView()
@@ -106,7 +107,7 @@ public class Gui : MonoBehaviour
 		if (isComplementing_) {
 			completionView.Next();
 		} else {
-			if (history_.IsFirst()) history_.SetInputting(input.text);
+			if (history_.IsFirst()) history_.SetInputtingCommand(input.text);
 			input.text = history_.Prev();
 			isCompletionStopped_ = true;
 		}
@@ -528,8 +529,10 @@ public class Gui : MonoBehaviour
 	static public void ShowHistory()
 	{
 		string histories = "";
-		foreach (var command in instance.history_.list) {
-			histories += command + "\n";
+		int num = instance.history_.Count;
+		foreach (var command in instance.history_.list.ToArray().Reverse()) {
+			histories += string.Format("{0}: {1}\n", num, command);
+			--num;
 		}
 		Log.Output(histories);
 	}

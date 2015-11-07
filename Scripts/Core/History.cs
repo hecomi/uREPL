@@ -8,22 +8,21 @@ namespace uREPL
 
 public class History
 {
-	private const string key = "unityshell-history";
+	private const string userPrefsKey = "unityshell-history";
 	private const string separator = "\r\n";
 	private const int maxNum = 100;
-
-	private List<string> codes_ = new List<string>();
+	private List<string> list_ = new List<string>();
 	private int index_ = -1;
-	private string inputting_ = "";
+	private string inputtingCommand_ = "";
 
 	public int Count
 	{
-		get { return codes_.Count; }
+		get { return list_.Count; }
 	}
 
 	public List<string> list
 	{
-		get { return codes_; }
+		get { return list_; }
 	}
 
 	public bool IsFirst()
@@ -33,7 +32,7 @@ public class History
 
 	public string Get()
 	{
-		return index_ == -1 ? inputting_ : codes_[index_];
+		return index_ == -1 ? inputtingCommand_ : list_[index_];
 	}
 
 	public string Next()
@@ -48,53 +47,53 @@ public class History
 		return Get();
 	}
 
-	public void SetInputting(string code)
+	public void SetInputtingCommand(string code)
 	{
-		inputting_ = code;
+		inputtingCommand_ = code;
 	}
 
 	public void Reset()
 	{
 		index_ = -1;
-		inputting_ = "";
+		inputtingCommand_ = "";
 	}
 
 	public void Add(string code)
 	{
-		if (Count > 0 && codes_[Count - 1] == code) return;
+		if (Count > 0 && list_[Count - 1] == code) return;
 
-		int index = codes_.IndexOf(code);
+		int index = list_.IndexOf(code);
 		if (index == -1) {
-			codes_.Insert(0, code);
+			list_.Insert(0, code);
 		} else {
-			codes_.RemoveAt(index);
-			codes_.Insert(0, code);
+			list_.RemoveAt(index);
+			list_.Insert(0, code);
 		}
 
 		while (Count > maxNum) {
-			codes_.RemoveAt(Count - 1);
+			list_.RemoveAt(Count - 1);
 		}
 	}
 
 	public void Clear()
 	{
-		PlayerPrefs.DeleteKey(key);
-		codes_.Clear();
+		PlayerPrefs.DeleteKey(userPrefsKey);
+		list_.Clear();
 	}
 
 	public void Save()
 	{
 		if (Count > 0) {
-			var str = codes_.Aggregate((a, b) => a + separator + b);
-			PlayerPrefs.SetString(key, str);
+			var str = list_.Aggregate((a, b) => a + separator + b);
+			PlayerPrefs.SetString(userPrefsKey, str);
 		}
 	}
 
 	public void Load()
 	{
-		var str = PlayerPrefs.GetString(key);
+		var str = PlayerPrefs.GetString(userPrefsKey);
 		if (!string.IsNullOrEmpty(str)) {
-			codes_ = str.Split(
+			list_ = str.Split(
 				new string[] { separator },
 				System.StringSplitOptions.RemoveEmptyEntries).ToList();
 		}
