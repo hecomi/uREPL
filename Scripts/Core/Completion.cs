@@ -1,4 +1,5 @@
-﻿using System;
+﻿using UnityEngine;
+using System;
 using System.Reflection;
 using System.Linq;
 using Mono.CSharp;
@@ -6,26 +7,23 @@ using Mono.CSharp;
 namespace uREPL
 {
 
-
-public enum CompletionType
+public class CompletionInfo
 {
-	Mono    = 0,
-	Command = 1,
-	Path    = 2,
-}
-
-
-public struct CompletionInfo
-{
-	public CompletionType type;
 	public string prefix;
 	public string code;
+	public string mark;
+	public Color32 color;
 
-	public CompletionInfo(CompletionType type, string prefix, string code)
+	public CompletionInfo(
+		string prefix,
+		string code,
+		string mark,
+		Color32 color)
 	{
-		this.type = type;
 		this.prefix = prefix;
-		this.code = code;
+		this.code   = code;
+		this.mark   = mark;
+		this.color  = color;
 	}
 }
 
@@ -42,23 +40,11 @@ public abstract class CompletionPlugin
 
 	public abstract void Initialize();
 	public abstract CompletionInfo[] Get(string input);
-	public abstract string mark  { get; }
-	public abstract string color { get; }
 }
 
 
 public class MonoCompletion : CompletionPlugin
 {
-	public override string mark
-	{
-		get { return "M"; }
-	}
-
-	public override string color
-	{
-		get { return "#3355bbff"; }
-	}
-
 	public override void Initialize()
 	{
 		// nothing to do.
@@ -101,9 +87,10 @@ public class MonoCompletion : CompletionPlugin
 
 		return (result == null) ? null : result
 			.Select(completion => new CompletionInfo(
-				CompletionType.Mono,
 				prefix,
-				completion.Replace(prefix, "")))
+				completion.Replace(prefix, ""),
+				"M",
+				new Color32(50, 70, 240, 255)))
 			.ToArray();
 	}
 }
@@ -113,16 +100,6 @@ public class CommandCompletion : CompletionPlugin
 {
 	static public CommandCompletion instance;
 	static private CommandInfo[] commands;
-
-	public override string mark
-	{
-		get { return "C"; }
-	}
-
-	public override string color
-	{
-		get { return "#bb5533ff"; }
-	}
 
 	public override void Initialize()
 	{
@@ -137,9 +114,10 @@ public class CommandCompletion : CompletionPlugin
 			commands
 				.Where(x => x.command.IndexOf(input) == 0)
 				.Select(x => new CompletionInfo(
-					CompletionType.Command,
 					input,
-					x.command.Replace(input, "")))
+					x.command.Replace(input, ""),
+					"C",
+					new Color32(200, 50, 30, 255)))
 				.ToArray();
 	}
 
@@ -153,16 +131,6 @@ public class CommandCompletion : CompletionPlugin
 public class GameObjectPathCompletion : CompletionPlugin
 {
 	static private string[] allGameObjectPaths;
-
-	public override string mark
-	{
-		get { return "P"; }
-	}
-
-	public override string color
-	{
-		get { return "#33bb55ff"; }
-	}
 
 	public override void Initialize()
 	{
@@ -179,9 +147,10 @@ public class GameObjectPathCompletion : CompletionPlugin
 			pathCompletions = allGameObjectPaths
 				.Where(x => x.IndexOf(partialPath) == 0)
 				.Select(x => new CompletionInfo(
-					CompletionType.Path,
 					partialPath,
-					x.Replace(partialPath, "")))
+					x.Replace(partialPath, ""),
+					"P",
+					new Color32(30, 200, 80, 255)))
 				.ToArray();
 		}
 		return pathCompletions;
