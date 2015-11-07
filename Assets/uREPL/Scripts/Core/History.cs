@@ -21,6 +21,11 @@ public class History
 		get { return codes_.Count; }
 	}
 
+	public List<string> list
+	{
+		get { return codes_; }
+	}
+
 	public bool IsFirst()
 	{
 		return index_ == -1;
@@ -57,7 +62,15 @@ public class History
 	public void Add(string code)
 	{
 		if (Count > 0 && codes_[Count - 1] == code) return;
-		codes_.Insert(0, code);
+
+		int index = codes_.IndexOf(code);
+		if (index == -1) {
+			codes_.Insert(0, code);
+		} else {
+			codes_.RemoveAt(index);
+			codes_.Insert(0, code);
+		}
+
 		while (Count > maxNum) {
 			codes_.RemoveAt(Count - 1);
 		}
