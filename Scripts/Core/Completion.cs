@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
 using System;
+using System.IO;
 using System.Reflection;
 using System.Linq;
+using System.Xml;
+using System.Xml.Serialization;
+using System.Collections.Generic;
 using Mono.CSharp;
 
 namespace uREPL
@@ -48,9 +52,33 @@ public abstract class CompletionPlugin
 
 public class MonoCompletion : CompletionPlugin
 {
+	[Serializable()]
+	public class TypeData
+	{
+		[XmlElement("name")]
+		public string name;
+		[XmlElement("desc")]
+		public string description;
+	}
+
+	[Serializable()]
+	[XmlRoot("root")]
+	public class TypeDataCollection
+	{
+		[XmlArray("types")]
+		[XmlArrayItem("type", typeof(TypeData))]
+		public TypeData[] list { get; set; }
+	}
+
+	private TypeDataCollection types_;
+
 	public override void Initialize()
 	{
-		// nothing to do.
+		var xml = Resources.Load("UnityEngineClasses") as TextAsset;
+		var serializer = new XmlSerializer(typeof(TypeDataCollection));
+		using (var reader = new StringReader(xml.text)) {
+			types_ = serializer.Deserialize(reader) as TypeDataCollection;
+		}
 	}
 
 	public override CompletionInfo[] Get(string input)
@@ -94,6 +122,13 @@ public class MonoCompletion : CompletionPlugin
 				completion.Replace(prefix, ""),
 				"M",
 				new Color32(50, 70, 240, 255)))
+			.Select(completion => {
+				var type = types_.list.FirstOrDefault(x => x.name == (completion.prefix + completion.code));
+				if (type != null) {
+					completion.description = type.description;
+				}
+				return completion;
+			})
 			.ToArray();
 	}
 }
