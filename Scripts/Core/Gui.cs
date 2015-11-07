@@ -17,8 +17,8 @@ public class Gui : MonoBehaviour
 	public KeyCode openKey = KeyCode.F1;
 	private bool isWindowOpened_ = false;
 
-	public InputField input;
-	public Transform output;
+	public InputField inputField;
+	public Transform outputContent;
 	public GameObject resultItemPrefab;
 	public GameObject logItemPrefab;
 
@@ -29,7 +29,7 @@ public class Gui : MonoBehaviour
 	private float elapsedTimeFromLastInput_ = 0f;
 
 	private string partial_ = "";
-	private string completionPrefix_ = "";
+	private string currentComletionPrefix_ = "";
 
 	private History history_ = new History();
 
@@ -76,7 +76,7 @@ public class Gui : MonoBehaviour
 		}
 
 		if (isWindowOpened_) {
-			if (input.isFocused) {
+			if (inputField.isFocused) {
 				CheckCommands();
 				CheckEmacsLikeCommands();
 			}
@@ -89,7 +89,7 @@ public class Gui : MonoBehaviour
 	public void OpenWindow()
 	{
 		GetComponent<Canvas>().enabled = true;
-		RunOnNextFrame(() => input.Select());
+		RunOnNextFrame(() => inputField.Select());
 		isWindowOpened_ = true;
 	}
 
@@ -101,8 +101,8 @@ public class Gui : MonoBehaviour
 
 	public void ClearOutputView()
 	{
-		for (int i = 0; i < output.childCount; ++i) {
-			Destroy(output.GetChild(i).gameObject);
+		for (int i = 0; i < outputContent.childCount; ++i) {
+			Destroy(outputContent.GetChild(i).gameObject);
 		}
 	}
 
@@ -111,11 +111,11 @@ public class Gui : MonoBehaviour
 		if (isComplementing_) {
 			completionView.Next();
 		} else {
-			if (history_.IsFirst()) history_.SetInputtingCommand(input.text);
-			input.text = history_.Prev();
+			if (history_.IsFirst()) history_.SetInputtingCommand(inputField.text);
+			inputField.text = history_.Prev();
 			isCompletionStopped_ = true;
 		}
-		input.MoveTextEnd(false);
+		inputField.MoveTextEnd(false);
 	}
 
 	private void Next()
@@ -123,10 +123,10 @@ public class Gui : MonoBehaviour
 		if (isComplementing_) {
 			completionView.Prev();
 		} else {
-			input.text = history_.Next();
+			inputField.text = history_.Next();
 			isCompletionStopped_ = true;
 		}
-		input.MoveTextEnd(false);
+		inputField.MoveTextEnd(false);
 	}
 
 	private bool CheckKey(KeyCode keyCode, KeyOption option = KeyOption.None)
@@ -191,7 +191,7 @@ public class Gui : MonoBehaviour
 			if (isComplementing_ && !IsInputContinuously()) {
 				DoCompletion();
 			} else {
-				OnSubmit(input.text);
+				OnSubmit(inputField.text);
 			}
 		}
 		if (CheckKey(KeyCode.Escape)) {
@@ -208,34 +208,34 @@ public class Gui : MonoBehaviour
 			Next();
 		}
 		if (CheckKey(KeyCode.F, KeyOption.Ctrl)) {
-			input.caretPosition = Mathf.Min(input.caretPosition + 1, input.text.Length);
+			inputField.caretPosition = Mathf.Min(inputField.caretPosition + 1, inputField.text.Length);
 		}
 		if (CheckKey(KeyCode.B, KeyOption.Ctrl)) {
-			input.caretPosition = Mathf.Max(input.caretPosition - 1, 0);
+			inputField.caretPosition = Mathf.Max(inputField.caretPosition - 1, 0);
 		}
 		if (CheckKey(KeyCode.A, KeyOption.Ctrl)) {
-			input.MoveTextStart(false);
+			inputField.MoveTextStart(false);
 		}
 		if (CheckKey(KeyCode.E, KeyOption.Ctrl)) {
-			input.MoveTextEnd(false);
+			inputField.MoveTextEnd(false);
 		}
 		if (CheckKey(KeyCode.H, KeyOption.Ctrl)) {
-			if (input.caretPosition > 0) {
-				var isCaretPositionLast = input.caretPosition == input.text.Length;
-				input.text = input.text.Remove(input.caretPosition - 1, 1);
+			if (inputField.caretPosition > 0) {
+				var isCaretPositionLast = inputField.caretPosition == inputField.text.Length;
+				inputField.text = inputField.text.Remove(inputField.caretPosition - 1, 1);
 				if (!isCaretPositionLast) {
-					--input.caretPosition;
+					--inputField.caretPosition;
 				}
 			}
 		}
 		if (CheckKey(KeyCode.D, KeyOption.Ctrl)) {
-			if (input.caretPosition < input.text.Length) {
-				input.text = input.text.Remove(input.caretPosition, 1);
+			if (inputField.caretPosition < inputField.text.Length) {
+				inputField.text = inputField.text.Remove(inputField.caretPosition, 1);
 			}
 		}
 		if (CheckKey(KeyCode.K, KeyOption.Ctrl)) {
-			if (input.caretPosition < input.text.Length) {
-				input.text = input.text.Remove(input.caretPosition);
+			if (inputField.caretPosition < inputField.text.Length) {
+				inputField.text = inputField.text.Remove(inputField.caretPosition);
 			}
 		}
 		if (CheckKey(KeyCode.L, KeyOption.Ctrl)) {
@@ -271,7 +271,7 @@ public class Gui : MonoBehaviour
 
 	private void StartCompletion()
 	{
-		if (string.IsNullOrEmpty(input.text)) return;
+		if (string.IsNullOrEmpty(inputField.text)) return;
 
 		// avoid undesired hang caused by Mono.CSharp.GetCompletions,
 		// run it on anothre thread and stop if hang in UpdateCompletion().
@@ -282,10 +282,10 @@ public class Gui : MonoBehaviour
 	private void StartCompletionThread()
 	{
 		completionThread_ = new Thread(() => {
-			var code = partial_ + input.text;
+			var code = partial_ + inputField.text;
 			completions_ = Core.GetCompletions(code);
 			if (completions_ != null && completions_.Length > 0) {
-				completionPrefix_ = completions_[0].prefix; // TODO: this is not smart...
+				currentComletionPrefix_ = completions_[0].prefix; // TODO: this is not smart...
 				isComplementing_ = true;
 			}
 		});
@@ -301,11 +301,11 @@ public class Gui : MonoBehaviour
 
 	private void DoCompletion()
 	{
-		input.text += completionView.selectedCode;
+		inputField.text += completionView.selectedCode;
 		completionView.Reset();
 
-		input.Select();
-		input.MoveTextEnd(false);
+		inputField.Select();
+		inputField.MoveTextEnd(false);
 
 		StopCompletion();
 	}
@@ -340,14 +340,14 @@ public class Gui : MonoBehaviour
 
 	private void RegisterListeners()
 	{
-		input.onValueChange.AddListener(OnValueChanged);
-		input.onEndEdit.AddListener(OnSubmit);
+		inputField.onValueChange.AddListener(OnValueChanged);
+		inputField.onEndEdit.AddListener(OnSubmit);
 	}
 
 	private void UnregisterListeners()
 	{
-		input.onValueChange.RemoveListener(OnValueChanged);
-		input.onEndEdit.RemoveListener(OnSubmit);
+		inputField.onValueChange.RemoveListener(OnValueChanged);
+		inputField.onEndEdit.RemoveListener(OnSubmit);
 	}
 
 	private bool IsInputContinuously()
@@ -366,20 +366,20 @@ public class Gui : MonoBehaviour
 
 	public Vector3 GetCompletionPosition()
 	{
-		if (input.isFocused && input.caretPosition == input.text.Length) {
-			var generator = input.textComponent.cachedTextGenerator;
-			if (input.caretPosition < generator.characters.Count) {
-				var len = input.text.Length;
+		if (inputField.isFocused && inputField.caretPosition == inputField.text.Length) {
+			var generator = inputField.textComponent.cachedTextGenerator;
+			if (inputField.caretPosition < generator.characters.Count) {
+				var len = inputField.text.Length;
 				var info = generator.characters[len];
-				var ppu  = input.textComponent.pixelsPerUnit;
+				var ppu  = inputField.textComponent.pixelsPerUnit;
 				var x = info.cursorPos.x / ppu;
 				var y = info.cursorPos.y / ppu;
 				var prefixWidth = 0f;
-				for (int i = 0; i < completionPrefix_.Length && i < len; ++i) {
+				for (int i = 0; i < currentComletionPrefix_.Length && i < len; ++i) {
 					prefixWidth += generator.characters[len - 1 - i].charWidth;
 				}
 				prefixWidth /= ppu;
-				var inputTform = input.GetComponent<RectTransform>();
+				var inputTform = inputField.GetComponent<RectTransform>();
 				return inputTform.localPosition + new Vector3(x - prefixWidth, y, 0);
 			}
 		}
@@ -390,7 +390,7 @@ public class Gui : MonoBehaviour
 	{
 		text = text.Replace("\n", "");
 		text = text.Replace("\r", "");
-		input.text = text;
+		inputField.text = text;
 		if (!IsEnterPressing()) {
 			isCompletionStopped_ = false;
 			RunOnEndOfFrame(() => { ResetCompletion(); });
@@ -426,16 +426,16 @@ public class Gui : MonoBehaviour
 		var result = Core.Evaluate(code);
 		ResultItem view = null;
 		if (isPartial) {
-			view = output.GetChild(output.childCount - 1).GetComponent<ResultItem>();
+			view = outputContent.GetChild(outputContent.childCount - 1).GetComponent<ResultItem>();
 		} else {
 			view = Instantiate(resultItemPrefab).GetComponent<ResultItem>();
-			view.transform.SetParent(output);
+			view.transform.SetParent(outputContent);
 		}
 		RemoveExceededItem();
 
 		switch (result.type) {
 			case CompileResult.Type.Success: {
-				input.text = "";
+				inputField.text = "";
 				history_.Add(result.code);
 				history_.Reset();
 				view.type   = CompileResult.Type.Success;
@@ -444,7 +444,7 @@ public class Gui : MonoBehaviour
 				break;
 			}
 			case CompileResult.Type.Partial: {
-				input.text = "";
+				inputField.text = "";
 				partial_ += text;
 				view.type   = CompileResult.Type.Partial;
 				view.input  = result.code;
@@ -464,8 +464,8 @@ public class Gui : MonoBehaviour
 
 	private void RemoveExceededItem()
 	{
-		if (output.childCount > resultMaxNum) {
-			Destroy(output.GetChild(0).gameObject);
+		if (outputContent.childCount > resultMaxNum) {
+			Destroy(outputContent.GetChild(0).gameObject);
 		}
 	}
 
@@ -479,7 +479,7 @@ public class Gui : MonoBehaviour
 		while (logData_.Count > 0) {
 			var data = logData_.Dequeue();
 			var item = Instantiate(logItemPrefab).GetComponent<LogItem>();
-			item.transform.SetParent(output);
+			item.transform.SetParent(outputContent);
 			item.level = data.level;
 			item.log   = data.log;
 			item.meta  = data.meta;
