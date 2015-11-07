@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Linq;
 
-namespace UnityShell
+namespace uREPL
 {
 
 public class CompletionView : MonoBehaviour

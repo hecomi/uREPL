@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace UnityShell
+namespace uREPL
 {
 
 public class Gui : MonoBehaviour

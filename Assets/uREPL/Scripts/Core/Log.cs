@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace UnityShell
+namespace uREPL
 {
 
 static public class Log

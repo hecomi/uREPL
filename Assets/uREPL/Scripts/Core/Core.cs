@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Linq;
 using Mono.CSharp;
 
-namespace UnityShell
+namespace uREPL
 {
 
 public class CompileResult

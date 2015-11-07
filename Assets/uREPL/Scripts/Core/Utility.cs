@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Linq;
 
-namespace UnityShell
+namespace uREPL
 {
 
 static public class Utility

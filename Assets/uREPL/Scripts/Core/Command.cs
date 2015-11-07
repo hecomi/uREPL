@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace UnityShell
+namespace uREPL
 {
 
 static public class Commands

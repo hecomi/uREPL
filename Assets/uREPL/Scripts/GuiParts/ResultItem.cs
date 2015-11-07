@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-namespace UnityShell
+namespace uREPL
 {
 
 public class ResultItem : MonoBehaviour
