@@ -523,6 +523,16 @@ public class Gui : MonoBehaviour
 			instance.history_.Clear();
 		});
 	}
+
+	[Command("show command histoies.", command = "show histories")]
+	static public void ShowHistory()
+	{
+		string histories = "";
+		foreach (var command in instance.history_.list) {
+			histories += command + "\n";
+		}
+		Log.Output(histories);
+	}
 }
 
 }
