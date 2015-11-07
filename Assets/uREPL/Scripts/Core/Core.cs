@@ -42,10 +42,13 @@ public static class Core
 {
 	static private CommandInfo[] commands;
 	static private string[] allGameObjectPaths;
+	static private bool isInitialized = false;
 
-	[RuntimeInitializeOnLoadMethod]
 	static public void Initialize()
 	{
+		if (isInitialized) return;
+		isInitialized = true;
+
 		// See the detailed information about this hack at:
 		//   http://forum.unity3d.com/threads/mono-csharp-evaluator.102162/
 		for (int n = 0; n < 2;) {
