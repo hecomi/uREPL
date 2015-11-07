@@ -14,6 +14,31 @@ static public class Log
 		Error
 	}
 
+	public struct Data
+	{
+		public string log;
+		public string meta;
+		public Level level;
+
+		public Data(string log, string meta, Level level)
+		{
+			this.log = log;
+			this.meta = meta;
+			this.level = level;
+		}
+	}
+
+	static private string dataPath = "";
+	static private bool isInitialized = false;
+
+	static public void Initialize()
+	{
+		if (isInitialized) return;
+		isInitialized = true;
+
+		dataPath = Application.dataPath;
+	}
+
 	static public void Output(string log)
 	{
 		Output(log, Level.Verbose, new StackFrame(1, true));
@@ -33,7 +58,7 @@ static public class Log
 	{
 		var method = frame.GetMethod();
 #if UNITY_EDITOR
-		var fileName = frame.GetFileName().Replace(Application.dataPath + "/", "");
+		var fileName = frame.GetFileName().Replace(dataPath + "/", "");
 		var line = frame.GetFileLineNumber();
 		var meta = string.Format("{0}.{1} ({2}:{3})",
 			method.DeclaringType.FullName,
@@ -45,7 +70,7 @@ static public class Log
 			method.DeclaringType.FullName,
 			method.Name);
 #endif
-		Gui.instance.OutputLog(log, meta, level);
+		Gui.instance.OutputLog(new Data(log, meta, level));
 	}
 }
 
