@@ -76,7 +76,9 @@ public class CompletionView : MonoBehaviour
 			item.SetCode(info.code, info.prefix);
 			item.type = info.type;
 		}
+#if UNITY_5_2 || UNITY_5_3
 		LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
+#endif
 	}
 
 	private void Clear()
