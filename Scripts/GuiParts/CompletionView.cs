@@ -36,12 +36,36 @@ public class CompletionView : MonoBehaviour
 		set { rect.localPosition = value + offset; }
 	}
 
+	public CompletionItem selectedItem
+	{
+		get {
+			return itemCount > 0 ?
+				content.GetChild(itemIndex).GetComponent<CompletionItem>() :
+				null;
+		}
+	}
+
 	public string selectedCode
 	{
 		get {
 			return itemCount > 0 ?
-				content.GetChild(itemIndex).GetComponent<CompletionItem>().code : "";
+				selectedItem.code :
+				"";
 		}
+	}
+
+	public Vector3 selectedPosition
+	{
+		get {
+			return itemCount > 0 ?
+				content.GetChild(itemIndex).position :
+				Vector3.zero;
+		}
+	}
+
+	public float width
+	{
+		get { return rect.rect.width; }
 	}
 
 	void Awake()
@@ -73,6 +97,7 @@ public class CompletionView : MonoBehaviour
 			var itemObject = Instantiate(itemPrefab) as GameObject;
 			itemObject.transform.SetParent(content);
 			var item = itemObject.GetComponent<CompletionItem>();
+			item.description = info.description;
 			item.SetMark(info.mark, info.color);
 			item.SetCompletion(info.code, info.prefix);
 		}
