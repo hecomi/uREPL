@@ -181,10 +181,10 @@ public class Gui : MonoBehaviour
 			Next();
 		}
 		if (CheckKey(KeyCode.Tab)) {
-			isCompletionStopped_ = false;
 			if (isComplementing_) {
 				DoCompletion();
 			} else {
+				ResetCompletion();
 				StartCompletion();
 			}
 		}
