@@ -60,7 +60,7 @@ static public class Log
 #if UNITY_EDITOR
 		var fileName = frame.GetFileName().Replace(dataPath + "/", "");
 		var line = frame.GetFileLineNumber();
-		var meta = string.Format("{0}.{1} ({2}:{3})",
+		var meta = string.Format("{0}.{1}() ({2}:{3})",
 			method.DeclaringType.FullName,
 			method.Name,
 			fileName,
