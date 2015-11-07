@@ -9,7 +9,7 @@ namespace uREPL
 public class CompletionView : MonoBehaviour
 {
 	private const string contentGameObjectName = "Content";
-	private const float scrollDamping = 0.4f;
+	private const float scrollDamping = 0.3f;
 
 	public GameObject itemPrefab;
 	public Vector3 offset = new Vector3(0, 10, 0);
@@ -65,7 +65,7 @@ public class CompletionView : MonoBehaviour
 		scroll.verticalNormalizedPosition = scrollPos_;
 	}
 
-	public void UpdateCompletion(CompletionInfo[] completions)
+	public void SetCompletions(CompletionInfo[] completions)
 	{
 		Reset();
 		if (completions.Length == 0) return;
@@ -76,9 +76,10 @@ public class CompletionView : MonoBehaviour
 			item.SetCode(info.code, info.prefix);
 			item.type = info.type;
 		}
+		LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
 	}
 
-	void RemoveAllChildren()
+	private void Clear()
 	{
 		for (int i = 0; i < itemCount; ++i) {
 			var item = content.GetChild(i).gameObject;
@@ -109,7 +110,7 @@ public class CompletionView : MonoBehaviour
 
 	public void Reset()
 	{
-		RemoveAllChildren();
+		Clear();
 		currentIndex_ = 0;
 		scrollPos_ = 0;
 		scroll.verticalNormalizedPosition = scrollPos_;

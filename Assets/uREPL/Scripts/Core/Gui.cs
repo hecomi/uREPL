@@ -25,6 +25,7 @@ public class Gui : MonoBehaviour
 	public CompletionView completionView;
 	public float completionTimer = 0.5f;
 	private bool isComplementing_ = false;
+	private bool isCompletionFinished_ = false;
 	private bool isCompletionStopped_ = false;
 	private float elapsedTimeFromLastInput_ = 0f;
 
@@ -64,7 +65,7 @@ public class Gui : MonoBehaviour
 	void OnDestroy()
 	{
 		instance = null;
-		AbortCompletion();
+		StopCompletionThread();
 		UnregisterListeners();
 		history_.Save();
 	}
@@ -248,12 +249,13 @@ public class Gui : MonoBehaviour
 		elapsedTimeFromLastInput_ += Time.deltaTime;
 
 		// stop completion thread if it is running to avoid hang.
-		if (elapsedTimeFromLastInput_ > completionTimer + 0.5f /* margin */) {
-			AbortCompletion();
+		if (IsCompletionThreadAlive() &&
+			elapsedTimeFromLastInput_ > completionTimer + 0.5f /* margin */) {
+			StopCompletion();
 		}
 
 		// show completion view after waiting for completionTimer.
-		if (!isCompletionStopped_ && !isComplementing_ && !IsCompletionThreadAlive()) {
+		if (!isCompletionStopped_ && !isCompletionFinished_ && !IsCompletionThreadAlive()) {
 			if (elapsedTimeFromLastInput_ >= completionTimer) {
 				StartCompletion();
 			}
@@ -264,7 +266,7 @@ public class Gui : MonoBehaviour
 
 		// update completion view if new completions set.
 		if (completions_ != null && completions_.Length > 0) {
-			completionView.UpdateCompletion(completions_);
+			completionView.SetCompletions(completions_);
 			completions_ = null;
 		}
 	}
@@ -274,7 +276,7 @@ public class Gui : MonoBehaviour
 		if (string.IsNullOrEmpty(inputField.text)) return;
 
 		// avoid undesired hang caused by Mono.CSharp.GetCompletions,
-		// run it on anothre thread and stop if hang in UpdateCompletion().
+		// run it on another thread and stop if hang occurs in UpdateCompletion().
 		StopCompletionThread();
 		StartCompletionThread();
 	}
@@ -288,6 +290,7 @@ public class Gui : MonoBehaviour
 				currentComletionPrefix_ = completions_[0].prefix; // TODO: this is not smart...
 				isComplementing_ = true;
 			}
+			isCompletionFinished_ = true;
 		});
 		completionThread_.Start();
 	}
@@ -313,6 +316,7 @@ public class Gui : MonoBehaviour
 	private void ResetCompletion()
 	{
 		isComplementing_ = false;
+		isCompletionFinished_ = false;
 		elapsedTimeFromLastInput_ = 0;
 		completionView.Reset();
 		StopCompletionThread();
@@ -329,13 +333,6 @@ public class Gui : MonoBehaviour
 	private bool IsCompletionThreadAlive()
 	{
 		return completionThread_ != null && completionThread_.IsAlive;
-	}
-
-	private void AbortCompletion()
-	{
-		if (IsCompletionThreadAlive()) {
-			completionThread_.Abort();
-		}
 	}
 
 	private void RegisterListeners()
@@ -407,7 +404,7 @@ public class Gui : MonoBehaviour
 		if (string.IsNullOrEmpty(text) || !IsEnterPressing()) return;
 
 		// stop completion to avoid hang.
-		AbortCompletion();
+		StopCompletionThread();
 
 		// use the partial code previously input if it exists.
 		var isPartial = false;
