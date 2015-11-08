@@ -44,8 +44,8 @@ public class MonoCompletion : CompletionPlugin
 
 	public int GetPosIfInsideBracket(string input, string left, string right)
 	{
-		var i1 = input.LastIndexOf("<");
-		var i2 = input.LastIndexOf(">");
+		var i1 = input.LastIndexOf(left);
+		var i2 = input.LastIndexOf(right);
 		return (i1 > i2 && i2 < input.Length) ? (i1 + 1) : -1;
 	}
 
