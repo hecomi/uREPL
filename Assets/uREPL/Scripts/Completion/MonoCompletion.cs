@@ -42,33 +42,55 @@ public class MonoCompletion : CompletionPlugin
 		base.Awake();
 	}
 
+	public int GetPosIfInsideBracket(string input, string left, string right)
+	{
+		var i1 = input.LastIndexOf("<");
+		var i2 = input.LastIndexOf(">");
+		return (i1 > i2 && i2 < input.Length) ? (i1 + 1) : -1;
+	}
+
+	public bool IsInsideQuotation(string input, string quot = "\"")
+	{
+		var cnt = 0;
+		var pos = -1;
+		for (;;) {
+			pos = input.IndexOf(quot, pos + 1);
+			if (pos == -1) break;
+			++cnt;
+		}
+		return cnt % 2 == 1;
+	}
+
 	public override CompletionInfo[] GetCompletions(string input)
 	{
 		bool isComplemented = false;
-		var result = new string[] {};
+		string[] result = null;
 		string prefix = "";
-		int i1, i2;
+		int index = 0;
 
-		// support generic type completion.
-		if (!isComplemented) {
-			i1 = input.LastIndexOf("<");
-			i2 = input.LastIndexOf(">");
-			if (i1 > i2 && i2 < input.Length) {
-				input = input.Substring(i1 + 1);
-				result = Evaluator.GetCompletions(input, out prefix);
-				isComplemented = true;
-			}
+		// skip if inside quotation
+		if (IsInsideQuotation(input)) {
+			return null;
+		}
+
+		// split by '='
+		var inputParts = input.Split(new char[] { '=' });
+		input = inputParts.Last();
+
+		// support generic type completion
+		index = GetPosIfInsideBracket(input, "<", ">");
+		if (!isComplemented && index != -1) {
+			input = input.Substring(index);
+			result = Evaluator.GetCompletions(input, out prefix);
+			isComplemented = true;
 		}
 
 		// support completion inner parenthesis
-		if (!isComplemented) {
-			i1 = input.LastIndexOf("(");
-			i2 = input.LastIndexOf(")");
-			if (i1 > i2 && i2 < input.Length) {
-				input = input.Substring(i1 + 1);
-				result = Evaluator.GetCompletions(input, out prefix);
-				isComplemented = true;
-			}
+		index = GetPosIfInsideBracket(input, "(", ")");
+		if (!isComplemented && index != -1) {
+			input = input.Substring(index);
+			result = Evaluator.GetCompletions(input, out prefix);
+			isComplemented = true;
 		}
 
 		// otherwise
