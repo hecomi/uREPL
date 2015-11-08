@@ -129,14 +129,14 @@ public static class Core
 		return Evaluator.GetUsing();
 	}
 
-	[Command("Show all local variables", command = "show vars")]
+	[Command(command = "show vars", description = "Show all local variables")]
 	static public void ShowVars()
 	{
 		Debug.Log(GetVars());
 		Log.Output(GetVars());
 	}
 
-	[Command("Show all using", command = "show using")]
+	[Command(command = "show using", description = "Show all using")]
 	static public void ShowUsing()
 	{
 		Log.Output(GetUsing());
