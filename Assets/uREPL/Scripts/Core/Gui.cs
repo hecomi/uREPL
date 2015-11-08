@@ -535,19 +535,19 @@ public class Gui : MonoBehaviour
 		func();
 	}
 
-	[Command("Close console.", command = "quit")]
+	[Command(command = "quit", description = "Close console.")]
 	static public void QuitCommand()
 	{
 		instance.CloseWindow();
 	}
 
-	[Command("Open console.", command = "open window")]
+	[Command(command = "open window", description = "Open console.")]
 	static public void OpenCommand()
 	{
 		instance.OpenWindow();
 	}
 
-	[Command("Clear output view.", command = "clear outputs")]
+	[Command(command = "clear outputs", description = "Clear output view.")]
 	static public void ClearOutputCommand()
 	{
 		instance.RunOnNextFrame(() => {
@@ -555,7 +555,7 @@ public class Gui : MonoBehaviour
 		});
 	}
 
-	[Command("Clear all input histories.", command = "clear histories")]
+	[Command(command = "clear histories", description = "Clear all input histories.")]
 	static public void ClearHistoryCommand()
 	{
 		instance.RunOnNextFrame(() => {
@@ -563,7 +563,7 @@ public class Gui : MonoBehaviour
 		});
 	}
 
-	[Command("show command histoies.", command = "show histories")]
+	[Command(command = "show histories", description = "show command histoies.")]
 	static public void ShowHistory()
 	{
 		string histories = "";

@@ -16,9 +16,8 @@ public sealed class CommandAttribute : Attribute
     public string description;
 	public string command;
 
-    public CommandAttribute(string description)
+    public CommandAttribute()
 	{
-		this.description = description;
 	}
 }
 
