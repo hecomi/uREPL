@@ -1,0 +1,26 @@
+- Keybinds
+
+  - While input
+    - Ctrl + a   : move to head.
+    - Ctrl + e   : move to end.
+    - Ctrl + f   : move forward.
+    - Ctrl + b   : move back
+    - Ctrl + h   : remove character before cursor position.
+    - Ctrl + d   : remove character after cursor position.
+    - Ctrl + k   : remove all characters after cursor position.
+    - Ctrl + l   : clear all outputs.
+    - Ctrl + n   : show next history.
+    - Ctrl + p   : show previous history.
+	- Up arrow   : show next history.
+	- Down arrow : show previous history.
+    - Ctrl + Tab : show complementions.
+    - Enter      : run input command.
+
+  - While completion
+    - Up arrow   : select lower item.
+    - Down arrow : select upper item.
+    - Ctrl + n   : select lower item.
+    - Ctrl + p   : select upper item.
+    - Ctrl + Tab : insert selected completion.
+    - Ctrl + Esc : hide complementions.
+    - Enter      : insert selected completion.

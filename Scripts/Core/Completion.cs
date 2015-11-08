@@ -142,27 +142,7 @@ public class CommandCompletion : CompletionPlugin
 	public override void Initialize()
 	{
 		instance = this;
-		GetAllCommands();
-	}
-
-	private void GetAllCommands()
-	{
-		commands = System.AppDomain.CurrentDomain.GetAssemblies()
-			.SelectMany(asm => asm.GetTypes())
-			.SelectMany(type => type
-				.GetMethods(BindingFlags.Static | BindingFlags.Public)
-				.SelectMany(method => method
-					.GetCustomAttributes(typeof(CommandAttribute), false)
-					.Cast<CommandAttribute>()
-					.Select(attr => new CommandInfo(
-						type.FullName,
-						method.Name,
-						string.Format("{0} <color=#888888ff>({1}.{2})</color>",
-							attr.description,
-							type.FullName,
-							method.Name),
-						attr.command))))
-			.ToArray();
+		commands = Commands.GetAll();
 	}
 
 	public override CompletionInfo[] Get(string input)

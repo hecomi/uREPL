@@ -73,7 +73,7 @@ public static class Core
 		result.code = code;
 
 		// find commands at first and if found, expand it.
-		var commands = CommandCompletion.instance.GetCommands();
+		var commands = Commands.GetAll();
 		var command = commands.FirstOrDefault(x => x.command == code.Replace(";", ""));
 		if (command != null) {
 			code = string.Format("{0}.{1}();", command.className, command.methodName);
