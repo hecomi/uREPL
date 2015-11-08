@@ -62,13 +62,10 @@ Keybinds
 ### Completion
 | Key                       | Description                                  |
 | ------------------------- | -------------------------------------------- |
-| `up arrow`                | select lower item.                           |
-| `down arrow`              | select upper item.                           |
 | `ctrl + n`, `up arrow`    | select lower item.                           |
 | `ctrl + p`, `down arrow`  | select upper item.                           |
-| `tab`                     | insert selected completion.                  |
-| `ctrl + esc`              | hide complementions.                         |
-| `enter`                   | insert selected completion.                  |
+| `tab`, `enter`            | insert selected completion.                  |
+| `esc`                     | hide complementions.                         |
 
 
 Logs
@@ -131,18 +128,23 @@ This class is derived from `MonoBehaviour`, so you have to attach this script to
 
 
 Others
------------
+------
 - Support World Space GUI.
   - Set the `Render Mode` of the `Canvas` component as `World Space`.
 
 
 TODOs
 -----
+- Command with arguments.
+- Multiline input.
 - VR support.
-- Add useful commands as plugins.
-- Add more types of logs (e.g. image, graph).
+- Various debug mode.
+- Various useful commands.
+- More log types (e.g. image, graph).
 - Show MonoBehaviour parameters and edit them in the log.
 - Add statistics log.
+
+Please request new features to issue.
 
 
 Version
