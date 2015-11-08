@@ -379,13 +379,14 @@ public class Gui : MonoBehaviour
 				var ppu  = inputField.textComponent.pixelsPerUnit;
 				var x = info.cursorPos.x / ppu;
 				var y = info.cursorPos.y / ppu;
+				var z = 0f;
 				var prefixWidth = 0f;
 				for (int i = 0; i < currentComletionPrefix_.Length && i < len; ++i) {
 					prefixWidth += generator.characters[len - 1 - i].charWidth;
 				}
 				prefixWidth /= ppu;
 				var inputTform = inputField.GetComponent<RectTransform>();
-				return inputTform.localPosition + new Vector3(x - prefixWidth, y, 0);
+				return inputTform.localPosition + new Vector3(x - prefixWidth, y, z);
 			}
 		}
 		return -9999f * Vector3.one;
@@ -429,12 +430,16 @@ public class Gui : MonoBehaviour
 		}
 
 		var result = Core.Evaluate(code);
-		ResultItem view = null;
+		ResultItem item = null;
 		if (isPartial) {
-			view = outputContent.GetChild(outputContent.childCount - 1).GetComponent<ResultItem>();
+			item = outputContent.GetChild(outputContent.childCount - 1).GetComponent<ResultItem>();
 		} else {
-			view = Instantiate(resultItemPrefab).GetComponent<ResultItem>();
-			view.transform.SetParent(outputContent);
+			var itemObj = Instantiate(
+				resultItemPrefab,
+				outputContent.position,
+				outputContent.rotation) as GameObject;
+			item = itemObj.GetComponent<ResultItem>();
+			itemObj.transform.SetParent(outputContent);
 		}
 		RemoveExceededItem();
 
@@ -443,23 +448,23 @@ public class Gui : MonoBehaviour
 				inputField.text = "";
 				history_.Add(result.code);
 				history_.Reset();
-				view.type   = CompileResult.Type.Success;
-				view.input  = result.code;
-				view.output = result.value.ToString();
+				item.type   = CompileResult.Type.Success;
+				item.input  = result.code;
+				item.output = result.value.ToString();
 				break;
 			}
 			case CompileResult.Type.Partial: {
 				inputField.text = "";
 				partial_ += text;
-				view.type   = CompileResult.Type.Partial;
-				view.input  = result.code;
-				view.output = "...";
+				item.type   = CompileResult.Type.Partial;
+				item.input  = result.code;
+				item.output = "...";
 				break;
 			}
 			case CompileResult.Type.Error: {
-				view.type   = CompileResult.Type.Error;
-				view.input  = result.code;
-				view.output = result.error;
+				item.type   = CompileResult.Type.Error;
+				item.input  = result.code;
+				item.output = result.error;
 				break;
 			}
 		}
@@ -483,7 +488,11 @@ public class Gui : MonoBehaviour
 	{
 		while (logData_.Count > 0) {
 			var data = logData_.Dequeue();
-			var item = Instantiate(logItemPrefab).GetComponent<LogItem>();
+			var itemObj = Instantiate(
+				logItemPrefab,
+				outputContent.position,
+				outputContent.rotation) as GameObject;
+			var item = itemObj.GetComponent<LogItem>();
 			item.transform.SetParent(outputContent);
 			item.level = data.level;
 			item.log   = data.log;
