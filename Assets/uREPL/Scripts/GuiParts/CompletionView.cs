@@ -93,14 +93,19 @@ public class CompletionView : MonoBehaviour
 	{
 		Reset();
 		if (completions.Length == 0) return;
+
 		foreach (var info in completions.Reverse()) {
-			var itemObject = Instantiate(itemPrefab) as GameObject;
+			var itemObject = Instantiate(
+				itemPrefab,
+				content.position,
+				content.rotation) as GameObject;
 			itemObject.transform.SetParent(content);
 			var item = itemObject.GetComponent<CompletionItem>();
 			item.description = info.description;
 			item.SetMark(info.mark, info.color);
 			item.SetCompletion(info.code, info.prefix);
 		}
+
 #if UNITY_5_2 || UNITY_5_3
 		LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
 #endif
