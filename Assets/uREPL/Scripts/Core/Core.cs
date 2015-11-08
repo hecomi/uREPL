@@ -27,6 +27,16 @@ public static class Core
 		if (isInitialized) return;
 		isInitialized = true;
 
+		ReferenceAllAssemblies();
+		SetUsings();
+		SetupCompletionPlugins();
+
+		// setup log
+		Log.Initialize();
+	}
+
+	static private void ReferenceAllAssemblies()
+	{
 		// See the detailed information about this hack at:
 		//   http://forum.unity3d.com/threads/mono-csharp-evaluator.102162/
 		for (int n = 0; n < 2;) {
@@ -37,22 +47,24 @@ public static class Core
 			Evaluator.Evaluate("null;");
 			n++;
 		}
+	}
 
+	static private void SetUsings()
+	{
 		Evaluator.Run("using UnityEngine;");
 		// #if UNITY_EDITOR
 		// Evaluator.Run("using UnityEditor;");
 		// #endif
+	}
 
-		// setup completion plugins
+	static private void SetupCompletionPlugins()
+	{
 		var pluginTypes = CompletionPlugin.GetAllCompletionPluginTypes();
 		foreach (var type in pluginTypes) {
 			var instance = System.Activator.CreateInstance(type) as CompletionPlugin;
 			instance.Initialize();
 			completionPlugins.Add(instance);
 		}
-
-		// setup log
-		Log.Initialize();
 	}
 
 	static public CompileResult Evaluate(string code)
