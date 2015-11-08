@@ -22,6 +22,15 @@ public static class Core
 	static private bool isInitialized = false;
 	static private List<CompletionPlugin> completionPlugins = new List<CompletionPlugin>();
 
+#if UNITY_EDITOR
+	[UnityEditor.MenuItem("Assets/Create/uREPL")]
+	static public void Create()
+	{
+		var instance = MonoBehaviour.Instantiate(Resources.Load("uREPL"));
+		instance.name = "uREPL";
+	}
+#endif
+
 	static public void Initialize()
 	{
 		if (isInitialized) return;
