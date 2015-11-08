@@ -38,7 +38,6 @@ public static class Core
 
 		ReferenceAllAssemblies();
 		SetUsings();
-		SetupCompletionPlugins();
 
 		// setup log
 		Log.Initialize();
@@ -66,13 +65,15 @@ public static class Core
 		// #endif
 	}
 
-	static private void SetupCompletionPlugins()
+	static public void RegisterCompletionPlugins(CompletionPlugin plugin)
 	{
-		var pluginTypes = CompletionPlugin.GetAllCompletionPluginTypes();
-		foreach (var type in pluginTypes) {
-			var instance = System.Activator.CreateInstance(type) as CompletionPlugin;
-			instance.Initialize();
-			completionPlugins.Add(instance);
+		completionPlugins.Add(plugin);
+	}
+
+	static public void UnregisterCompletionPlugins(CompletionPlugin plugin)
+	{
+		if (completionPlugins.Contains(plugin)) {
+			completionPlugins.Remove(plugin);
 		}
 	}
 
@@ -131,7 +132,7 @@ public static class Core
 		var result = new CompletionInfo[] {};
 
 		foreach (var plugin in completionPlugins) {
-			var completions = plugin.Get(input);
+			var completions = plugin.GetCompletions(input);
 			if (completions != null) {
 				result = result.Concat(completions).ToArray();
 			}
