@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 
+namespace uREPL
+{
+
 public class CommandInputField : InputField
 {
 	public override void OnUpdateSelected(BaseEventData eventData)
@@ -42,4 +45,6 @@ public class CommandInputField : InputField
 
 		eventData.Use();
 	}
+}
+
 }
