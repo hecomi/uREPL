@@ -133,7 +133,7 @@ public static class Core
 
 		foreach (var plugin in completionPlugins) {
 			var completions = plugin.GetCompletions(input);
-			if (completions != null) {
+			if (completions != null && completions.Length > 0) {
 				result = result.Concat(completions).ToArray();
 			}
 		}
