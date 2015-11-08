@@ -100,6 +100,7 @@ public class CompletionView : MonoBehaviour
 				content.position,
 				content.rotation) as GameObject;
 			itemObject.transform.SetParent(content);
+			itemObject.transform.localScale = Vector3.one;
 			var item = itemObject.GetComponent<CompletionItem>();
 			item.description = info.description;
 			item.SetMark(info.mark, info.color);

@@ -434,12 +434,7 @@ public class Gui : MonoBehaviour
 		if (isPartial) {
 			item = outputContent.GetChild(outputContent.childCount - 1).GetComponent<ResultItem>();
 		} else {
-			var itemObj = Instantiate(
-				resultItemPrefab,
-				outputContent.position,
-				outputContent.rotation) as GameObject;
-			item = itemObj.GetComponent<ResultItem>();
-			itemObj.transform.SetParent(outputContent);
+			item = InstantiateInOutputContent(resultItemPrefab).GetComponent<ResultItem>();
 		}
 		RemoveExceededItem();
 
@@ -488,12 +483,7 @@ public class Gui : MonoBehaviour
 	{
 		while (logData_.Count > 0) {
 			var data = logData_.Dequeue();
-			var itemObj = Instantiate(
-				logItemPrefab,
-				outputContent.position,
-				outputContent.rotation) as GameObject;
-			var item = itemObj.GetComponent<LogItem>();
-			item.transform.SetParent(outputContent);
+			var item = InstantiateInOutputContent(logItemPrefab).GetComponent<LogItem>();
 			item.level = data.level;
 			item.log   = data.log;
 			item.meta  = data.meta;
@@ -519,6 +509,17 @@ public class Gui : MonoBehaviour
 
 		annotation.transform.position =
 			completionView.selectedPosition + Vector3.right * (completionView.width + 4f);
+	}
+
+	private GameObject InstantiateInOutputContent(GameObject prefab)
+	{
+		var obj = Instantiate(
+			prefab,
+			outputContent.position,
+			outputContent.rotation) as GameObject;
+		obj.transform.SetParent(outputContent);
+		obj.transform.localScale = Vector3.one;
+		return obj;
 	}
 
 	private void RunOnEndOfFrame(System.Action func)
