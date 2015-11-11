@@ -18,6 +18,12 @@ Demo
 Sorry, there is no demo now...
 
 
+Environment
+-----------
+- Mac OS X
+- Unity 5
+
+
 Installation
 ------------
 Sorry, there is no relase now...
@@ -26,7 +32,7 @@ Sorry, there is no relase now...
 Usage
 -----
 1. Select menu from `Assets/Create/uREPL` to instantiate a `uREPL` prefab.
-2. Set the `Open Key` of the `Gui` component attached to the `uREPL` gameobject (default is `F1`).
+2. Set the `Open Key` of the `Gui` component attached to the `uREPL` *GameObject* (default is `F1`).
 3. Run game and hit the key.
 4. Input code into the input filed, then press Enter key to submit and evaluate it.
 
@@ -123,8 +129,39 @@ public class CommandTest
 
 Add completion plugin
 ---------------------
-You can add completion plugins by adding a class that inherits from `CompletionPlugin` and overrides `GetCompletions()`.
-This class is derived from `MonoBehaviour`, so you have to attach this script to a certain gameobject.
+You can add completion plugins by adding a class that inherits from `uREPL.CompletionPlugin` and overrides `GetCompletions()`.
+This class is derived from `MonoBehaviour`, so you have to attach this script to a certain *GameObject*.
+The following code is a sample fer *GameObject* path completion.
+
+```cs
+using UnityEngine;
+using System.Linq;
+using uREPL;
+
+public class SampleCompletion : CompletionPlugin
+{
+	string[] gameObjectNames_;
+
+	public void Update()
+	{
+		gameObjectNames_ = GameObject.FindObjectsOfType<GameObject>()
+			.Select(go => go.name)
+			.ToArray();
+	}
+
+	// This method is called from a non-main thread.
+	// If you want to use such as GameObject-related data, please get it in the main thread.
+	public override CompletionInfo[] GetCompletions(string input)
+	{
+		var partialName = input.Substring(input.LastIndexOf("\"") + 1);
+		return gameObjectNames_
+			.Where(name => name.IndexOf(partialName) != -1)
+			.Select(name => new CompletionInfo(
+				partialName, name, "G", Color.red))
+			.ToArray();
+	}
+}
+```
 
 
 Others
@@ -143,6 +180,7 @@ TODOs
 - More log types (e.g. image, graph).
 - Show MonoBehaviour parameters and edit them in the log.
 - Add statistics log.
+- Syntax Highlight
 
 Please request new features to issue.
 
