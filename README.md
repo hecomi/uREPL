@@ -6,11 +6,9 @@ uREPL is an in-game powerful REPL envinronment for Unity3D that supports followi
 - Execute any Unity-supported C# code at run time.
 - Support completions.
 - Emacs-like keyboard shortcuts.
-- Output logs.
+- Output various logs.
 - Add commands just by adding an attribute.
-- Add optional completion methods easily.
-
-This asset helps you debug your projects and learn Unity APIs.
+- Add optional completion plugins easily.
 
 
 Demo
@@ -20,7 +18,7 @@ Sorry, there is no demo now...
 
 Environment
 -----------
-- Mac OS X
+- Mac / Windows
 - Unity 5
 
 
@@ -99,10 +97,11 @@ You can add commands by adding a `[uREPL.Command]` attribute to static methods.
 ```cs
 public class CommandTest
 {
+	// Given from somewhere.
 	public GameObject gameObject;
 
 	// This method can be called without class name.
-	// $ ShowCurrentSelectedObject() [Enter]
+	// $ ShowCurrentSelectedObject() ⏎
 	[uREPL.Command]
 	static public void ShowCurrentSelectedObject()
 	{
@@ -110,7 +109,8 @@ public class CommandTest
 	}
 
 	// This method can be called by the given name.
-	// $ selected [Enter]
+	// $ selected ⏎
+	[uREPL.Command]
 	[uREPL.Command(name = "selected")]
 	static public void ShowCurrentSelectedObject2()
 	{
@@ -187,6 +187,6 @@ Please request new features to issue.
 
 Version
 -------
-| Data       |  Description    |
-| ---------- | --------------- |
-| 2015/11/01 |  Start project. |
+| Data       | Version | Description    |
+| ---------- | ------- | -------------- |
+| 2015/11/01 |  0.0.1  | Start project. |
