@@ -24,10 +24,10 @@ public class CompletionItem : MonoBehaviour
 		get { return !string.IsNullOrEmpty(description); }
 	}
 
-	private string code_;
-	public string code
+	private string completion_;
+	public string completion
 	{
-		get { return code_;  }
+		get { return completion_;  }
 	}
 
 	private Image image_;
@@ -51,14 +51,17 @@ public class CompletionItem : MonoBehaviour
 
 	public void SetCompletion(string code, string prefix)
 	{
-		code_ = code;
+		completion_ = string.IsNullOrEmpty(prefix) ? code : code.Replace(prefix, "");
 		var hitTextColorHex =
 			hitTextColor.r.ToString("X2") +
 			hitTextColor.g.ToString("X2") +
 			hitTextColor.b.ToString("X2") +
 			hitTextColor.a.ToString("X2");
 		completionText.text = string.Format(
-			"<b><color=#{2}>{0}</color></b>{1}", prefix, code, hitTextColorHex.ToString());
+			"<b><color=#{2}>{0}</color></b>{1}",
+			prefix,
+			completion_,
+			hitTextColorHex.ToString());
 	}
 
 	public void SetMark(string mark, Color32 color)

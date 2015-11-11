@@ -45,11 +45,11 @@ public class CompletionView : MonoBehaviour
 		}
 	}
 
-	public string selectedCode
+	public string selectedCompletion
 	{
 		get {
 			return itemCount > 0 ?
-				selectedItem.code :
+				selectedItem.completion :
 				"";
 		}
 	}

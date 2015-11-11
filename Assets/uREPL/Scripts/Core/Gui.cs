@@ -312,7 +312,7 @@ public class Gui : MonoBehaviour
 
 	private void DoCompletion()
 	{
-		inputField.text += completionView.selectedCode;
+		inputField.text += completionView.selectedCompletion;
 		completionView.Reset();
 
 		inputField.Select();

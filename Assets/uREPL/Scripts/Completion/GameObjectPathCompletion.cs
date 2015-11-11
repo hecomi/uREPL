@@ -23,10 +23,10 @@ public class GameObjectPathCompletion : CompletionPlugin
 		if (i1 != -1 && i1 == i2) {
 			var partialPath = input.Substring(i1 + 1);
 			pathCompletions = allGameObjectPaths
-				.Where(x => x.IndexOf(partialPath) == 0)
-				.Select(x => new CompletionInfo(
+				.Where(path => path.IndexOf(partialPath) == 0)
+				.Select(path => new CompletionInfo(
 					partialPath,
-					x.Replace(partialPath, ""),
+					path,
 					"P",
 					new Color32(30, 200, 80, 255)))
 				.ToArray();

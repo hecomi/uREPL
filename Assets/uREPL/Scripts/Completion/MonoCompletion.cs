@@ -77,6 +77,8 @@ public class MonoCompletion : CompletionPlugin
 		var inputParts = input.Split(new char[] { '=' });
 		input = inputParts.Last();
 
+		// TODO: also check { }
+
 		// support generic type completion
 		index = GetPosIfInsideBracket(input, "<", ">");
 		if (!isComplemented && index != -1) {
@@ -102,7 +104,7 @@ public class MonoCompletion : CompletionPlugin
 		return (result == null) ? null : result
 			.Select(completion => new CompletionInfo(
 				prefix,
-				completion.Replace(prefix, ""),
+				completion,
 				"M",
 				new Color32(50, 70, 240, 255)))
 			.Select(completion => {
