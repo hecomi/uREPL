@@ -73,13 +73,17 @@ public class MonoCompletion : CompletionPlugin
 			return null;
 		}
 
-		// split by '='
-		var inputParts = input.Split(new char[] { '=' });
+		// split by '=, \s'
+		var inputParts = input.Split(new char[] { '=', ' ', '	' });
 		input = inputParts.Last();
 
-		// TODO: also check { }
+		// completion inner block
+		index = GetPosIfInsideBracket(input, "{", "}");
+		if (!isComplemented && index != -1) {
+			input = input.Substring(index);
+		}
 
-		// support generic type completion
+		// generic type completion
 		index = GetPosIfInsideBracket(input, "<", ">");
 		if (!isComplemented && index != -1) {
 			input = input.Substring(index);
@@ -87,7 +91,7 @@ public class MonoCompletion : CompletionPlugin
 			isComplemented = true;
 		}
 
-		// support completion inner parenthesis
+		// completion inner parenthesis
 		index = GetPosIfInsideBracket(input, "(", ")");
 		if (!isComplemented && index != -1) {
 			input = input.Substring(index);
