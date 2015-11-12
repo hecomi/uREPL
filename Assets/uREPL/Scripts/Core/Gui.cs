@@ -11,7 +11,7 @@ namespace uREPL
 
 public class Gui : MonoBehaviour
 {
-	static public Gui instance;
+	static public Gui selected;
 	private const int resultMaxNum = 100;
 
 	public KeyCode openKey = KeyCode.F1;
@@ -55,7 +55,6 @@ public class Gui : MonoBehaviour
 
 	void Awake()
 	{
-		instance = this;
 		Core.Initialize();
 		isWindowOpened_ = GetComponent<Canvas>().enabled;
 	}
@@ -68,7 +67,6 @@ public class Gui : MonoBehaviour
 
 	void OnDestroy()
 	{
-		instance = null;
 		StopCompletionThread();
 		UnregisterListeners();
 		history_.Save();
@@ -94,6 +92,7 @@ public class Gui : MonoBehaviour
 
 	public void OpenWindow()
 	{
+		selected = this;
 		GetComponent<Canvas>().enabled = true;
 		RunOnNextFrame(() => inputField.Select());
 		isWindowOpened_ = true;
@@ -101,6 +100,7 @@ public class Gui : MonoBehaviour
 
 	public void CloseWindow()
 	{
+		selected = null;
 		GetComponent<Canvas>().enabled = false;
 		isWindowOpened_ = false;
 	}
@@ -548,37 +548,41 @@ public class Gui : MonoBehaviour
 	[Command(command = "quit", description = "Close console.")]
 	static public void QuitCommand()
 	{
-		instance.CloseWindow();
-	}
-
-	[Command(command = "open window", description = "Open console.")]
-	static public void OpenCommand()
-	{
-		instance.OpenWindow();
+		if (selected != null) {
+			selected.CloseWindow();
+		}
 	}
 
 	[Command(command = "clear outputs", description = "Clear output view.")]
 	static public void ClearOutputCommand()
 	{
-		instance.RunOnNextFrame(() => {
-			instance.ClearOutputView();
+		if (selected == null) return;
+
+		var target = selected;
+		selected.RunOnNextFrame(() => {
+			target.ClearOutputView();
 		});
 	}
 
 	[Command(command = "clear histories", description = "Clear all input histories.")]
 	static public void ClearHistoryCommand()
 	{
-		instance.RunOnNextFrame(() => {
-			instance.history_.Clear();
+		if (selected == null) return;
+
+		var target = selected;
+		selected.RunOnNextFrame(() => {
+			target.history_.Clear();
 		});
 	}
 
 	[Command(command = "show histories", description = "show command histoies.")]
 	static public void ShowHistory()
 	{
+		if (selected == null) return;
+
 		string histories = "";
-		int num = instance.history_.Count;
-		foreach (var command in instance.history_.list.ToArray().Reverse()) {
+		int num = selected.history_.Count;
+		foreach (var command in selected.history_.list.ToArray().Reverse()) {
 			histories += string.Format("{0}: {1}\n", num, command);
 			--num;
 		}
