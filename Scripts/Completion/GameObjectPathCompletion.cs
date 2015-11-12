@@ -27,7 +27,7 @@ public class GameObjectPathCompletion : CompletionPlugin
 				.Select(path => new CompletionInfo(
 					partialPath,
 					path,
-					"P",
+					"G",
 					new Color32(30, 200, 80, 255)))
 				.ToArray();
 		}
