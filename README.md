@@ -39,9 +39,9 @@ Completion
 ----------
 uREPL supports three completions:
 
-- context
-- command
-- gameobject path
+- Context
+- Command
+- *GameObject* name / path
 
 
 Keybinds
@@ -130,8 +130,8 @@ public class CommandTest
 Add completion plugin
 ---------------------
 You can add completion plugins by adding a class that inherits from `uREPL.CompletionPlugin` and overrides `GetCompletions()`.
-This class is derived from `MonoBehaviour`, so you have to attach this script to a certain *GameObject*.
-The following code is a sample fer *GameObject* path completion.
+This class is derived from `MonoBehaviour`, so you can collect information using its callbacks.
+The following code is a sample for *GameObject* name completion.
 
 ```cs
 using UnityEngine;
@@ -166,8 +166,12 @@ public class SampleCompletion : CompletionPlugin
 
 Others
 ------
-- Support World Space GUI.
+- World Space GUI
   - Set the `Render Mode` of the `Canvas` component as `World Space`.
+- Multiple GUI
+  - You can locate multiple GUIs in a scene.
+- Builds
+  - Almost all functions are available even for builds.
 
 
 TODOs
