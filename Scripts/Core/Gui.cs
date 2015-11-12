@@ -14,16 +14,22 @@ public class Gui : MonoBehaviour
 	static public Gui selected;
 	private const int resultMaxNum = 100;
 
+	[HeaderAttribute("Keys")]
 	public KeyCode openKey = KeyCode.F1;
+	public KeyCode closeKey = KeyCode.F1;
 	private bool isWindowOpened_ = false;
 
+	[HeaderAttribute("References")]
 	public InputField inputField;
 	public Transform outputContent;
 	public AnnotationView annotation;
+	public CompletionView completionView;
+
+	[HeaderAttribute("Prefabs")]
 	public GameObject resultItemPrefab;
 	public GameObject logItemPrefab;
 
-	public CompletionView completionView;
+	[HeaderAttribute("Parameters")]
 	public float completionTimer = 0.5f;
 	private bool isComplementing_ = false;
 	private bool isCompletionFinished_ = false;
@@ -33,14 +39,6 @@ public class Gui : MonoBehaviour
 	public float annotationTimer = 1f;
 	private float elapsedTimeFromLastSelect_ = 0f;
 
-	private string partial_ = "";
-	private string currentComletionPrefix_ = "";
-
-	private History history_ = new History();
-
-	private Thread completionThread_;
-	private CompletionInfo[] completions_;
-
 	private enum KeyOption {
 		None  = 0,
 		Ctrl  = 1000,
@@ -48,10 +46,18 @@ public class Gui : MonoBehaviour
 		Alt   = 1000000000
 	};
 	private Dictionary<int, int> keyPressingCounter_ = new Dictionary<int, int>();
-	public int holdInputStartDelay = 30;
-	public int holdInputFrameInterval = 5;
+	public float holdInputStartDelay = 30;
+	public float holdInputFrameInterval = 5;
 
 	public Queue<Log.Data> logData_ = new Queue<Log.Data>();
+
+	private string partial_ = "";
+	private string currentComletionPrefix_ = "";
+
+	private History history_ = new History();
+
+	private Thread completionThread_;
+	private CompletionInfo[] completions_;
 
 	void Awake()
 	{
@@ -74,8 +80,21 @@ public class Gui : MonoBehaviour
 
 	void Update()
 	{
-		if (Input.GetKeyDown(openKey)) {
-			OpenWindow();
+		if (openKey == closeKey) {
+			if (Input.GetKeyDown(openKey)) {
+				if (!isWindowOpened_) {
+					OpenWindow();
+				} else {
+					CloseWindow();
+				}
+			}
+		} else {
+			if (Input.GetKeyDown(openKey)) {
+				OpenWindow();
+			}
+			if (Input.GetKeyDown(closeKey)) {
+				OpenWindow();
+			}
 		}
 
 		if (isWindowOpened_) {
