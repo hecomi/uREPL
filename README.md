@@ -90,7 +90,6 @@ public class CommandTest
 
 	// This method can be called by the given name.
 	// $ selected ⏎
-	[uREPL.Command]
 	[uREPL.Command(name = "selected")]
 	static public void ShowCurrentSelectedObject2()
 	{
