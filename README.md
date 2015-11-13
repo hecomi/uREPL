@@ -6,6 +6,7 @@ uREPL is an in-game powerful REPL envinronment for Unity3D that supports followi
 - Execute any Unity-supported C# code at run time.
 - Support completions.
 - Emacs-like keyboard shortcuts.
+- History.
 - Output various logs.
 - Add commands just by adding an attribute.
 - Add optional completion plugins easily.
@@ -13,7 +14,13 @@ uREPL is an in-game powerful REPL envinronment for Unity3D that supports followi
 
 Demo
 ----
-Sorry, there is no demo now...
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=0eNvSF6mfnk" target="_blank">
+	<img src="https://raw.githubusercontent.com/wiki/hecomi/uREPL/images/demo.png"
+		alt="uREPL - In-game powerful REPL environment for Unity3D - YouTube"
+		width="720"
+		height="420"
+		border="10" />
+</a>
 
 
 Environment
@@ -30,18 +37,9 @@ Sorry, there is no relase now...
 Usage
 -----
 1. Select menu from `Assets/Create/uREPL` to instantiate a `uREPL` prefab.
-2. Set the `Open Key` of the `Gui` component attached to the `uREPL` *GameObject* (default is `F1`).
+2. Set the `Open Key` of the `uREPL.Gui` component attached to the `uREPL` *GameObject* (default is `F1`).
 3. Run game and hit the key.
 4. Input code into the input filed, then press Enter key to submit and evaluate it.
-
-
-Completion
-----------
-uREPL supports three completions:
-
-- Context
-- Command
-- *GameObject* name / path
 
 
 Keybinds
@@ -70,24 +68,6 @@ Keybinds
 | `ctrl + p`, `down arrow`  | select upper item.                           |
 | `tab`, `enter`            | insert selected completion.                  |
 | `esc`                     | hide complementions.                         |
-
-
-Logs
-----
-You can output 3 level logs by `uREPL.Log.Output(string)`, `uREPL.Log.Warn(string)`,
-and `uREPL.Log.Error(string)`.
-
-```cs
-public class LogTest
-{
-	void ShowLogs()
-	{
-		uREPL.Log.Output("this is normal log.");
-		uREPL.Log.Warn("this is warning log.");
-		uREPL.Log.Error("this is error log.");
-	}
-}
-```
 
 
 Commands
@@ -126,9 +106,17 @@ public class CommandTest
 }
 ```
 
+All commands can be seen by `commands` command.
 
-Add completion plugin
----------------------
+
+Completion
+----------
+uREPL supports three completion methods by default:
+
+- Context
+- Command
+- *GameObject* name / path
+
 You can add completion plugins by adding a class that inherits from `uREPL.CompletionPlugin` and overrides `GetCompletions()`.
 This class is derived from `MonoBehaviour`, so you can collect information using its callbacks.
 The following code is a sample for *GameObject* name completion.
@@ -162,6 +150,30 @@ public class SampleCompletion : CompletionPlugin
 	}
 }
 ```
+
+
+Logs
+----
+You can output 3 level logs by `uREPL.Log.Output(string)`, `uREPL.Log.Warn(string)`,
+and `uREPL.Log.Error(string)`.
+
+```cs
+static public class LogTest
+{
+	static public void ShowLogs()
+	{
+		uREPL.Log.Output("this is normal log.");
+		uREPL.Log.Warn("this is warning log.");
+		uREPL.Log.Error("this is error log.");
+	}
+}
+```
+
+<img src="https://raw.githubusercontent.com/wiki/hecomi/uREPL/images/log.png"
+	alt="log examples"
+	width="720"
+	height="420"
+	border="10" />
 
 
 Others
