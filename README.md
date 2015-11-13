@@ -31,7 +31,7 @@ Environment
 
 Installation
 ------------
-Sorry, there is no relase now...
+Please download the latest *uREPL.unitypackage* from the [release page](https://github.com/hecomi/uREPL/releases).
 
 
 Usage
