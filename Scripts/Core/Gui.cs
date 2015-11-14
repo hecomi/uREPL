@@ -530,14 +530,17 @@ public class Gui : MonoBehaviour
 			completionView.selectedPosition + Vector3.right * (completionView.width + 4f);
 	}
 
-	private GameObject InstantiateInOutputContent(GameObject prefab)
+	static public GameObject InstantiateInOutputContent(GameObject prefab)
 	{
+		if (selected == null) return null;
+
 		var obj = Instantiate(
 			prefab,
-			outputContent.position,
-			outputContent.rotation) as GameObject;
-		obj.transform.SetParent(outputContent);
+			selected.outputContent.position,
+			selected.outputContent.rotation) as GameObject;
+		obj.transform.SetParent(selected.outputContent);
 		obj.transform.localScale = Vector3.one;
+
 		return obj;
 	}
 
