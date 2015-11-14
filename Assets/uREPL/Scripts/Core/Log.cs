@@ -58,12 +58,15 @@ static public class Log
 	{
 		var method = frame.GetMethod();
 #if UNITY_EDITOR
-		var fileName = frame.GetFileName().Replace(dataPath + "/", "");
+		var fileName = frame.GetFileName();
+		if (!string.IsNullOrEmpty(fileName)) {
+			fileName = fileName.Replace(dataPath + "/", "");
+		}
 		var line = frame.GetFileLineNumber();
 		var meta = string.Format("{0}.{1}() ({2}:{3})",
 			method.DeclaringType.FullName,
 			method.Name,
-			fileName,
+			fileName ?? "$",
 			line);
 #else
 		var meta = string.Format("{0}.{1}",
