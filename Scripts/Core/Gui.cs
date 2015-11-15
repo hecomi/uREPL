@@ -63,6 +63,9 @@ public class Gui : MonoBehaviour
 	{
 		Core.Initialize();
 		isWindowOpened_ = GetComponent<Canvas>().enabled;
+		if (isWindowOpened_) {
+			selected = this;
+		}
 	}
 
 	void Start()
@@ -495,6 +498,7 @@ public class Gui : MonoBehaviour
 
 	public void OutputLog(Log.Data data)
 	{
+		// enqueue given datas temporarily to handle data from other threads.
 		logData_.Enqueue(data);
 	}
 
@@ -555,7 +559,7 @@ public class Gui : MonoBehaviour
 		func();
 	}
 
-	private void RunOnNextFrame(System.Action func)
+	public void RunOnNextFrame(System.Action func)
 	{
 		StartCoroutine(_RunOnNextFrame(func));
 	}
