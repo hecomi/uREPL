@@ -321,7 +321,6 @@ public class Gui : MonoBehaviour
 	{
 		var code = partial_ + inputField.text;
 		code = code.Substring(0, caretPosition);
-		Debug.Log(code);
 		completionThread_ = new Thread(() => {
 			completions_ = Core.GetCompletions(code);
 			if (completions_ != null && completions_.Length > 0) {
