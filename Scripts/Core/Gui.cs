@@ -25,6 +25,12 @@ public class Gui : MonoBehaviour
 	public AnnotationView annotation;
 	public CompletionView completionView;
 
+	public int caretPosition
+	{
+		get { return inputField.caretPosition;  }
+		set { inputField.caretPosition = value; }
+	}
+
 	[HeaderAttribute("Prefabs")]
 	public GameObject resultItemPrefab;
 	public GameObject logItemPrefab;
@@ -238,10 +244,10 @@ public class Gui : MonoBehaviour
 			Next();
 		}
 		if (CheckKey(KeyCode.F, KeyOption.Ctrl)) {
-			inputField.caretPosition = Mathf.Min(inputField.caretPosition + 1, inputField.text.Length);
+			caretPosition = Mathf.Min(caretPosition + 1, inputField.text.Length);
 		}
 		if (CheckKey(KeyCode.B, KeyOption.Ctrl)) {
-			inputField.caretPosition = Mathf.Max(inputField.caretPosition - 1, 0);
+			caretPosition = Mathf.Max(caretPosition - 1, 0);
 		}
 		if (CheckKey(KeyCode.A, KeyOption.Ctrl)) {
 			inputField.MoveTextStart(false);
@@ -250,22 +256,22 @@ public class Gui : MonoBehaviour
 			inputField.MoveTextEnd(false);
 		}
 		if (CheckKey(KeyCode.H, KeyOption.Ctrl)) {
-			if (inputField.caretPosition > 0) {
-				var isCaretPositionLast = inputField.caretPosition == inputField.text.Length;
-				inputField.text = inputField.text.Remove(inputField.caretPosition - 1, 1);
+			if (caretPosition > 0) {
+				var isCaretPositionLast = caretPosition == inputField.text.Length;
+				inputField.text = inputField.text.Remove(caretPosition - 1, 1);
 				if (!isCaretPositionLast) {
-					--inputField.caretPosition;
+					--caretPosition;
 				}
 			}
 		}
 		if (CheckKey(KeyCode.D, KeyOption.Ctrl)) {
-			if (inputField.caretPosition < inputField.text.Length) {
-				inputField.text = inputField.text.Remove(inputField.caretPosition, 1);
+			if (caretPosition < inputField.text.Length) {
+				inputField.text = inputField.text.Remove(caretPosition, 1);
 			}
 		}
 		if (CheckKey(KeyCode.K, KeyOption.Ctrl)) {
-			if (inputField.caretPosition < inputField.text.Length) {
-				inputField.text = inputField.text.Remove(inputField.caretPosition);
+			if (caretPosition < inputField.text.Length) {
+				inputField.text = inputField.text.Remove(caretPosition);
 			}
 		}
 		if (CheckKey(KeyCode.L, KeyOption.Ctrl)) {
@@ -313,8 +319,10 @@ public class Gui : MonoBehaviour
 
 	private void StartCompletionThread()
 	{
+		var code = partial_ + inputField.text;
+		code = code.Substring(0, caretPosition);
+		Debug.Log(code);
 		completionThread_ = new Thread(() => {
-			var code = partial_ + inputField.text;
 			completions_ = Core.GetCompletions(code);
 			if (completions_ != null && completions_.Length > 0) {
 				currentComletionPrefix_ = completions_[0].prefix; // TODO: this is not smart...
@@ -334,11 +342,12 @@ public class Gui : MonoBehaviour
 
 	private void DoCompletion()
 	{
-		inputField.text += completionView.selectedCompletion;
+		var completion = completionView.selectedCompletion;
+		inputField.text = inputField.text.Insert(caretPosition, completion);
 		completionView.Reset();
 
 		inputField.Select();
-		inputField.MoveTextEnd(false);
+		inputField.caretPosition = caretPosition + completion.Length;
 
 		StopCompletion();
 	}
@@ -393,10 +402,10 @@ public class Gui : MonoBehaviour
 
 	public Vector3 GetCompletionPosition()
 	{
-		if (inputField.isFocused && inputField.caretPosition == inputField.text.Length) {
+		if (inputField.isFocused) {
 			var generator = inputField.textComponent.cachedTextGenerator;
-			if (inputField.caretPosition < generator.characters.Count) {
-				var len = inputField.text.Length;
+			if (caretPosition < generator.characters.Count) {
+				var len = caretPosition;
 				var info = generator.characters[len];
 				var ppu  = inputField.textComponent.pixelsPerUnit;
 				var x = info.cursorPos.x / ppu;
