@@ -33,6 +33,9 @@ public class Inspector : MonoBehaviour
 	public GameObject intItemPrefab;
 	public GameObject floatItemPrefab;
 	public GameObject stringItemPrefab;
+	public GameObject vector2ItemPrefab;
+	public GameObject vector3ItemPrefab;
+	public GameObject vector4ItemPrefab;
 
 	void Awake()
 	{
@@ -44,6 +47,10 @@ public class Inspector : MonoBehaviour
 			typeof(int),
 			typeof(float),
 			typeof(string),
+			typeof(Vector2),
+			typeof(Vector3),
+			typeof(Vector4),
+			typeof(Quaternion),
 		};
 
 	static public void Inspect<T>(T component) where T : Component
@@ -100,6 +107,14 @@ public class Inspector : MonoBehaviour
 			obj = Instantiate(instance.floatItemPrefab);
 		} else if (field.type == typeof(string)) {
 			obj = Instantiate(instance.intItemPrefab);
+		} else if (field.type == typeof(Vector2)) {
+			obj = Instantiate(instance.vector2ItemPrefab);
+		} else if (field.type == typeof(Vector3)) {
+			obj = Instantiate(instance.vector3ItemPrefab);
+		} else if (field.type == typeof(Vector4)) {
+			obj = Instantiate(instance.vector4ItemPrefab);
+		} else if (field.type == typeof(Quaternion)) {
+			obj = Instantiate(instance.vector4ItemPrefab);
 		}
 
 		var item = obj.GetComponent<FieldItem>();

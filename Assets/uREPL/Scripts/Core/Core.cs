@@ -59,6 +59,7 @@ public static class Core
 
 	static private void SetUsings()
 	{
+		Evaluator.Run("using uREPL;");
 		Evaluator.Run("using UnityEngine;");
 		// #if UNITY_EDITOR
 		// Evaluator.Run("using UnityEditor;");
