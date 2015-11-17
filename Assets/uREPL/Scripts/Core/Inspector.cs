@@ -36,22 +36,12 @@ public class Inspector : MonoBehaviour
 	public GameObject vector2ItemPrefab;
 	public GameObject vector3ItemPrefab;
 	public GameObject vector4ItemPrefab;
+	public GameObject readonlyItemPrefab;
 
 	void Awake()
 	{
 		instance = this;
 	}
-
-	static private readonly List<Type> supportedTypes =
-		new List<Type>() {
-			typeof(int),
-			typeof(float),
-			typeof(string),
-			typeof(Vector2),
-			typeof(Vector3),
-			typeof(Vector4),
-			typeof(Quaternion),
-		};
 
 	static public void Inspect<T>(T component) where T : Component
 	{
@@ -70,7 +60,6 @@ public class Inspector : MonoBehaviour
 		var fields = componentType.GetFields(BindingFlags.Public | BindingFlags.Instance);
 		foreach (var field in fields) {
 			var type = field.FieldType;
-			if (!supportedTypes.Contains(type)) continue;
 			var info = new FieldItemInfo();
 			info.type = type;
 			info.name = field.Name;
@@ -115,6 +104,8 @@ public class Inspector : MonoBehaviour
 			obj = Instantiate(instance.vector4ItemPrefab);
 		} else if (field.type == typeof(Quaternion)) {
 			obj = Instantiate(instance.vector4ItemPrefab);
+		} else {
+			obj = Instantiate(instance.readonlyItemPrefab);
 		}
 
 		var item = obj.GetComponent<FieldItem>();
