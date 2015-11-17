@@ -150,7 +150,6 @@ public class Gui : MonoBehaviour
 			inputField.text = history_.Prev();
 			isCompletionStopped_ = true;
 		}
-		inputField.MoveTextEnd(false);
 	}
 
 	private void Next()
@@ -162,7 +161,6 @@ public class Gui : MonoBehaviour
 			inputField.text = history_.Next();
 			isCompletionStopped_ = true;
 		}
-		inputField.MoveTextEnd(false);
 	}
 
 	private bool CheckKey(KeyCode keyCode, KeyOption option = KeyOption.None)
@@ -215,6 +213,12 @@ public class Gui : MonoBehaviour
 		if (CheckKey(KeyCode.DownArrow)) {
 			Next();
 		}
+		if (CheckKey(KeyCode.LeftArrow)) {
+			StopCompletion();
+		}
+		if (CheckKey(KeyCode.RightArrow)) {
+			StopCompletion();
+		}
 		if (CheckKey(KeyCode.Tab)) {
 			if (isComplementing_) {
 				DoCompletion();
@@ -245,15 +249,19 @@ public class Gui : MonoBehaviour
 		}
 		if (CheckKey(KeyCode.F, KeyOption.Ctrl)) {
 			caretPosition = Mathf.Min(caretPosition + 1, inputField.text.Length);
+			StopCompletion();
 		}
 		if (CheckKey(KeyCode.B, KeyOption.Ctrl)) {
 			caretPosition = Mathf.Max(caretPosition - 1, 0);
+			StopCompletion();
 		}
 		if (CheckKey(KeyCode.A, KeyOption.Ctrl)) {
 			inputField.MoveTextStart(false);
+			StopCompletion();
 		}
 		if (CheckKey(KeyCode.E, KeyOption.Ctrl)) {
 			inputField.MoveTextEnd(false);
+			StopCompletion();
 		}
 		if (CheckKey(KeyCode.H, KeyOption.Ctrl)) {
 			if (caretPosition > 0) {
@@ -263,16 +271,19 @@ public class Gui : MonoBehaviour
 					--caretPosition;
 				}
 			}
+			StopCompletion();
 		}
 		if (CheckKey(KeyCode.D, KeyOption.Ctrl)) {
 			if (caretPosition < inputField.text.Length) {
 				inputField.text = inputField.text.Remove(caretPosition, 1);
 			}
+			StopCompletion();
 		}
 		if (CheckKey(KeyCode.K, KeyOption.Ctrl)) {
 			if (caretPosition < inputField.text.Length) {
 				inputField.text = inputField.text.Remove(caretPosition);
 			}
+			StopCompletion();
 		}
 		if (CheckKey(KeyCode.L, KeyOption.Ctrl)) {
 			ClearOutputView();
