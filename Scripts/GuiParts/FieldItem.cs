@@ -1,12 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System;
-using System.Reflection;
 
-public class FieldItem : MonoBehaviour
+public abstract class FieldItem : MonoBehaviour
 {
 	public Text labelText;
-	public InputField valueInputField;
 
 	public string label
 	{
@@ -14,10 +11,10 @@ public class FieldItem : MonoBehaviour
 		set { labelText.text = value; }
 	}
 
-	public string value
+	public abstract object value
 	{
-		get { return valueInputField.text;  }
-		set { valueInputField.text = value; }
+		get;
+		protected set;
 	}
 
 	[HideInInspector]
@@ -28,26 +25,4 @@ public class FieldItem : MonoBehaviour
 	public string fieldName;
 	[HideInInspector]
 	public System.Type fieldType;
-
-	void Start()
-	{
-		valueInputField.onEndEdit.AddListener(OnSubmit);
-	}
-
-	void OnDestroy()
-	{
-		valueInputField.onEndEdit.RemoveListener(OnSubmit);
-	}
-
-	void Update()
-	{
-		if (!valueInputField.isFocused) {
-			value = componentType.GetField(fieldName).GetValue(component).ToString();
-		}
-	}
-
-	void OnSubmit(string text)
-	{
-		componentType.GetField(fieldName).SetValue(component, Convert.ChangeType(text, fieldType));
-	}
 }
