@@ -60,7 +60,7 @@ public class Inspector : MonoBehaviour
 		});
 	}
 
-	static public void Inspect<T>(T component) where T : MonoBehaviour
+	static public void Inspect<T>(T component) where T : Component
 	{
 		if (component == null) {
 			Log.Warn("given component is null.");
