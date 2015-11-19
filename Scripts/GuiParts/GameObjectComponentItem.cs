@@ -7,7 +7,7 @@ namespace uREPL
 public class GameObjectComponentItem : MonoBehaviour
 {
 	[HideInInspector]
-	public MonoBehaviour component;
+	public Component component;
 	[HideInInspector]
 	public System.Type type;
 

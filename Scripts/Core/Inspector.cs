@@ -15,7 +15,7 @@ public class FieldItemInfo
 
 public class ComponentInfo
 {
-	public MonoBehaviour instance;
+	public Component instance;
 	public System.Type type;
 	public string componentName;
 	public string gameObjectPath;
@@ -68,7 +68,7 @@ public class Inspector : MonoBehaviour
 		Inspect(component, typeof(T));
 	}
 
-	static public void Inspect(MonoBehaviour component, Type componentType)
+	static public void Inspect(Component component, Type componentType)
 	{
 		var componentInfo = new ComponentInfo();
 		componentInfo.instance       = component;

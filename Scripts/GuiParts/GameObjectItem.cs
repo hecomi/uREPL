@@ -91,7 +91,7 @@ public class GameObjectItem : MonoBehaviour
 		toggle.onValueChanged.AddListener(OnValueChanged);
 
 		if (targetGameObject) {
-			var components = targetGameObject.GetComponents<MonoBehaviour>();
+			var components = targetGameObject.GetComponents<Component>();
 			foreach (var component in components) {
 				noAvailableComponentText.SetActive(false);
 				var obj = Instantiate(componentItemPrefab);

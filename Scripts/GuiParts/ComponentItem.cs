@@ -7,9 +7,11 @@ namespace uREPL
 public class ComponentItem : MonoBehaviour
 {
 	[HideInInspector]
-	public MonoBehaviour component;
+	public Component component;
 
 	public Toggle toggle;
+	public GameObject checkbox;
+
 	public Text nameText;
 	public Transform fieldsView;
 	public GameObject noAvailableFieldText;
@@ -18,6 +20,16 @@ public class ComponentItem : MonoBehaviour
 	{
 		get { return nameText.text;  }
 		set { nameText.text = value; }
+	}
+
+	public System.Type type
+	{
+		get { return component.GetType(); }
+	}
+
+	public bool hasEnabled
+	{
+		get { return component && type.GetProperty("enabled") != null; }
 	}
 
 	public void Add(GameObject field)
@@ -38,15 +50,19 @@ public class ComponentItem : MonoBehaviour
 
 	void Update()
 	{
-		if (component) {
-			toggle.isOn = component.enabled;
+		if (hasEnabled) {
+			toggle.isOn = (bool)type.GetProperty("enabled").GetValue(component, null);
+			checkbox.SetActive(true);
+		} else {
+			checkbox.SetActive(false);
 		}
+		Debug.Log(type.GetProperty("enabled"));
 	}
 
 	void OnValueChanged(bool isOn)
 	{
-		if (component) {
-			component.enabled = isOn;
+		if (hasEnabled) {
+			type.GetProperty("enabled").SetValue(component, isOn, null);
 		}
 	}
 }
