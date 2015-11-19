@@ -24,6 +24,16 @@ static public class Utility
 	{
 		return GetAllGameObjects().Select(go => go.transform.GetPath()).ToArray();
 	}
+
+	static public void Inspect(this GameObject gameObject)
+	{
+		Inspector.Inspect(gameObject);
+	}
+
+	static public void Inspect(this Component component)
+	{
+		Inspector.Inspect(component);
+	}
 }
 
 }
