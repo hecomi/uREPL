@@ -6,6 +6,7 @@ namespace uREPL
 
 public class FieldItemTest : MonoBehaviour
 {
+	public bool flag;
 	public int counter;
 	public float time;
 	public string text;
