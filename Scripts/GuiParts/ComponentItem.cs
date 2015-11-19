@@ -56,7 +56,6 @@ public class ComponentItem : MonoBehaviour
 		} else {
 			checkbox.SetActive(false);
 		}
-		Debug.Log(type.GetProperty("enabled"));
 	}
 
 	void OnValueChanged(bool isOn)
