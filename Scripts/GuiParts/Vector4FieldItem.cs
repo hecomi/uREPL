@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using System;
 using System.Reflection;
 
+namespace uREPL
+{
+
 public class Vector4FieldItem : FieldItem
 {
 	public InputField xInputField;
@@ -62,3 +65,4 @@ public class Vector4FieldItem : FieldItem
 	}
 }
 
+}

@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using System;
 using System.Reflection;
 
+namespace uREPL
+{
+
 public class Vector2FieldItem : FieldItem
 {
 	public InputField xInputField;
@@ -47,4 +50,6 @@ public class Vector2FieldItem : FieldItem
 	{
 		componentType.GetField(fieldName).SetValue(component, value);
 	}
+}
+
 }

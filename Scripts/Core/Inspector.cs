@@ -15,7 +15,7 @@ public class FieldItemInfo
 
 public class ComponentInfo
 {
-	public Component instance;
+	public MonoBehaviour instance;
 	public System.Type type;
 	public string componentName;
 	public string gameObjectPath;
@@ -26,10 +26,11 @@ public class Inspector : MonoBehaviour
 {
 	static private Inspector instance;
 
-	[HeaderAttribute("Views")]
+	[HeaderAttribute("Inspect Prefabs")]
+	public GameObject gameObjectViewPrefab;
 	public GameObject componentViewPrefab;
 
-	[HeaderAttribute("Items")]
+	[HeaderAttribute("Fields")]
 	public GameObject intItemPrefab;
 	public GameObject floatItemPrefab;
 	public GameObject stringItemPrefab;
@@ -43,14 +44,32 @@ public class Inspector : MonoBehaviour
 		instance = this;
 	}
 
-	static public void Inspect<T>(T component) where T : Component
+	static public void Inspect(GameObject gameObject)
+	{
+		if (gameObject == null) {
+			Log.Warn("given GameObject is null.");
+			return;
+		}
+
+		Gui.selected.RunOnNextFrame(() => {
+			var obj = Gui.InstantiateInOutputContent(instance.gameObjectViewPrefab);
+			var item = obj.GetComponent<GameObjectItem>();
+			item.targetGameObject = gameObject;
+			item.title = gameObject.name;
+		});
+	}
+
+	static public void Inspect<T>(T component) where T : MonoBehaviour
 	{
 		if (component == null) {
 			Log.Warn("given component is null.");
 			return;
 		}
+		Inspect(component, typeof(T));
+	}
 
-		var componentType = typeof(T);
+	static public void Inspect(MonoBehaviour component, Type componentType)
+	{
 		var componentInfo = new ComponentInfo();
 		componentInfo.instance       = component;
 		componentInfo.type           = componentType;
@@ -78,6 +97,7 @@ public class Inspector : MonoBehaviour
 		if (obj == null) return;
 
 		var item = obj.GetComponent<ComponentItem>();
+		item.component = component.instance;
 		item.title = string.Format("<b><i>{0}</i></b> ({1})",
 			component.componentName, component.gameObjectPath);
 		foreach (var field in component.fields) {

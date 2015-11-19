@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+namespace uREPL
+{
+
 public class FieldItemTest : MonoBehaviour
 {
 	public int counter;
@@ -13,4 +16,11 @@ public class FieldItemTest : MonoBehaviour
 	public KeyCode keyCode = KeyCode.Escape;
 	public Color32 color = Color.red;
 	public List<int> list = new List<int>();
+
+	void Update()
+	{
+		// dummy
+	}
+}
+
 }

@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using System;
 using System.Reflection;
 
+namespace uREPL
+{
+
 public class SingleFieldItem : FieldItem
 {
 	public InputField valueInputField;
@@ -34,4 +37,6 @@ public class SingleFieldItem : FieldItem
 	{
 		componentType.GetField(fieldName).SetValue(component, value);
 	}
+}
+
 }
