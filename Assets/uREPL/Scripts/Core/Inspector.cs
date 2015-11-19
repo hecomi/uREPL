@@ -37,6 +37,7 @@ public class Inspector : MonoBehaviour
 	public GameObject vector2ItemPrefab;
 	public GameObject vector3ItemPrefab;
 	public GameObject vector4ItemPrefab;
+	public GameObject boolItemPrefab;
 	public GameObject readonlyItemPrefab;
 
 	void Awake()
@@ -110,7 +111,9 @@ public class Inspector : MonoBehaviour
 	{
 		GameObject obj = null;
 
-		if (field.type == typeof(int)) {
+		if (field.type == typeof(bool)) {
+			obj = Instantiate(instance.boolItemPrefab);
+		} else if (field.type == typeof(int)) {
 			obj = Instantiate(instance.intItemPrefab);
 		} else if (field.type == typeof(float)) {
 			obj = Instantiate(instance.floatItemPrefab);
