@@ -100,6 +100,7 @@ public class GameObjectItem : MonoBehaviour
 				item.component = component;
 				item.type = component.GetType();
 				item.title = item.type.Name;
+				item.detail = "(" + item.type.FullName + ")";
 			}
 		}
 	}
