@@ -121,16 +121,22 @@ public class Gui : MonoBehaviour
 	public void OpenWindow()
 	{
 		selected = this;
-		GetComponent<Canvas>().enabled = true;
-		RunOnNextFrame(() => inputField.Select());
-		isWindowOpened_ = true;
+		SetActive(true);
 	}
 
 	public void CloseWindow()
 	{
 		selected = null;
-		GetComponent<Canvas>().enabled = false;
-		isWindowOpened_ = false;
+		SetActive(false);
+	}
+
+	private void SetActive(bool active)
+	{
+		GetComponent<Canvas>().enabled = active;
+		inputField.gameObject.SetActive(active);
+		outputContent.gameObject.SetActive(active);
+		completionView.gameObject.SetActive(active);
+		isWindowOpened_ = active;
 	}
 
 	public void ClearOutputView()
