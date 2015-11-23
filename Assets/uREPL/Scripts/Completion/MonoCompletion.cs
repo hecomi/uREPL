@@ -11,6 +11,8 @@ namespace uREPL
 
 public class MonoCompletion : CompletionPlugin
 {
+	private const string unityEngineClassXmlPath = "uREPL/Xmls/UnityEngineClasses";
+
 	[Serializable()]
 	public class TypeData
 	{
@@ -33,7 +35,7 @@ public class MonoCompletion : CompletionPlugin
 
 	protected override void Awake()
 	{
-		var xml = Resources.Load("UnityEngineClasses") as TextAsset;
+		var xml = Resources.Load(unityEngineClassXmlPath) as TextAsset;
 		var serializer = new XmlSerializer(typeof(TypeDataCollection));
 		using (var reader = new StringReader(xml.text)) {
 			types_ = serializer.Deserialize(reader) as TypeDataCollection;
