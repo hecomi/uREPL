@@ -31,13 +31,14 @@ public class Inspector : MonoBehaviour
 	public GameObject componentViewPrefab;
 
 	[HeaderAttribute("Fields")]
+	public GameObject boolItemPrefab;
 	public GameObject intItemPrefab;
 	public GameObject floatItemPrefab;
 	public GameObject stringItemPrefab;
 	public GameObject vector2ItemPrefab;
 	public GameObject vector3ItemPrefab;
 	public GameObject vector4ItemPrefab;
-	public GameObject boolItemPrefab;
+	public GameObject enumItemPrefab;
 	public GameObject readonlyItemPrefab;
 
 	void Awake()
@@ -127,6 +128,8 @@ public class Inspector : MonoBehaviour
 			obj = Instantiate(instance.vector4ItemPrefab);
 		} else if (field.type == typeof(Quaternion)) {
 			obj = Instantiate(instance.vector4ItemPrefab);
+		} else if (field.type.IsEnum) {
+			obj = Instantiate(instance.enumItemPrefab);
 		} else {
 			obj = Instantiate(instance.readonlyItemPrefab);
 		}

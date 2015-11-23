@@ -155,7 +155,6 @@ public static class Core
 	[Command(command = "show vars", description = "Show all local variables")]
 	static public void ShowVars()
 	{
-		Debug.Log(GetVars());
 		Log.Output(GetVars());
 	}
 
