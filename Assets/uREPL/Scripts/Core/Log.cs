@@ -28,7 +28,9 @@ static public class Log
 		}
 	}
 
+#if UNITY_EDITOR
 	static private string dataPath = "";
+#endif
 	static private bool isInitialized = false;
 
 	static public void Initialize()
@@ -36,7 +38,9 @@ static public class Log
 		if (isInitialized) return;
 		isInitialized = true;
 
+#if UNITY_EDITOR
 		dataPath = Application.dataPath;
+#endif
 	}
 
 	static public void Output(string log)
