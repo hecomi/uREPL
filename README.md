@@ -7,7 +7,8 @@ uREPL is an in-game powerful REPL envinronment for Unity3D that supports followi
 - Support completions.
 - Emacs-like keyboard shortcuts.
 - History.
-- Output various logs.
+- Output logs.
+- Inspect *GameObject* and *Component*.
 - Add commands just by adding an attribute.
 - Add optional completion plugins easily.
 
@@ -18,8 +19,7 @@ Demo
 	<img src="https://raw.githubusercontent.com/wiki/hecomi/uREPL/images/demo.png"
 		alt="uREPL - In-game powerful REPL environment for Unity3D - YouTube"
 		width="720"
-		height="420"
-		border="10" />
+		height="420" />
 </a>
 
 
@@ -171,8 +171,28 @@ static public class LogTest
 <img src="https://raw.githubusercontent.com/wiki/hecomi/uREPL/images/log.png"
 	alt="log examples"
 	width="720"
-	height="420"
-	border="10" />
+	height="405" />
+
+
+Inspector
+---------
+You can inspect *GameObject* by calling `GameObject.Inspect()`. This shows position, rotation, scale, and components added to it.
+
+<img src="https://raw.githubusercontent.com/wiki/hecomi/uREPL/images/gameobject_inspector.png"
+	alt="log examples"
+	width="720"
+	height="405" />
+
+You can also inspect *Component* by clicking the inspect icon or calling `Component.Inspect()`.
+
+<img src="https://raw.githubusercontent.com/wiki/hecomi/uREPL/images/component_inspector.png"
+	alt="log examples"
+	width="720"
+	height="405" />
+
+See following movies for more detail.
+- [GameObject Demo](https://www.youtube.com/watch?v=CF3S3TsJajU)
+- [Component Demo](https://www.youtube.com/watch?v=WdfmlPrrxX0)
 
 
 Others
@@ -193,15 +213,14 @@ TODOs
 - Various debug mode.
 - Various useful commands.
 - More log types (e.g. image, graph).
-- Show MonoBehaviour parameters and edit them in the log.
 - Add statistics log.
-- Syntax Highlight
 
 Please request new features to issue.
 
 
 Version
 -------
-| Data       | Version | Description    |
-| ---------- | ------- | -------------- |
-| 2015/11/01 |  0.0.1  | Start project. |
+| Data       | Version | Description     |
+| ---------- | ------- | --------------- |
+| 2015/11/27 |  0.1.0  | Add inspectors. |
+| 2015/11/01 |  0.0.1  | Start project.  |
