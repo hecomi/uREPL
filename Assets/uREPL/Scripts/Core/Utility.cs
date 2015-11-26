@@ -30,7 +30,7 @@ static public class Utility
 		Inspector.Inspect(gameObject);
 	}
 
-	static public void Inspect(this Component component)
+	static public void Inspect<T>(this T component) where T : Component
 	{
 		Inspector.Inspect(component);
 	}
