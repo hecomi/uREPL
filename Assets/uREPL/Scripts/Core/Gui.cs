@@ -596,7 +596,7 @@ public class Gui : MonoBehaviour
 		func();
 	}
 
-	[Command(command = "quit", description = "Close console.")]
+	[Command(name = "quit", description = "Close console.")]
 	static public void QuitCommand()
 	{
 		if (selected != null) {
@@ -604,7 +604,7 @@ public class Gui : MonoBehaviour
 		}
 	}
 
-	[Command(command = "clear outputs", description = "Clear output view.")]
+	[Command(name = "clear outputs", description = "Clear output view.")]
 	static public void ClearOutputCommand()
 	{
 		if (selected == null) return;
@@ -615,7 +615,7 @@ public class Gui : MonoBehaviour
 		});
 	}
 
-	[Command(command = "clear histories", description = "Clear all input histories.")]
+	[Command(name = "clear histories", description = "Clear all input histories.")]
 	static public void ClearHistoryCommand()
 	{
 		if (selected == null) return;
@@ -626,7 +626,7 @@ public class Gui : MonoBehaviour
 		});
 	}
 
-	[Command(command = "show histories", description = "show command histoies.")]
+	[Command(name = "show histories", description = "show command histoies.")]
 	static public void ShowHistory()
 	{
 		if (selected == null) return;
