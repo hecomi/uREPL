@@ -83,6 +83,7 @@ public static class Commands
 							method.Name),
 						attr.name,
 						method.GetParameters()))))
+			.OrderByDescending(x => x.command.Length)
 			.ToArray());
 	}
 }
