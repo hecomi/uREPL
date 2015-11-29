@@ -477,37 +477,44 @@ public class Gui : MonoBehaviour
 		}
 
 		var result = Core.Evaluate(code);
+		GameObject itemObj = null;
 		ResultItem item = null;
 		if (isPartial) {
-			item = outputContent.GetChild(outputContent.childCount - 1).GetComponent<ResultItem>();
+			itemObj = outputContent.GetChild(outputContent.childCount - 1).gameObject;
 		} else {
-			item = InstantiateInOutputContent(resultItemPrefab).GetComponent<ResultItem>();
+			itemObj = InstantiateInOutputContent(resultItemPrefab);
 		}
+		if (itemObj) {
+			item = itemObj.GetComponent<ResultItem>();
+		}
+
 		RemoveExceededItem();
 
-		switch (result.type) {
-			case CompileResult.Type.Success: {
-				inputField.text = "";
-				history_.Add(result.code);
-				history_.Reset();
-				item.type   = CompileResult.Type.Success;
-				item.input  = result.code;
-				item.output = result.value.ToString();
-				break;
-			}
-			case CompileResult.Type.Partial: {
-				inputField.text = "";
-				partial_ += text;
-				item.type   = CompileResult.Type.Partial;
-				item.input  = result.code;
-				item.output = "...";
-				break;
-			}
-			case CompileResult.Type.Error: {
-				item.type   = CompileResult.Type.Error;
-				item.input  = result.code;
-				item.output = result.error;
-				break;
+		if (item) {
+			switch (result.type) {
+				case CompileResult.Type.Success: {
+					inputField.text = "";
+					history_.Add(result.code);
+					history_.Reset();
+					item.type   = CompileResult.Type.Success;
+					item.input  = result.code;
+					item.output = result.value.ToString();
+					break;
+				}
+				case CompileResult.Type.Partial: {
+					inputField.text = "";
+					partial_ += text;
+					item.type   = CompileResult.Type.Partial;
+					item.input  = result.code;
+					item.output = "...";
+					break;
+				}
+				case CompileResult.Type.Error: {
+					item.type   = CompileResult.Type.Error;
+					item.input  = result.code;
+					item.output = result.error;
+					break;
+				}
 			}
 		}
 
