@@ -122,6 +122,8 @@ public class Gui : MonoBehaviour
 	{
 		selected = this;
 		SetActive(true);
+		inputField.ActivateInputField();
+		inputField.Select();
 	}
 
 	public void CloseWindow()
@@ -603,11 +605,13 @@ public class Gui : MonoBehaviour
 		func();
 	}
 
-	[Command(name = "quit", description = "Close console.")]
-	static public void QuitCommand()
+	[Command(name = "close", description = "Close console.")]
+	static public void CloseCommand()
 	{
-		if (selected != null) {
-			selected.CloseWindow();
+		if (selected) {
+			selected.RunOnNextFrame(() => {
+				if (selected) selected.CloseWindow();
+			});
 		}
 	}
 
