@@ -26,6 +26,7 @@ public static class Core
 
 #if UNITY_EDITOR
 	[UnityEditor.MenuItem("Assets/Create/uREPL")]
+	[UnityEditor.MenuItem("GameObject/Create Other/uREPL")]
 	static public void Create()
 	{
 		var prefab = Resources.Load(uReplPrefabPath);
