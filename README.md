@@ -244,7 +244,6 @@ Others
 
 TODOs
 -----
-- Command with arguments.
 - Multiline input.
 - VR support.
 - Various debug mode.
