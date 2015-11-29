@@ -472,7 +472,7 @@ public class Gui : MonoBehaviour
 		}
 
 		// auto-complete semicolon.
-		if ((code.Substring(code.Length - 1) != ";") && !IsInputContinuously()) {
+		if (!code.EndsWith(";") && !IsInputContinuously()) {
 			code += ";";
 		}
 

@@ -28,13 +28,15 @@ public class CommandInfo
 	public string className;
 	public string description;
 	public string command;
+	public ParameterInfo[] parameters;
 
-	public CommandInfo(string className, string methodName, string description, string command)
+	public CommandInfo(string className, string methodName, string description, string command, ParameterInfo[] parameters)
 	{
 		this.className   = className;
 		this.methodName  = methodName;
 		this.description = description;
 		this.command     = string.IsNullOrEmpty(command) ? methodName : command;
+		this.parameters  = parameters;
 	}
 }
 
@@ -79,7 +81,8 @@ public static class Commands
 							attr.description,
 							type.FullName,
 							method.Name),
-						attr.command))))
+						attr.command,
+						method.GetParameters()))))
 			.ToArray());
 	}
 }

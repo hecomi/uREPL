@@ -80,17 +80,34 @@ public static class Core
 		}
 	}
 
+	static private string ConvertIntoCodeIfCommand(string code)
+	{
+		var commands = Commands.GetAll();
+
+		var args = code.TrimEnd(';').Split(
+			new string[] { " ", "\t" },
+			System.StringSplitOptions.RemoveEmptyEntries).ToList();
+		var command = args[0];
+		args.RemoveAt(0);
+
+		var commandInfo = commands.FirstOrDefault(
+			x => (x.command == command) && (x.parameters.Length == args.Count));
+		if (commandInfo != null) {
+			code  = string.Format("{0}.{1}(", commandInfo.className, commandInfo.methodName);
+			code += string.Join(", ", args.ToArray());
+			code += ");";
+		}
+
+		return code;
+	}
+
 	static public CompileResult Evaluate(string code)
 	{
 		var result = new CompileResult();
 		result.code = code;
 
-		// find commands at first and if found, expand it.
-		var commands = Commands.GetAll();
-		var command = commands.FirstOrDefault(x => x.command == code.Replace(";", ""));
-		if (command != null) {
-			code = string.Format("{0}.{1}();", command.className, command.methodName);
-		}
+		// find commands at first and expand it if found.
+		code = ConvertIntoCodeIfCommand(code);
 
 		// if not match, eval the code using Mono.
 		object ret = null;
