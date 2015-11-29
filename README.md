@@ -3,14 +3,14 @@ uREPL
 
 uREPL is an in-game powerful REPL envinronment for Unity3D that supports following functions:
 
-- Execute any Unity-supported C# code at run time.
-- Support completions.
+- Any Unity-supported C# code evaluation at run time.
+- completions.
 - Emacs-like keyboard shortcuts.
 - History.
 - Output logs.
-- Inspect *GameObject* and *Component*.
-- Add commands just by adding an attribute.
-- Add optional completion plugins easily.
+- *GameObject* and *Component* inspecor.
+- Command definition just by adding an attribute.
+- Additional completion plugins.
 
 
 Demo
@@ -36,10 +36,9 @@ Please download the latest *uREPL.unitypackage* from the [release page](https://
 
 Usage
 -----
-1. Select menu from `Assets/Create/uREPL` to instantiate a `uREPL` prefab.
-2. Set the `Open Key` of the `uREPL.Gui` component attached to the `uREPL` *GameObject* (default is `F1`).
-3. Run game and hit the key.
-4. Input code into the input filed, then press Enter key to submit and evaluate it.
+1. Select menu from `Assets > Create > uREPL` to instantiate a `uREPL` prefab.
+2. If you have no `EventSystem`, add it from `Hierarchy > Create > UI > EventSystem`.
+3. Input the code into the input filed, then press the Enter key to submit and evaluate it.
 
 
 Keybinds
@@ -72,13 +71,16 @@ Keybinds
 
 Commands
 --------
+
+### Attribute
+
 You can add commands by adding a `[uREPL.Command]` attribute to static methods.
 
 ```cs
 public class CommandTest
 {
 	// Given from somewhere.
-	public GameObject gameObject;
+	static public GameObject gameObject;
 
 	// This method can be called without class name.
 	// $ ShowCurrentSelectedObject() ⏎
@@ -105,7 +107,42 @@ public class CommandTest
 }
 ```
 
-All commands can be seen by `commands` command.
+### Command with arguments
+
+uREPL automatically convert the command format into the actual code.
+
+```cs
+public class CommandTest
+{
+	// '$ print "\"hoge hoge\"" ⏎' will be replaced with:
+	// CommandTest.Print("\"hoge hoge\"");
+	[uREPL.Command(name = "print")]
+	static public void Print(object obj)
+	{
+		Debug.Log(obj);
+	}
+
+	// Supports an overloaded command.
+	[uREPL.Command(name = "print")]
+	static public void Print(string value1, int value2, float value3)
+	{
+		Debug.LogFormat("string: {0}, int: {1}, float: {2}", value1, value2, value3);
+	}
+}
+```
+
+
+### Built-in Commands
+- help
+  - show keybinds.
+- commands
+  - show all commands.
+- close
+  - close uREPL window.
+- exit
+  - exit game.
+
+Please all commands by the `commands` command.
 
 
 Completion
@@ -220,7 +257,8 @@ Please request new features to issue.
 
 Version
 -------
-| Data       | Version | Description     |
-| ---------- | ------- | --------------- |
-| 2015/11/27 |  0.1.0  | Add inspectors. |
-| 2015/11/01 |  0.0.1  | Start project.  |
+| Data       | Version | Description                 |
+| ---------- | ------- | --------------------------- |
+| 2015/11/29 |  0.2.0  | Add command with arguments. |
+| 2015/11/27 |  0.1.0  | Add inspectors.             |
+| 2015/11/01 |  0.0.1  | Start project.              |
