@@ -15,7 +15,7 @@ namespace uREPL
 public sealed class CommandAttribute : Attribute
 {
     public string description;
-	public string command;
+	public string name;
 
     public CommandAttribute()
 	{
@@ -45,14 +45,14 @@ public static class Commands
 	private const string helpTextFile = "uREPL/Xmls/uReplHelp";
 	static private CommandInfo[] commands_;
 
-	[Command(command = "help", description = "show help")]
+	[Command(name = "help", description = "show help")]
 	static public void ShowHelp()
 	{
 		var help = Resources.Load(helpTextFile) as TextAsset;
 		Log.Output(help.text);
 	}
 
-	[Command(command = "commands", description = "show commands")]
+	[Command(name = "commands", description = "show commands")]
 	static public void ShowCommands()
 	{
 		var commands = commands_
@@ -81,7 +81,7 @@ public static class Commands
 							attr.description,
 							type.FullName,
 							method.Name),
-						attr.command,
+						attr.name,
 						method.GetParameters()))))
 			.ToArray());
 	}

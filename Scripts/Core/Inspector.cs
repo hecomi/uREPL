@@ -46,6 +46,7 @@ public class Inspector : MonoBehaviour
 		instance = this;
 	}
 
+	[Command(name = "inspect", description = "inspect GameObject.")]
 	static public void Inspect(GameObject gameObject)
 	{
 		if (gameObject == null) {
@@ -61,6 +62,7 @@ public class Inspector : MonoBehaviour
 		});
 	}
 
+	[Command(name = "inspect", description = "inspect Component.")]
 	static public void Inspect<T>(T component) where T : Component
 	{
 		if (component == null) {
@@ -142,12 +144,6 @@ public class Inspector : MonoBehaviour
 		item.fieldType     = field.type;
 
 		view.Add(obj);
-	}
-
-	[Command]
-	static public void Test()
-	{
-		uREPL.Inspector.Inspect(GameObject.Find("uREPL").GetComponent<uREPL.Gui>());
 	}
 }
 

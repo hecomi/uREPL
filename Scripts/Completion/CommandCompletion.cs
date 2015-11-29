@@ -25,7 +25,7 @@ public class CommandCompletion : CompletionPlugin
 				.Where(x => x.command.IndexOf(input) == 0)
 				.Select(x => new CompletionInfo(
 					input,
-					x.command,
+					x.command + " ",
 					"C",
 					new Color32(200, 50, 30, 255),
 					x.description))

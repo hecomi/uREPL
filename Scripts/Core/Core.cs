@@ -90,6 +90,9 @@ public static class Core
 		var command = args[0];
 		args.RemoveAt(0);
 
+		// If two or more commands that have a same name are registered,
+		// the first one will be used here. It is not correct but works well because
+		// evaluation will be done after expanding the command to the code.
 		var commandInfo = commands.FirstOrDefault(
 			x => (x.command == command) && (x.parameters.Length == args.Count));
 		if (commandInfo != null) {
@@ -171,13 +174,13 @@ public static class Core
 		return Evaluator.GetUsing();
 	}
 
-	[Command(command = "show vars", description = "Show all local variables")]
+	[Command(name = "show vars", description = "Show all local variables")]
 	static public void ShowVars()
 	{
 		Log.Output(GetVars());
 	}
 
-	[Command(command = "show using", description = "Show all using")]
+	[Command(name = "show using", description = "Show all using")]
 	static public void ShowUsing()
 	{
 		Log.Output(GetUsing());
