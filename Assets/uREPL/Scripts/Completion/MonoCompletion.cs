@@ -110,7 +110,7 @@ public class MonoCompletion : CompletionPlugin
 		return (result == null) ? null : result
 			.Select(completion => new CompletionInfo(
 				prefix,
-				completion,
+				prefix + completion,
 				"M",
 				new Color32(50, 70, 240, 255)))
 			.Select(completion => {

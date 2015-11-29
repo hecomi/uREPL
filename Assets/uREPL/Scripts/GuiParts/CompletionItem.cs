@@ -51,7 +51,7 @@ public class CompletionItem : MonoBehaviour
 
 	public void SetCompletion(string code, string prefix)
 	{
-		completion_ = code;
+		completion_ = string.IsNullOrEmpty(prefix) ? code : code.Substring(prefix.Length);
 		var hitTextColorHex =
 			hitTextColor.r.ToString("X2") +
 			hitTextColor.g.ToString("X2") +
