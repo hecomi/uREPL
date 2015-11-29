@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Mono.CSharp;
 
 namespace uREPL
@@ -82,19 +83,38 @@ public static class Core
 
 	static private string ConvertIntoCodeIfCommand(string code)
 	{
-		var commands = Commands.GetAll();
+		// NOTE: If two or more commands that have a same name are registered,
+		//       the first one will be used here. It is not correct but works well because
+		//       evaluation will be done after expanding the command to the code.
 
-		var args = code.TrimEnd(';').Split(
+		// To consider commands with spaces, check if the head of the given code is consistent
+		// with any command name. command list is ranked in descending order of the command string length.
+		var commandInfo = Commands.GetAll().FirstOrDefault(
+			x => (code.Length >= x.command.Length) && (code.Substring(0, x.command.Length) == x.command));
+		if (commandInfo == null) {
+			return code;
+		}
+
+		var argsTmp = code.Substring(commandInfo.command.Length).TrimEnd(';').Split(
 			new string[] { " ", "\t" },
-			System.StringSplitOptions.RemoveEmptyEntries).ToList();
-		var command = args[0];
-		args.RemoveAt(0);
+			System.StringSplitOptions.None).ToList();
 
-		// If two or more commands that have a same name are registered,
-		// the first one will be used here. It is not correct but works well because
-		// evaluation will be done after expanding the command to the code.
-		var commandInfo = commands.FirstOrDefault(
-			x => (x.command == command) && (x.parameters.Length == args.Count));
+		// Check arguments with spaces inner semicolons (e.g. $ print "foo \"bar\"").
+		var args = new List<string>();
+		var semicolonCount = 0;
+		for (int i = 0; i < argsTmp.Count; ++i) {
+			bool isPartial = semicolonCount % 2 == 1;
+			var arg = argsTmp[i];
+			var regex = new Regex("(^|[^\\\\]+)\"");
+			semicolonCount += regex.Matches(arg).Count;
+			if (isPartial) {
+				args[args.Count - 1] += " " + arg;
+			} else if (!string.IsNullOrEmpty(arg)) {
+				args.Add(arg);
+			}
+		}
+
+		// Convert the command into the code.
 		if (commandInfo != null) {
 			code  = string.Format("{0}.{1}(", commandInfo.className, commandInfo.methodName);
 			code += string.Join(", ", args.ToArray());
