@@ -85,24 +85,24 @@ public class CommandTest
 	// This method can be called without class name.
 	// $ ShowCurrentSelectedObject() ⏎
 	[uREPL.Command]
-	static public void ShowCurrentSelectedObject()
+	static public string ShowCurrentSelectedObject()
 	{
-		return gameObject.Name;
+		return gameObject.name;
 	}
 
 	// This method can be called by the given name.
 	// $ selected ⏎
 	[uREPL.Command(name = "selected")]
-	static public void ShowCurrentSelectedObject2()
+	static public string ShowCurrentSelectedObject2()
 	{
-		return gameObject.Name;
+		return gameObject.name;
 	}
 
 	// Completion view show the given description.
 	[uREPL.Command(name = "selected2", description = "show the selected gameobject name.")]
-	static public void ShowCurrentSelectedObject3()
+	static public string ShowCurrentSelectedObject3()
 	{
-		return gameObject.Name;
+		return gameObject.name;
 	}
 }
 ```
@@ -180,8 +180,7 @@ public class SampleCompletion : CompletionPlugin
 		var partialName = input.Substring(input.LastIndexOf("\"") + 1);
 		return gameObjectNames_
 			.Where(name => name.IndexOf(partialName) != -1)
-			.Select(name => new CompletionInfo(
-				partialName, name, "G", Color.red))
+			.Select(name => new CompletionInfo(partialName, name, "G", Color.red))
 			.ToArray();
 	}
 }
