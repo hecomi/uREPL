@@ -35,7 +35,7 @@ public class GameObjectNameCompletion : CompletionPlugin
 
 		var partialName = input.Substring(input.LastIndexOf("\"") + 1);
 		return allGameObjectNames_
-			.Where(name => name.IndexOf(partialName) != -1)
+			.Where(name => name.IndexOf(partialName) == 0)
 			.Select(name => new CompletionInfo(
 				partialName,
 				name,
