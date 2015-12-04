@@ -22,28 +22,43 @@ public class ComponentInfo
 	public List<FieldItemInfo> fields = new List<FieldItemInfo>();
 }
 
-public class Inspector : MonoBehaviour
+public static class Inspector
 {
-	static private Inspector instance;
+	private const string outputPrefabDirPath = "uREPL/Prefabs/Output/";
+	private const string fieldPrefabDirPath  = "uREPL/Prefabs/Field Items/";
 
-	[HeaderAttribute("Inspect Prefabs")]
-	public GameObject gameObjectViewPrefab;
-	public GameObject componentViewPrefab;
+	static private bool isInitialized = false;
 
-	[HeaderAttribute("Fields")]
-	public GameObject boolItemPrefab;
-	public GameObject intItemPrefab;
-	public GameObject floatItemPrefab;
-	public GameObject stringItemPrefab;
-	public GameObject vector2ItemPrefab;
-	public GameObject vector3ItemPrefab;
-	public GameObject vector4ItemPrefab;
-	public GameObject enumItemPrefab;
-	public GameObject readonlyItemPrefab;
+	static private GameObject gameObjectViewPrefab;
+	static private GameObject componentViewPrefab;
 
-	void Awake()
+	static private GameObject boolItemPrefab;
+	static private GameObject intItemPrefab;
+	static private GameObject floatItemPrefab;
+	static private GameObject stringItemPrefab;
+	static private GameObject vector2ItemPrefab;
+	static private GameObject vector3ItemPrefab;
+	static private GameObject vector4ItemPrefab;
+	static private GameObject enumItemPrefab;
+	static private GameObject readonlyItemPrefab;
+
+	static public void Initialize()
 	{
-		instance = this;
+		if (isInitialized) return;
+		isInitialized = true;
+
+		gameObjectViewPrefab = (GameObject) Resources.Load(outputPrefabDirPath + "GameObject Item");
+		componentViewPrefab  = (GameObject) Resources.Load(outputPrefabDirPath + "Component Item");
+
+		boolItemPrefab       = (GameObject) Resources.Load(fieldPrefabDirPath + "Bool Item");
+		intItemPrefab        = (GameObject) Resources.Load(fieldPrefabDirPath + "Int Item");
+		floatItemPrefab      = (GameObject) Resources.Load(fieldPrefabDirPath + "Float Item");
+		stringItemPrefab     = (GameObject) Resources.Load(fieldPrefabDirPath + "String Item");
+		vector2ItemPrefab    = (GameObject) Resources.Load(fieldPrefabDirPath + "Vector2 Item");
+		vector3ItemPrefab    = (GameObject) Resources.Load(fieldPrefabDirPath + "Vector3 Item");
+		vector4ItemPrefab    = (GameObject) Resources.Load(fieldPrefabDirPath + "Vector4 Item");
+		enumItemPrefab       = (GameObject) Resources.Load(fieldPrefabDirPath + "Enum Item");
+		readonlyItemPrefab   = (GameObject) Resources.Load(fieldPrefabDirPath + "Readonly Item");
 	}
 
 	[Command(name = "inspect", description = "inspect GameObject.")]
@@ -55,7 +70,7 @@ public class Inspector : MonoBehaviour
 		}
 
 		Gui.selected.RunOnNextFrame(() => {
-			var obj = Gui.InstantiateInOutputContent(instance.gameObjectViewPrefab);
+			var obj = Gui.InstantiateInOutputContent(gameObjectViewPrefab);
 			var item = obj.GetComponent<GameObjectItem>();
 			item.targetGameObject = gameObject;
 			item.title = gameObject.name;
@@ -97,7 +112,7 @@ public class Inspector : MonoBehaviour
 
 	static public void Output(ComponentInfo component)
 	{
-		var obj = Gui.InstantiateInOutputContent(instance.componentViewPrefab);
+		var obj = Gui.InstantiateInOutputContent(componentViewPrefab);
 		if (obj == null) return;
 
 		var item = obj.GetComponent<ComponentItem>();
@@ -115,25 +130,25 @@ public class Inspector : MonoBehaviour
 		GameObject obj = null;
 
 		if (field.type == typeof(bool)) {
-			obj = Instantiate(instance.boolItemPrefab);
+			obj = UnityEngine.Object.Instantiate(boolItemPrefab);
 		} else if (field.type == typeof(int)) {
-			obj = Instantiate(instance.intItemPrefab);
+			obj = UnityEngine.Object.Instantiate(intItemPrefab);
 		} else if (field.type == typeof(float)) {
-			obj = Instantiate(instance.floatItemPrefab);
+			obj = UnityEngine.Object.Instantiate(floatItemPrefab);
 		} else if (field.type == typeof(string)) {
-			obj = Instantiate(instance.intItemPrefab);
+			obj = UnityEngine.Object.Instantiate(stringItemPrefab);
 		} else if (field.type == typeof(Vector2)) {
-			obj = Instantiate(instance.vector2ItemPrefab);
+			obj = UnityEngine.Object.Instantiate(vector2ItemPrefab);
 		} else if (field.type == typeof(Vector3)) {
-			obj = Instantiate(instance.vector3ItemPrefab);
+			obj = UnityEngine.Object.Instantiate(vector3ItemPrefab);
 		} else if (field.type == typeof(Vector4)) {
-			obj = Instantiate(instance.vector4ItemPrefab);
+			obj = UnityEngine.Object.Instantiate(vector4ItemPrefab);
 		} else if (field.type == typeof(Quaternion)) {
-			obj = Instantiate(instance.vector4ItemPrefab);
+			obj = UnityEngine.Object.Instantiate(vector4ItemPrefab);
 		} else if (field.type.IsEnum) {
-			obj = Instantiate(instance.enumItemPrefab);
+			obj = UnityEngine.Object.Instantiate(enumItemPrefab);
 		} else {
-			obj = Instantiate(instance.readonlyItemPrefab);
+			obj = UnityEngine.Object.Instantiate(readonlyItemPrefab);
 		}
 
 		var item = obj.GetComponent<FieldItem>();
