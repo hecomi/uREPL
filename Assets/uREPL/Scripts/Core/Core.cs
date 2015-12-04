@@ -62,8 +62,8 @@ public static class Core
 		ReferenceAllAssemblies();
 		SetUsings();
 
-		// setup log
 		Log.Initialize();
+		Inspector.Initialize();
 	}
 
 	static private void ReferenceAllAssemblies()
