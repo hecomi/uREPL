@@ -20,7 +20,6 @@ public class CompileResult
 
 public static class Core
 {
-	private const string uReplPrefabPath = "uREPL/Prefabs/uREPL";
 	static private bool isInitialized = false;
 	static private List<CompletionPlugin> completionPlugins = new List<CompletionPlugin>();
 
@@ -48,7 +47,7 @@ public static class Core
 	[UnityEditor.MenuItem("GameObject/Create Other/uREPL")]
 	static public void Create()
 	{
-		var prefab = Resources.Load(uReplPrefabPath);
+		var prefab = Resources.Load("uREPL/Prefabs/uREPL");
 		var instance = MonoBehaviour.Instantiate(prefab);
 		instance.name = "uREPL";
 	}

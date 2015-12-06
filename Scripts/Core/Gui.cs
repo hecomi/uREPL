@@ -19,11 +19,10 @@ public class Gui : MonoBehaviour
 	public KeyCode closeKey = KeyCode.F1;
 	private bool isWindowOpened_ = false;
 
-	[HeaderAttribute("References")]
-	public InputField inputField;
-	public Transform outputContent;
-	public AnnotationView annotation;
-	public CompletionView completionView;
+	private InputField inputField;
+	private Transform outputContent;
+	private AnnotationView annotation;
+	private CompletionView completionView;
 
 	public int caretPosition
 	{
@@ -31,9 +30,8 @@ public class Gui : MonoBehaviour
 		set { inputField.caretPosition = value; }
 	}
 
-	[HeaderAttribute("Prefabs")]
-	public GameObject resultItemPrefab;
-	public GameObject logItemPrefab;
+	private GameObject resultItemPrefab;
+	private GameObject logItemPrefab;
 
 	[HeaderAttribute("Parameters")]
 	public float completionTimer = 0.5f;
@@ -67,11 +65,27 @@ public class Gui : MonoBehaviour
 
 	void Awake()
 	{
+		FindObjects();
+
 		Core.Initialize();
+
 		isWindowOpened_ = GetComponent<Canvas>().enabled;
 		if (isWindowOpened_) {
 			selected = this;
 		}
+	}
+
+	void FindObjects()
+	{
+		// Instances
+		inputField     = transform.FindChild("InputField").GetComponent<InputField>();
+		outputContent  = transform.FindChild("Output View/Content");
+		annotation     = transform.FindChild("Annotation View").GetComponent<AnnotationView>();
+		completionView = transform.FindChild("Completion View").GetComponent<CompletionView>();
+
+		// Prefabs
+		resultItemPrefab = Resources.Load<GameObject>("uREPL/Prefabs/Output/Result Item");
+		logItemPrefab    = Resources.Load<GameObject>("uREPL/Prefabs/Output/Log Item");
 	}
 
 	void Start()

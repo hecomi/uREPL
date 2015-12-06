@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public abstract class FieldItem : MonoBehaviour
 {
-	public Text labelText;
+	protected Text labelText;
 
 	public string label
 	{
@@ -25,4 +25,9 @@ public abstract class FieldItem : MonoBehaviour
 	public string fieldName;
 	[HideInInspector]
 	public System.Type fieldType;
+
+	void Awake()
+	{
+		labelText = transform.FindChild("Label").GetComponent<Text>();
+	}
 }
