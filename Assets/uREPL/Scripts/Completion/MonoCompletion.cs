@@ -114,7 +114,7 @@ public class MonoCompletion : CompletionPlugin
 				"M",
 				new Color32(50, 70, 240, 255)))
 			.Select(completion => {
-				var type = types_.list.FirstOrDefault(x => x.name == (completion.prefix + completion.code));
+				var type = types_.list.FirstOrDefault(x => x.name == completion.code);
 				if (type != null) {
 					completion.description = type.description;
 				}
