@@ -11,37 +11,24 @@ namespace uREPL
 
 public class Gui : MonoBehaviour
 {
+	#region [core]
 	static public Gui selected;
-	private const int resultMaxNum = 100;
 
+	private Thread completionThread_;
+	private CompletionInfo[] completions_;
+
+	public Queue<Log.Data> logData_ = new Queue<Log.Data>();
+	private History history_ = new History();
+
+	private string currentPartialCode_ = "";
+	private string currentComletionPrefix_ = "";
+	#endregion
+
+	#region [key operations]
 	[HeaderAttribute("Keys")]
 	public KeyCode openKey = KeyCode.F1;
 	public KeyCode closeKey = KeyCode.F1;
 	private bool isWindowOpened_ = false;
-
-	private InputField inputField;
-	private Transform outputContent;
-	private AnnotationView annotation;
-	private CompletionView completionView;
-
-	public int caretPosition
-	{
-		get { return inputField.caretPosition;  }
-		set { inputField.caretPosition = value; }
-	}
-
-	private GameObject resultItemPrefab;
-	private GameObject logItemPrefab;
-
-	[HeaderAttribute("Parameters")]
-	public float completionTimer = 0.5f;
-	private bool isComplementing_ = false;
-	private bool isCompletionFinished_ = false;
-	private bool isCompletionStopped_ = false;
-	private float elapsedTimeFromLastInput_ = 0f;
-
-	public float annotationTimer = 1f;
-	private float elapsedTimeFromLastSelect_ = 0f;
 
 	private enum KeyOption {
 		None  = 0,
@@ -52,26 +39,46 @@ public class Gui : MonoBehaviour
 	private Dictionary<int, int> keyPressingCounter_ = new Dictionary<int, int>();
 	public float holdInputStartDelay = 30;
 	public float holdInputFrameInterval = 5;
+	#endregion
 
-	public Queue<Log.Data> logData_ = new Queue<Log.Data>();
+	#region [content]
+	private InputField inputField;
+	private Transform outputContent;
+	private AnnotationView annotation;
+	private CompletionView completionView;
+	private GameObject resultItemPrefab;
+	private GameObject logItemPrefab;
 
-	private string partial_ = "";
-	private string currentComletionPrefix_ = "";
+	public int caretPosition
+	{
+		get { return inputField.caretPosition;  }
+		set { inputField.caretPosition = value; }
+	}
+	#endregion
 
-	private History history_ = new History();
+	#region [parameters]
+	[HeaderAttribute("Parameters")]
+	public int maxResultNum = 100;
+	public float completionTimer = 0.5f;
+	private bool isComplementing_ = false;
+	private bool isCompletionFinished_ = false;
+	private bool isCompletionStopped_ = false;
+	private float elapsedTimeFromLastInput_ = 0f;
+	public float annotationTimer = 1f;
+	private float elapsedTimeFromLastSelect_ = 0f;
+	#endregion
 
-	private Thread completionThread_;
-	private CompletionInfo[] completions_;
-
+	#region [default completion methods]
 	[HeaderAttribute("Completion Methods")]
 	public bool useMonoCompletion           = true;
 	public bool useCommandCompletion        = true;
 	public bool useGameObjectNameCompletion = true;
 	public bool useGameObjectPathCompletion = true;
+	#endregion
 
 	void Awake()
 	{
-		FindObjects();
+		InitObjects();
 		AddCompletionComponents();
 
 		Core.Initialize();
@@ -82,7 +89,7 @@ public class Gui : MonoBehaviour
 		}
 	}
 
-	void FindObjects()
+	void InitObjects()
 	{
 		// Instances
 		inputField     = transform.FindChild("InputField").GetComponent<InputField>();
@@ -369,7 +376,7 @@ public class Gui : MonoBehaviour
 
 	private void StartCompletionThread()
 	{
-		var code = partial_ + inputField.text;
+		var code = currentPartialCode_ + inputField.text;
 		code = code.Substring(0, caretPosition);
 		completionThread_ = new Thread(() => {
 			completions_ = Core.GetCompletions(code);
@@ -498,9 +505,9 @@ public class Gui : MonoBehaviour
 		// use the partial code previously input if it exists.
 		var isPartial = false;
 		var code = text;
-		if (!string.IsNullOrEmpty(partial_)) {
-			code = partial_ + code;
-			partial_ = "";
+		if (!string.IsNullOrEmpty(currentPartialCode_)) {
+			code = currentPartialCode_ + code;
+			currentPartialCode_ = "";
 			isPartial = true;
 		}
 
@@ -536,7 +543,7 @@ public class Gui : MonoBehaviour
 				}
 				case CompileResult.Type.Partial: {
 					inputField.text = "";
-					partial_ += text;
+					currentPartialCode_ += text;
 					item.type   = CompileResult.Type.Partial;
 					item.input  = result.code;
 					item.output = "...";
@@ -556,7 +563,7 @@ public class Gui : MonoBehaviour
 
 	private void RemoveExceededItem()
 	{
-		if (outputContent.childCount > resultMaxNum) {
+		if (outputContent.childCount > maxResultNum) {
 			Destroy(outputContent.GetChild(0).gameObject);
 		}
 	}
