@@ -6,12 +6,25 @@ namespace uREPL
 
 public class GameObjectNameCompletion : CompletionPlugin
 {
-	static private string[] allGameObjectNames_;
+	private struct GameObjectInfo
+	{
+		public string name;
+		public string path;
+		public GameObjectInfo(string name, string path)
+		{
+			this.name = name;
+			this.path = path;
+		}
+	}
+
+	static private GameObjectInfo[] allGameObjects_;
 
 	protected override void Awake()
 	{
-		allGameObjectNames_ = GameObject.FindObjectsOfType<GameObject>()
-			.Select(go => go.name)
+		allGameObjects_ = GameObject.FindObjectsOfType<GameObject>()
+			.Select(go => new GameObjectInfo(
+				go.name,
+				go.transform.GetPath()))
 			.ToArray();
 
 		base.Awake();
@@ -34,13 +47,14 @@ public class GameObjectNameCompletion : CompletionPlugin
 		if (!IsInsideQuotation(input)) return null;
 
 		var partialName = input.Substring(input.LastIndexOf("\"") + 1);
-		return allGameObjectNames_
-			.Where(name => name.IndexOf(partialName) == 0)
-			.Select(name => new CompletionInfo(
+		return allGameObjects_
+			.Where(info => info.name.IndexOf(partialName) == 0)
+			.Select(info => new CompletionInfo(
 				partialName,
-				name,
+				info.name,
 				"G",
-				new Color32(30, 200, 80, 255)))
+				new Color32(30, 200, 80, 255),
+				info.path))
 			.ToArray();
 	}
 }
