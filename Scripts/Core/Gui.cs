@@ -63,9 +63,16 @@ public class Gui : MonoBehaviour
 	private Thread completionThread_;
 	private CompletionInfo[] completions_;
 
+	[HeaderAttribute("Completion Methods")]
+	public bool useMonoCompletion           = true;
+	public bool useCommandCompletion        = true;
+	public bool useGameObjectNameCompletion = true;
+	public bool useGameObjectPathCompletion = true;
+
 	void Awake()
 	{
 		FindObjects();
+		AddCompletionComponents();
 
 		Core.Initialize();
 
@@ -86,6 +93,14 @@ public class Gui : MonoBehaviour
 		// Prefabs
 		resultItemPrefab = Resources.Load<GameObject>("uREPL/Prefabs/Output/Result Item");
 		logItemPrefab    = Resources.Load<GameObject>("uREPL/Prefabs/Output/Log Item");
+	}
+
+	void AddCompletionComponents()
+	{
+		if (useMonoCompletion)           gameObject.AddComponent<MonoCompletion>();
+		if (useCommandCompletion)        gameObject.AddComponent<CommandCompletion>();
+		if (useGameObjectNameCompletion) gameObject.AddComponent<GameObjectNameCompletion>();
+		if (useGameObjectPathCompletion) gameObject.AddComponent<GameObjectPathCompletion>();
 	}
 
 	void Start()
@@ -142,7 +157,9 @@ public class Gui : MonoBehaviour
 
 	public void CloseWindow()
 	{
-		selected = null;
+		if (selected == this) {
+			selected = null;
+		}
 		SetActive(false);
 	}
 
