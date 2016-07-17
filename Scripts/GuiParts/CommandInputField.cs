@@ -8,9 +8,12 @@ namespace uREPL
 
 public class CommandInputField : InputField
 {
+	public Gui parentGui { get; set; }
+
 	public override void OnUpdateSelected(BaseEventData eventData)
 	{
 		if (!isFocused) return;
+		Gui.selected = parentGui;
 
 		bool consumedEvent = false;
 		var e = new Event();

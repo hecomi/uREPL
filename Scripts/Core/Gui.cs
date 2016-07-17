@@ -42,7 +42,7 @@ public class Gui : MonoBehaviour
 	#endregion
 
 	#region [content]
-	private InputField inputField;
+	private CommandInputField inputField;
 	private Transform outputContent;
 	private AnnotationView annotation;
 	private CompletionView completionView;
@@ -92,7 +92,7 @@ public class Gui : MonoBehaviour
 	void InitObjects()
 	{
 		// Instances
-		inputField     = transform.FindChild("InputField").GetComponent<InputField>();
+		inputField     = transform.FindChild("InputField").GetComponent<CommandInputField>();
 		outputContent  = transform.FindChild("Output View/Content");
 		annotation     = transform.FindChild("Annotation View").GetComponent<AnnotationView>();
 		completionView = transform.FindChild("Completion View").GetComponent<CompletionView>();
@@ -100,6 +100,9 @@ public class Gui : MonoBehaviour
 		// Prefabs
 		resultItemPrefab = Resources.Load<GameObject>("uREPL/Prefabs/Output/Result Item");
 		logItemPrefab    = Resources.Load<GameObject>("uREPL/Prefabs/Output/Log Item");
+
+		// Settings
+		inputField.parentGui = this;
 	}
 
 	void AddCompletionComponents()
