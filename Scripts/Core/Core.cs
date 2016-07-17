@@ -21,7 +21,6 @@ public class CompileResult
 public static class Core
 {
 	static private bool isInitialized = false;
-	static private List<CompletionPlugin> completionPlugins = new List<CompletionPlugin>();
 
 	internal class ParseBlockResult
 	{
@@ -88,18 +87,6 @@ public static class Core
 		// #endif
 	}
 
-	static public void RegisterCompletionPlugins(CompletionPlugin plugin)
-	{
-		completionPlugins.Add(plugin);
-	}
-
-	static public void UnregisterCompletionPlugins(CompletionPlugin plugin)
-	{
-		if (completionPlugins.Contains(plugin)) {
-			completionPlugins.Remove(plugin);
-		}
-	}
-
 	static private ParseBlockResult ConvertBlockToPlaceholder(
 		string input,
 		string pattern,
@@ -139,7 +126,8 @@ public static class Core
 		// To consider commands with spaces, check if the head of the given code is consistent
 		// with any command name. command list is ranked in descending order of the command string length.
 		var commandInfo = Commands.GetAll().FirstOrDefault(
-			x => (code.Length >= x.command.Length) && (code.Substring(0, x.command.Length) == x.command));
+			x => (code.Length >= x.command.Length) && 
+			     (code.Substring(0, x.command.Length) == x.command));
 		if (commandInfo == null) {
 			return code;
 		}
@@ -219,20 +207,6 @@ public static class Core
 		result.type = CompileResult.Type.Success;
 		result.value = (hasReturnValue && ret != null) ? ret : "null";
 		return result;
-	}
-
-	static public CompletionInfo[] GetCompletions(string input)
-	{
-		var result = new CompletionInfo[] {};
-
-		foreach (var plugin in completionPlugins) {
-			var completions = plugin.GetCompletions(input);
-			if (completions != null && completions.Length > 0) {
-				result = result.Concat(completions).ToArray();
-			}
-		}
-
-		return result.OrderBy(x => x.code).ToArray();
 	}
 
 	static public string GetVars()

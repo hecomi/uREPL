@@ -9,12 +9,12 @@ public class CommandCompletion : CompletionPlugin
 	static public CommandCompletion instance;
 	private CommandInfo[] commands_;
 
-	protected override void Awake()
+	protected override void OnEnable()
 	{
 		instance = this;
 		commands_ = Commands.GetAll();
 
-		base.Awake();
+		base.OnEnable();
 	}
 
 	public override CompletionInfo[] GetCompletions(string input)
