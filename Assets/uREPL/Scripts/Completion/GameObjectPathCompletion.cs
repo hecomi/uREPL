@@ -8,11 +8,11 @@ public class GameObjectPathCompletion : CompletionPlugin
 {
 	static private string[] allGameObjectPaths;
 
-	protected override void Awake()
+	protected override void OnEnable()
 	{
 		allGameObjectPaths = Utility.GetAllGameObjectPaths();
 
-		base.Awake();
+		base.OnEnable();
 	}
 
 	public override CompletionInfo[] GetCompletions(string input)

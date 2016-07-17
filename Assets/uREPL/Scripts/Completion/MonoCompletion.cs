@@ -33,7 +33,7 @@ public class MonoCompletion : CompletionPlugin
 
 	private TypeDataCollection types_;
 
-	protected override void Awake()
+	protected override void OnEnable()
 	{
 		var xml = Resources.Load(unityEngineClassXmlPath) as TextAsset;
 		var serializer = new XmlSerializer(typeof(TypeDataCollection));
@@ -41,7 +41,7 @@ public class MonoCompletion : CompletionPlugin
 			types_ = serializer.Deserialize(reader) as TypeDataCollection;
 		}
 
-		base.Awake();
+		base.OnEnable();
 	}
 
 	public int GetPosIfInsideBracket(string input, string left, string right)

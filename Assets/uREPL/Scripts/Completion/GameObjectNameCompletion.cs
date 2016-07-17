@@ -19,7 +19,7 @@ public class GameObjectNameCompletion : CompletionPlugin
 
 	static private GameObjectInfo[] allGameObjects_;
 
-	protected override void Awake()
+	protected override void OnEnable()
 	{
 		allGameObjects_ = GameObject.FindObjectsOfType<GameObject>()
 			.Select(go => new GameObjectInfo(
@@ -27,7 +27,7 @@ public class GameObjectNameCompletion : CompletionPlugin
 				go.transform.GetPath()))
 			.ToArray();
 
-		base.Awake();
+		base.OnEnable();
 	}
 
 	public bool IsInsideQuotation(string input, string quot = "\"")

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mono.CSharp;
 
 namespace uREPL
@@ -33,14 +34,45 @@ public abstract class CompletionPlugin : MonoBehaviour
 {
 	public abstract CompletionInfo[] GetCompletions(string input);
 
-	protected virtual void Awake()
+	protected virtual void OnEnable()
 	{
-		Core.RegisterCompletionPlugins(this);
+		CompletionPluginManager.RegisterCompletionPlugins(this);
 	}
 
-	protected virtual void OnDestroy()
+	protected virtual void OnDisable()
 	{
-		Core.UnregisterCompletionPlugins(this);
+		CompletionPluginManager.UnregisterCompletionPlugins(this);
+	}
+}
+
+public class CompletionPluginManager
+{
+	static private List<CompletionPlugin> completionPlugins = new List<CompletionPlugin>();
+
+	static public void RegisterCompletionPlugins(CompletionPlugin plugin)
+	{
+		completionPlugins.Add(plugin);
+	}
+
+	static public void UnregisterCompletionPlugins(CompletionPlugin plugin)
+	{
+		if (completionPlugins.Contains(plugin)) {
+			completionPlugins.Remove(plugin);
+		}
+	}
+
+	static public CompletionInfo[] GetCompletions(string input)
+	{
+		var result = new CompletionInfo[] {};
+
+		foreach (var plugin in completionPlugins) {
+			var completions = plugin.GetCompletions(input);
+			if (completions != null && completions.Length > 0) {
+				result = result.Concat(completions).ToArray();
+			}
+		}
+
+		return result.OrderBy(x => x.code).ToArray();
 	}
 }
 

@@ -382,7 +382,7 @@ public class Gui : MonoBehaviour
 		var code = currentPartialCode_ + inputField.text;
 		code = code.Substring(0, caretPosition);
 		completionThread_ = new Thread(() => {
-			completions_ = Core.GetCompletions(code);
+			completions_ = CompletionPluginManager.GetCompletions(code);
 			if (completions_ != null && completions_.Length > 0) {
 				currentComletionPrefix_ = completions_[0].prefix; // TODO: this is not smart...
 				isComplementing_ = true;
