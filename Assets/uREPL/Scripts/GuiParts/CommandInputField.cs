@@ -36,7 +36,7 @@ public class CommandInputField : InputField
 				var shouldContinue = KeyPressed(e);
 
 				// Prevent finish.
-				// Command submission and cancel are observed in Core.
+				// Command submission and cancel are observed and handled in Core.
 				switch (e.keyCode) {
 					case KeyCode.Return:
 					case KeyCode.KeypadEnter:
