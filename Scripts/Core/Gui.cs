@@ -43,6 +43,7 @@ public class Gui : MonoBehaviour
 
 	#region [content]
 	private CommandInputField inputField;
+	private CommandInputField multilineInputField;
 	private Transform outputContent;
 	private AnnotationView annotation;
 	private CompletionView completionView;
@@ -92,10 +93,11 @@ public class Gui : MonoBehaviour
 	void InitObjects()
 	{
 		// Instances
-		inputField     = transform.FindChild("InputField").GetComponent<CommandInputField>();
-		outputContent  = transform.FindChild("Output View/Content");
-		annotation     = transform.FindChild("Annotation View").GetComponent<AnnotationView>();
-		completionView = transform.FindChild("Completion View").GetComponent<CompletionView>();
+		var container  = transform.Find("Container");
+		inputField     = container.Find("Input Field").GetComponent<CommandInputField>();
+		outputContent  = container.Find("Output View/Content");
+		annotation     = transform.Find("Annotation View").GetComponent<AnnotationView>();
+		completionView = transform.Find("Completion View").GetComponent<CompletionView>();
 
 		// Prefabs
 		resultItemPrefab = Resources.Load<GameObject>("uREPL/Prefabs/Output/Result Item");
@@ -225,19 +227,13 @@ public class Gui : MonoBehaviour
 				isOptionAcceptable = true;
 				break;
 			case KeyOption.Ctrl:
-				isOptionAcceptable =
-					Input.GetKey(KeyCode.LeftControl) ||
-					Input.GetKey(KeyCode.RightControl);
+				isOptionAcceptable = KeyUtil.Control();
 				break;
 			case KeyOption.Shift:
-				isOptionAcceptable =
-					Input.GetKey(KeyCode.LeftShift) ||
-					Input.GetKey(KeyCode.RightShift);
+				isOptionAcceptable = KeyUtil.Shift();
 				break;
 			case KeyOption.Alt:
-				isOptionAcceptable =
-					Input.GetKey(KeyCode.LeftAlt) ||
-					Input.GetKey(KeyCode.RightAlt);
+				isOptionAcceptable = KeyUtil.Alt();
 				break;
 		}
 
@@ -435,28 +431,28 @@ public class Gui : MonoBehaviour
 
 	private void RegisterListeners()
 	{
-		inputField.onValueChange.AddListener(OnValueChanged);
+		inputField.onValueChanged.AddListener(OnValueChanged);
 		inputField.onEndEdit.AddListener(OnSubmit);
 	}
 
 	private void UnregisterListeners()
 	{
-		inputField.onValueChange.RemoveListener(OnValueChanged);
+		inputField.onValueChanged.RemoveListener(OnValueChanged);
 		inputField.onEndEdit.RemoveListener(OnSubmit);
 	}
 
 	private bool IsInputContinuously()
 	{
-		return
-			Input.GetKey(KeyCode.LeftShift) ||
-			Input.GetKey(KeyCode.RightShift);
+		return !inputField.multiLine && KeyUtil.Shift();
 	}
 
 	private bool IsEnterPressing()
 	{
-		return
-			Input.GetKeyDown(KeyCode.Return) ||
-			Input.GetKeyDown(KeyCode.KeypadEnter);
+		if (!inputField.multiLine) {
+			return KeyUtil.Enter();
+		} else {
+			return (KeyUtil.Control() || KeyUtil.Shift()) && KeyUtil.Enter();
+		}
 	}
 
 	public Vector3 GetCompletionPosition()
@@ -484,9 +480,11 @@ public class Gui : MonoBehaviour
 
 	private void OnValueChanged(string text)
 	{
-		text = text.Replace("\n", "");
-		text = text.Replace("\r", "");
-		inputField.text = text;
+		if (!inputField.multiLine) {
+			text = text.Replace("\n", "");
+			text = text.Replace("\r", "");
+			inputField.text = text;
+		}
 		if (!IsEnterPressing()) {
 			isCompletionStopped_ = false;
 			RunOnEndOfFrame(() => { ResetCompletion(); });
