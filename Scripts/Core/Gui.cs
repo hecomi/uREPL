@@ -30,15 +30,7 @@ public class Gui : MonoBehaviour
 	public KeyCode closeKey = KeyCode.F1;
 	private bool isWindowOpened_ = false;
 
-	private enum KeyOption {
-		None  = 0,
-		Ctrl  = 1000,
-		Shift = 1000000,
-		Alt   = 1000000000
-	};
-	private Dictionary<int, int> keyPressingCounter_ = new Dictionary<int, int>();
-	public float holdInputStartDelay = 30;
-	public float holdInputFrameInterval = 5;
+	private KeyEvent keyEvent_ = new KeyEvent();
 	#endregion
 
 	#region [content]
@@ -72,6 +64,8 @@ public class Gui : MonoBehaviour
 	void Awake()
 	{
 		InitObjects();
+		InitCommands();
+		InitEmacsLikeCommands();
 
 		Core.Initialize();
 
@@ -96,6 +90,70 @@ public class Gui : MonoBehaviour
 
 		// Settings
 		inputField.parentGui = this;
+	}
+
+	private void InitCommands()
+	{
+		keyEvent_.Add(KeyCode.UpArrow, Prev);
+		keyEvent_.Add(KeyCode.DownArrow, Next);
+		keyEvent_.Add(KeyCode.LeftArrow, StopCompletion);
+		keyEvent_.Add(KeyCode.RightArrow, StopCompletion);
+		keyEvent_.Add(KeyCode.Escape, StopCompletion);
+		keyEvent_.Add(KeyCode.Tab, () => {
+			if (isComplementing_) {
+				DoCompletion();
+			} else {
+				ResetCompletion();
+				StartCompletion();
+			}
+		});
+	}
+
+	void InitEmacsLikeCommands()
+	{
+		keyEvent_.Add(KeyCode.P, KeyEvent.Option.Ctrl, Prev);
+		keyEvent_.Add(KeyCode.N, KeyEvent.Option.Ctrl, Next);
+		keyEvent_.Add(KeyCode.F, KeyEvent.Option.Ctrl, () => {
+			caretPosition = Mathf.Min(caretPosition + 1, inputField.text.Length);
+			StopCompletion();
+		});
+		keyEvent_.Add(KeyCode.B, KeyEvent.Option.Ctrl, () => {
+			caretPosition = Mathf.Max(caretPosition - 1, 0);
+			StopCompletion();
+		});
+		keyEvent_.Add(KeyCode.A, KeyEvent.Option.Ctrl, () => {
+			inputField.MoveTextStart(false);
+			StopCompletion();
+		});
+		keyEvent_.Add(KeyCode.E, KeyEvent.Option.Ctrl, () => {
+			inputField.MoveTextEnd(false);
+			StopCompletion();
+		});
+		keyEvent_.Add(KeyCode.H, KeyEvent.Option.Ctrl, () => {
+			if (caretPosition > 0) {
+				var isCaretPositionLast = caretPosition == inputField.text.Length;
+				inputField.text = inputField.text.Remove(caretPosition - 1, 1);
+				if (!isCaretPositionLast) {
+					--caretPosition;
+				}
+			}
+			StopCompletion();
+		});
+		keyEvent_.Add(KeyCode.D, KeyEvent.Option.Ctrl, () => {
+			if (caretPosition < inputField.text.Length) {
+				inputField.text = inputField.text.Remove(caretPosition, 1);
+			}
+			StopCompletion();
+		});
+		keyEvent_.Add(KeyCode.K, KeyEvent.Option.Ctrl, () => {
+			if (caretPosition < inputField.text.Length) {
+				inputField.text = inputField.text.Remove(caretPosition);
+			}
+			StopCompletion();
+		});
+		keyEvent_.Add(KeyCode.L, KeyEvent.Option.Ctrl, () => {
+			ClearOutputView();
+		});
 	}
 
 	void Start()
@@ -126,15 +184,25 @@ public class Gui : MonoBehaviour
 				OpenWindow();
 			}
 			if (Input.GetKeyDown(closeKey)) {
-				OpenWindow();
+				CloseWindow();
 			}
 		}
 
 		if (isWindowOpened_) {
 			if (inputField.isFocused) {
-				CheckCommands();
-				CheckEmacsLikeCommands();
+				keyEvent_.Check();
+			} else {
+				keyEvent_.Clear();
 			}
+
+			if (IsEnterPressing()) {
+				if (isComplementing_ && !IsInputContinuously()) {
+					DoCompletion();
+				} else {
+					OnSubmit(inputField.text);
+				}
+			}
+
 			UpdateCompletion();
 		}
 
@@ -194,127 +262,6 @@ public class Gui : MonoBehaviour
 		} else {
 			inputField.text = history_.Next();
 			isCompletionStopped_ = true;
-		}
-	}
-
-	private bool CheckKey(KeyCode keyCode, KeyOption option = KeyOption.None)
-	{
-		var key = (int)keyCode + (int)option;
-		if (!keyPressingCounter_.ContainsKey(key)) {
-			keyPressingCounter_.Add(key, 0);
-		}
-
-		bool isOptionAcceptable = false;
-		switch (option) {
-			case KeyOption.None:
-				isOptionAcceptable = true;
-				break;
-			case KeyOption.Ctrl:
-				isOptionAcceptable = KeyUtil.Control();
-				break;
-			case KeyOption.Shift:
-				isOptionAcceptable = KeyUtil.Shift();
-				break;
-			case KeyOption.Alt:
-				isOptionAcceptable = KeyUtil.Alt();
-				break;
-		}
-
-		var cnt = keyPressingCounter_[key];
-		if (Input.GetKey(keyCode) && isOptionAcceptable) {
-			++cnt;
-		} else {
-			cnt = 0;
-		}
-		keyPressingCounter_[key] = cnt;
-
-		return
-			cnt == 1 ||
-			(cnt >= holdInputStartDelay && cnt % holdInputFrameInterval == 0);
-	}
-
-	private void CheckCommands()
-	{
-		if (CheckKey(KeyCode.UpArrow)) {
-			Prev();
-		}
-		if (CheckKey(KeyCode.DownArrow)) {
-			Next();
-		}
-		if (CheckKey(KeyCode.LeftArrow)) {
-			StopCompletion();
-		}
-		if (CheckKey(KeyCode.RightArrow)) {
-			StopCompletion();
-		}
-		if (CheckKey(KeyCode.Tab)) {
-			if (isComplementing_) {
-				DoCompletion();
-			} else {
-				ResetCompletion();
-				StartCompletion();
-			}
-		}
-		if (IsEnterPressing()) {
-			if (isComplementing_ && !IsInputContinuously()) {
-				DoCompletion();
-			} else {
-				OnSubmit(inputField.text);
-			}
-		}
-		if (CheckKey(KeyCode.Escape)) {
-			StopCompletion();
-		}
-	}
-
-	void CheckEmacsLikeCommands()
-	{
-		if (CheckKey(KeyCode.P, KeyOption.Ctrl)) {
-			Prev();
-		}
-		if (CheckKey(KeyCode.N, KeyOption.Ctrl)) {
-			Next();
-		}
-		if (CheckKey(KeyCode.F, KeyOption.Ctrl)) {
-			caretPosition = Mathf.Min(caretPosition + 1, inputField.text.Length);
-			StopCompletion();
-		}
-		if (CheckKey(KeyCode.B, KeyOption.Ctrl)) {
-			caretPosition = Mathf.Max(caretPosition - 1, 0);
-			StopCompletion();
-		}
-		if (CheckKey(KeyCode.A, KeyOption.Ctrl)) {
-			inputField.MoveTextStart(false);
-			StopCompletion();
-		}
-		if (CheckKey(KeyCode.E, KeyOption.Ctrl)) {
-			inputField.MoveTextEnd(false);
-			StopCompletion();
-		}
-		if (CheckKey(KeyCode.H, KeyOption.Ctrl)) {
-			if (caretPosition > 0) {
-				var isCaretPositionLast = caretPosition == inputField.text.Length;
-				inputField.text = inputField.text.Remove(caretPosition - 1, 1);
-				if (!isCaretPositionLast) {
-					--caretPosition;
-				}
-			}
-			StopCompletion();
-		}
-		if (CheckKey(KeyCode.D, KeyOption.Ctrl)) {
-			if (caretPosition < inputField.text.Length) {
-				inputField.text = inputField.text.Remove(caretPosition, 1);
-			}
-			StopCompletion();
-		}
-		if (CheckKey(KeyCode.K, KeyOption.Ctrl)) {
-			if (caretPosition < inputField.text.Length) {
-				inputField.text = inputField.text.Remove(caretPosition);
-			}
-			StopCompletion();
-		}
-		if (CheckKey(KeyCode.L, KeyOption.Ctrl)) {
-			ClearOutputView();
 		}
 	}
 
