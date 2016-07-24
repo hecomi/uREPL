@@ -338,6 +338,11 @@ public class Gui : MonoBehaviour
 
 	private void DoCompletion()
 	{
+		// for multiline input
+		if (inputField.text.EndsWith("\t")) {
+			inputField.text = inputField.text.Remove(inputField.text.Length - 1, 1);
+		}
+
 		var completion = completionView.selectedCompletion;
 		inputField.text = inputField.text.Insert(caretPosition, completion);
 		completionView.Reset();
