@@ -30,6 +30,11 @@ public class CompletionView : MonoBehaviour
 		get { return itemCount - 1 - currentIndex_; }
 	}
 
+	public bool hasItem
+	{
+		get { return itemCount > 0; }
+	}
+
 	public Vector3 position
 	{
 		get { return rect.localPosition; }
@@ -107,7 +112,7 @@ public class CompletionView : MonoBehaviour
 			item.SetCompletion(info.code, info.prefix);
 		}
 
-#if UNITY_5_2 || UNITY_5_3
+#if UNITY_5_2 || UNITY_5_3 || UNITY_5_4
 		LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
 #endif
 	}
