@@ -15,7 +15,6 @@ public class Gui : MonoBehaviour
 	private Completion completion_ = new Completion();
 	public Queue<Log.Data> logData_ = new Queue<Log.Data>();
 	private History history_ = new History();
-	private string currentPartialCode_ = "";
 	private string currentComletionPrefix_ = "";
 
 	enum CompletionState {
@@ -307,8 +306,7 @@ public class Gui : MonoBehaviour
 	{
 		if (string.IsNullOrEmpty(inputField.text)) return;
 
-		var code = currentPartialCode_ + inputField.text;
-		code = code.Substring(0, caretPosition);
+		var code = inputField.text.Substring(0, caretPosition);
 		completion_.Start(code);
 
 		completionState_ = CompletionState.Complementing;
@@ -354,11 +352,6 @@ public class Gui : MonoBehaviour
 	{
 		inputField.onValueChanged.RemoveListener(OnValueChanged);
 		inputField.onEndEdit.RemoveListener(OnSubmit);
-	}
-
-	private bool IsInputContinuously()
-	{
-		return !inputField.multiLine && KeyUtil.Shift();
 	}
 
 	private bool IsEnterPressing()
@@ -409,43 +402,26 @@ public class Gui : MonoBehaviour
 		RunOnEndOfFrame(completionView.Reset);
 	}
 
-	private void OnSubmit(string text)
+	private void OnSubmit(string code)
 	{
-		text = text.Trim();
+		code = code.Trim();
 
 		// do nothing if following states:
 		// - the input text is empty.
 		// - receive the endEdit event without the enter key (e.g. lost focus).
-		if (string.IsNullOrEmpty(text) || !IsEnterPressing()) return;
+		if (string.IsNullOrEmpty(code) || !IsEnterPressing()) return;
 
 		// stop completion to avoid hang.
 		completion_.Stop();
 
-		// use the partial code previously input if it exists.
-		var isPartial = false;
-		var code = text;
-		if (!string.IsNullOrEmpty(currentPartialCode_)) {
-			code = currentPartialCode_ + code;
-			currentPartialCode_ = "";
-			isPartial = true;
-		}
-
 		// auto-complete semicolon.
-		if (!code.EndsWith(";") && !IsInputContinuously()) {
+		if (!code.EndsWith(";")) {
 			code += ";";
 		}
 
 		var result = Core.Evaluate(code);
-		GameObject itemObj = null;
-		ResultItem item = null;
-		if (isPartial) {
-			itemObj = outputContent.GetChild(outputContent.childCount - 1).gameObject;
-		} else {
-			itemObj = InstantiateInOutputContent(resultItemPrefab);
-		}
-		if (itemObj) {
-			item = itemObj.GetComponent<ResultItem>();
-		}
+		var itemObj = InstantiateInOutputContent(resultItemPrefab);
+		var item = itemObj.GetComponent<ResultItem>();
 
 		RemoveExceededItem();
 
@@ -461,11 +437,12 @@ public class Gui : MonoBehaviour
 					break;
 				}
 				case CompileResult.Type.Partial: {
+					// This block should not be reached because the given code is 
+					// added a semicolon to end of it. 
 					inputField.text = "";
-					currentPartialCode_ += text;
 					item.type   = CompileResult.Type.Partial;
 					item.input  = result.code;
-					item.output = "...";
+					item.output = "The given code is something wrong: " + code;
 					break;
 				}
 				case CompileResult.Type.Error: {
