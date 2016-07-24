@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace uREPL
 {
@@ -12,9 +11,16 @@ public class Gui : MonoBehaviour
 {
 	#region [core]
 	static public Gui selected;
+
 	private Completion completion_ = new Completion();
+
 	public Queue<Log.Data> logData_ = new Queue<Log.Data>();
+
 	private History history_ = new History();
+	public History history { 
+		get { return history_; } 
+	}
+
 	private string currentComletionPrefix_ = "";
 
 	enum CompletionState {
@@ -535,52 +541,6 @@ public class Gui : MonoBehaviour
 		yield return new WaitForEndOfFrame();
 		yield return new WaitForEndOfFrame();
 		func();
-	}
-
-	[Command(name = "close", description = "Close console.")]
-	static public void CloseCommand()
-	{
-		if (selected) {
-			selected.RunOnNextFrame(() => {
-				if (selected) selected.CloseWindow();
-			});
-		}
-	}
-
-	[Command(name = "clear outputs", description = "Clear output view.")]
-	static public void ClearOutputCommand()
-	{
-		if (selected == null) return;
-
-		var target = selected;
-		selected.RunOnNextFrame(() => {
-			target.ClearOutputView();
-		});
-	}
-
-	[Command(name = "clear histories", description = "Clear all input histories.")]
-	static public void ClearHistoryCommand()
-	{
-		if (selected == null) return;
-
-		var target = selected;
-		selected.RunOnNextFrame(() => {
-			target.history_.Clear();
-		});
-	}
-
-	[Command(name = "show histories", description = "show command histoies.")]
-	static public void ShowHistory()
-	{
-		if (selected == null) return;
-
-		string histories = "";
-		int num = selected.history_.Count;
-		foreach (var command in selected.history_.list.ToArray().Reverse()) {
-			histories += string.Format("{0}: {1}\n", num, command);
-			--num;
-		}
-		Log.Output(histories);
 	}
 }
 
