@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
-using Mono.CSharp;
 
 namespace uREPL
 {
@@ -17,7 +16,7 @@ public class CompileResult
 	public object value = null;
 }
 
-public static class Core
+public static class Evaluator
 {
 	static private bool isInitialized = false;
 
@@ -51,19 +50,19 @@ public static class Core
 		for (int n = 0; n < 2;) {
 			foreach (var assembly in System.AppDomain.CurrentDomain.GetAssemblies()) {
 				if (assembly == null) continue;
-				Evaluator.ReferenceAssembly(assembly);
+				Mono.CSharp.Evaluator.ReferenceAssembly(assembly);
 			}
-			Evaluator.Evaluate("null;");
+			Mono.CSharp.Evaluator.Evaluate("null;");
 			n++;
 		}
 	}
 
 	static private void SetUsings()
 	{
-		Evaluator.Run("using uREPL;");
-		Evaluator.Run("using UnityEngine;");
+		Mono.CSharp.Evaluator.Run("using uREPL;");
+		Mono.CSharp.Evaluator.Run("using UnityEngine;");
 		// #if UNITY_EDITOR
-		// Evaluator.Run("using UnityEditor;");
+		// Mono.CSharp.Evaluator.Run("using UnityEditor;");
 		// #endif
 	}
 
@@ -79,16 +78,16 @@ public static class Core
 		object ret = null;
 		bool hasReturnValue = false;
 
-		var originalOutput = Evaluator.MessageOutput;
+		var originalOutput = Mono.CSharp.Evaluator.MessageOutput;
 		var errorWriter = new System.IO.StringWriter();
 		bool isPartial = false;
-		Evaluator.MessageOutput = errorWriter;
+		Mono.CSharp.Evaluator.MessageOutput = errorWriter;
 		try {
-			isPartial = Evaluator.Evaluate(code, out ret, out hasReturnValue) != null;
+			isPartial = Mono.CSharp.Evaluator.Evaluate(code, out ret, out hasReturnValue) != null;
 		} catch (System.Exception e) {
 			errorWriter.Write(e.Message);
 		}
-		Evaluator.MessageOutput = originalOutput;
+		Mono.CSharp.Evaluator.MessageOutput = originalOutput;
 
 		var error = errorWriter.ToString();
 		if (!string.IsNullOrEmpty(error)) {
@@ -113,14 +112,19 @@ public static class Core
 		return result;
 	}
 
+	static public string[] GetCompletions(string input, out string prefix)
+	{
+		return Mono.CSharp.Evaluator.GetCompletions(input, out prefix);
+	}
+
 	static public string GetVars()
 	{
-		return Evaluator.GetVars();
+		return Mono.CSharp.Evaluator.GetVars();
 	}
 
 	static public string GetUsing()
 	{
-		return Evaluator.GetUsing();
+		return Mono.CSharp.Evaluator.GetUsing();
 	}
 
 	[Command(name = "show vars", description = "Show all local variables")]

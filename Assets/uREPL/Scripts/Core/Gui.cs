@@ -74,7 +74,7 @@ public class Gui : MonoBehaviour
 
 		completion_.AddCompletionFinishedListener(OnCompletionFinished);
 
-		Core.Initialize();
+		Evaluator.Initialize();
 
 		isWindowOpened_ = GetComponent<Canvas>().enabled;
 		if (isWindowOpened_) {
@@ -430,7 +430,7 @@ public class Gui : MonoBehaviour
 			code += ";";
 		}
 
-		var result = Core.Evaluate(code);
+		var result = Evaluator.Evaluate(code);
 		var itemObj = InstantiateInOutputContent(resultItemPrefab);
 		var item = itemObj.GetComponent<ResultItem>();
 
