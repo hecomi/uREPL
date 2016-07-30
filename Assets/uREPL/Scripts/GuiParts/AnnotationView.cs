@@ -12,6 +12,10 @@ public class AnnotationView : MonoBehaviour
 		get { return description.text;  }
 		set { description.text = value; }
 	}
+
+	private CompletionView completion_;
+
+	public float delay = 0.5f;
 }
 
 }

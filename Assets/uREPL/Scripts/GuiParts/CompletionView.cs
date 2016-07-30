@@ -8,6 +8,9 @@ namespace uREPL
 
 public class CompletionView : MonoBehaviour
 {
+	private AnnotationView annotation_;
+	private float elapsedTimeFromLastSelect_ = 0f;
+
 	private const string contentGameObjectName = "Content";
 	private const float scrollDamping = 0.3f;
 
@@ -78,6 +81,7 @@ public class CompletionView : MonoBehaviour
 		rect    = GetComponent<RectTransform>();
 		scroll  = GetComponent<ScrollRect>();
 		content = transform.FindChild(contentGameObjectName);
+		annotation_ = transform.parent.Find("Annotation View").GetComponent<AnnotationView>();
 	}
 
 	void Update()
@@ -85,6 +89,8 @@ public class CompletionView : MonoBehaviour
 		for (int i = 0; i < itemCount; ++i) {
 			content.GetChild(i).GetComponent<CompletionItem>().SetHighlight(i == itemIndex);
 		}
+
+		UpdateAnnotation();
 	}
 
 	void LateUpdate()
@@ -92,6 +98,24 @@ public class CompletionView : MonoBehaviour
 		var targetScrollPos = (itemCount <= 1) ? 0f : 1f * currentIndex_ / (itemCount - 1);
 		scrollPos_ += (targetScrollPos - scrollPos_) * scrollDamping;
 		scroll.verticalNormalizedPosition = scrollPos_;
+	}
+
+	private void UpdateAnnotation()
+	{
+		elapsedTimeFromLastSelect_ += Time.deltaTime;
+
+		var hasDescription = (selectedItem != null) && selectedItem.hasDescription;
+		if (hasDescription) annotation_.text = selectedItem.description;
+
+		var isAnnotationVisible = elapsedTimeFromLastSelect_ >= annotation_.delay;
+		annotation_.gameObject.SetActive(hasDescription && isAnnotationVisible);
+
+		annotation_.transform.position = selectedPosition + Vector3.right * (width + 4f);
+	}
+
+	private void ResetAnnotation()
+	{
+		elapsedTimeFromLastSelect_ = 0f;
 	}
 
 	public void SetCompletions(CompletionInfo[] completions)
@@ -123,6 +147,7 @@ public class CompletionView : MonoBehaviour
 			var item = content.GetChild(i).gameObject;
 			Destroy(item);
 		}
+		ResetAnnotation();
 	}
 
 	public void Next()
@@ -132,6 +157,7 @@ public class CompletionView : MonoBehaviour
 		} else {
 			currentIndex_ = (currentIndex_ + 1) % itemCount;
 		}
+		ResetAnnotation();
 	}
 
 	public void Prev()
@@ -144,6 +170,7 @@ public class CompletionView : MonoBehaviour
 				currentIndex_ += itemCount;
 			}
 		}
+		ResetAnnotation();
 	}
 
 	public void Reset()
@@ -152,6 +179,7 @@ public class CompletionView : MonoBehaviour
 		currentIndex_ = 0;
 		scrollPos_ = 0;
 		scroll.verticalNormalizedPosition = scrollPos_;
+		ResetAnnotation();
 	}
 }
 

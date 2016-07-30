@@ -66,8 +66,12 @@ public static class Evaluator
 		// #endif
 	}
 
-	static public CompileResult Evaluate(string code)
+	static public CompileResult Evaluate(string code, bool autoCompleteComma = true)
 	{
+		if (autoCompleteComma && !code.EndsWith(";")) {
+			code += ";";
+		}
+
 		var result = new CompileResult();
 		result.code = code;
 

@@ -7,13 +7,17 @@ namespace uREPL
 public class Completion
 {
 	private Thread thread_;
-	private CompletionInfo[] completions_;
-
-	private string partialCodeForCompletion_;
 	private bool hasCompletionFinished_ = false;
 
-	public delegate void CompletionFinishHandler(CompletionInfo[] completions);
-	private event CompletionFinishHandler onCompletionFinished_ = completions => {};
+	public struct Result
+	{
+		public string partialCode;
+		public CompletionInfo[] completions;
+	}
+	private Result result_;
+
+	public delegate void CompletionFinishHandler(Result result);
+	private event CompletionFinishHandler onCompletionFinished_ = result => {};
 
 	public bool IsAlive()
 	{
@@ -35,7 +39,9 @@ public class Completion
 		Stop();
 		hasCompletionFinished_ = false;
 		thread_ = new Thread(() => {
-			completions_ = CompletionPluginManager.GetCompletions(code);
+			var completions = CompletionPluginManager.GetCompletions(code);
+			result_.completions = completions;
+			result_.partialCode = completions[0].prefix ?? "";
 		});
 		thread_.Start();
 	}
@@ -54,7 +60,7 @@ public class Completion
 		// call all handlers to notify them completion results from the main thread.
 		if (!IsAlive() && !hasCompletionFinished_) {
 			hasCompletionFinished_ = true;
-			onCompletionFinished_(completions_);
+			onCompletionFinished_(result_);
 		}
 	}
 }
