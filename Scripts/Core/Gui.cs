@@ -28,27 +28,21 @@ public class Gui : MonoBehaviour
 	}
 	private CompletionState completionState_ = CompletionState.Idle;
 	private string completionPartialCode_ = "";
+
+	private float elapsedTimeFromLastInput_ = 0f;
 	#endregion
 
 	#region [key operations]
-	[HeaderAttribute("Keys")]
+	private KeyEvent keyEvent_ = new KeyEvent();
 	public KeyCode openKey = KeyCode.F1;
 	public KeyCode closeKey = KeyCode.F1;
 	private bool isWindowOpened_ = false;
-
-	private KeyEvent keyEvent_ = new KeyEvent();
 	#endregion
 
 	#region [content]
 	private CommandInputField inputField_;
 	private OutputView output_;
 	private CompletionView completionView_;
-	#endregion
-
-	#region [parameters]
-	[HeaderAttribute("Parameters")]
-	public float completionTimer = 0.5f;
-	private float elapsedTimeFromLastInput_ = 0f;
 	#endregion
 
 	void Awake()
@@ -245,14 +239,14 @@ public class Gui : MonoBehaviour
 			}
 			case CompletionState.WaitingForCompletion: {
 				elapsedTimeFromLastInput_ += Time.deltaTime;
-				if (elapsedTimeFromLastInput_ >= completionTimer) {
+				if (elapsedTimeFromLastInput_ >= completionView_.delay) {
 					StartCompletion();
 				}
 				break;
 			}
 			case CompletionState.Complementing: {
 				elapsedTimeFromLastInput_ += Time.deltaTime;
-				if (elapsedTimeFromLastInput_ > completionTimer + COMPLETION_TIMEOUT) {
+				if (elapsedTimeFromLastInput_ > completionView_.delay + COMPLETION_TIMEOUT) {
 					StopCompletion();
 				}
 				completion_.Update();
@@ -335,7 +329,7 @@ public class Gui : MonoBehaviour
 			elapsedTimeFromLastInput_ = 0f;
 		}
 
-		RunOnEndOfFrame(completionView_.Reset);
+		Utility.RunOnEndOfFrame(completionView_.Reset);
 	}
 
 	private void OnSubmit(string code)
@@ -394,41 +388,18 @@ public class Gui : MonoBehaviour
 		return selected.output_.AddObject(prefab);
 	}
 
-	private void RunOnEndOfFrame(System.Action func)
-	{
-		StartCoroutine(_RunOnEndOfFrame(func));
-	}
-
-	private IEnumerator _RunOnEndOfFrame(System.Action func)
-	{
-		yield return new WaitForEndOfFrame();
-		func();
-	}
-
-	public void RunOnNextFrame(System.Action func)
-	{
-		StartCoroutine(_RunOnNextFrame(func));
-	}
-
-	private IEnumerator _RunOnNextFrame(System.Action func)
-	{
-		yield return new WaitForEndOfFrame();
-		yield return new WaitForEndOfFrame();
-		func();
-	}
-
 	[Command(name = "clear outputs", description = "Clear output view.")]
 	static public void ClearOutputCommand()
 	{
 		if (Gui.selected == null) return;
-		Gui.selected.RunOnNextFrame(Gui.selected.output_.Clear);
+		Utility.RunOnNextFrame(Gui.selected.output_.Clear);
 	}
 
 	[Command(name = "clear histories", description = "Clear all input histories.")]
 	static public void ClearHistoryCommand()
 	{
 		if (Gui.selected == null) return;
-		Gui.selected.RunOnNextFrame(Gui.selected.history_.Clear);
+		Utility.RunOnNextFrame(Gui.selected.history_.Clear);
 	}
 
 	[Command(name = "show histories", description = "show command histoies.")]

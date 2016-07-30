@@ -69,7 +69,7 @@ public static class Inspector
 			return;
 		}
 
-		Gui.selected.RunOnNextFrame(() => {
+		Utility.RunOnNextFrame(() => {
 			var item = Gui.InstantiateInOutputView(gameObjectViewPrefab).GetComponent<GameObjectItem>();;
 			item.targetGameObject = gameObject;
 			item.title = gameObject.name;
@@ -104,7 +104,7 @@ public static class Inspector
 			componentInfo.fields.Add(info);
 		}
 
-		Gui.selected.RunOnNextFrame(() => {
+		Utility.RunOnNextFrame(() => {
 			Output(componentInfo);
 		});
 	}
