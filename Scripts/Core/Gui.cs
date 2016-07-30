@@ -298,7 +298,7 @@ public class Gui : MonoBehaviour
 		var completion = completionView_.selectedCompletion;
 		inputField_.InsertToCaretPosition(completion);
 		inputField_.MoveCaretPosition(completion.Length);
-		inputField_.Select();
+		inputField_.Focus();
 
 		StopCompletion();
 	}
