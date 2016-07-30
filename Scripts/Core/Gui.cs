@@ -10,14 +10,16 @@ namespace uREPL
 
 public class Gui : MonoBehaviour
 {
+	#region [const]
+	private const float COMPLETION_TIMEOUT = 0.5f;
+	#endregion
+
 	#region [core]
 	static public Gui selected;
 
 	private Completion completion_ = new Completion();
 	public Queue<Log.Data> logData_ = new Queue<Log.Data>();
 	private History history_ = new History();
-
-	private string currentComletionPrefix_ = "";
 
 	enum CompletionState {
 		Idle,
@@ -26,6 +28,7 @@ public class Gui : MonoBehaviour
 		Complementing,
 	}
 	private CompletionState completionState_ = CompletionState.Idle;
+	private string completionPartialCode_ = "";
 	#endregion
 
 	#region [key operations]
@@ -40,16 +43,13 @@ public class Gui : MonoBehaviour
 	#region [content]
 	private CommandInputField inputField_;
 	private OutputView output_;
-	private AnnotationView annotation_;
 	private CompletionView completionView_;
 	#endregion
 
 	#region [parameters]
 	[HeaderAttribute("Parameters")]
 	public float completionTimer = 0.5f;
-	public float annotationTimer = 1f;
 	private float elapsedTimeFromLastInput_ = 0f;
-	private float elapsedTimeFromLastSelect_ = 0f;
 	#endregion
 
 	void Awake()
@@ -74,7 +74,6 @@ public class Gui : MonoBehaviour
 		var container   = transform.Find("Container");
 		inputField_     = container.Find("Input Field").GetComponent<CommandInputField>();
 		output_         = container.Find("Output View").GetComponent<OutputView>();
-		annotation_     = transform.Find("Annotation View").GetComponent<AnnotationView>();
 		completionView_ = transform.Find("Completion View").GetComponent<CompletionView>();
 
 		// Settings
@@ -129,9 +128,7 @@ public class Gui : MonoBehaviour
 			inputField_.DeleteAllCharactersAfterCaretPosition();
 			StopCompletion();
 		});
-		keyEvent_.Add(KeyCode.L, KeyEvent.Option.Ctrl, () => {
-			output_.Clear();
-		});
+		keyEvent_.Add(KeyCode.L, KeyEvent.Option.Ctrl, output_.Clear);
 	}
 
 	void Start()
@@ -153,7 +150,6 @@ public class Gui : MonoBehaviour
 		UpdateKeyEvents();
 		UpdateCompletion();
 		UpdateLogs();
-		UpdateAnnotation();
 	}
 
 	private void ToggleWindowByKeys()
@@ -218,7 +214,6 @@ public class Gui : MonoBehaviour
 	{
 		if (completionView_.hasItem) {
 			completionView_.Next();
-			ResetAnnotation();
 		} else {
 			if (history_.IsFirst()) history_.SetInputtingCommand(inputField_.text);
 			inputField_.text = history_.Prev();
@@ -231,7 +226,6 @@ public class Gui : MonoBehaviour
 	{
 		if (completionView_.hasItem) {
 			completionView_.Prev();
-			ResetAnnotation();
 		} else {
 			inputField_.text = history_.Next();
 			inputField_.MoveTextEnd(false);
@@ -260,7 +254,7 @@ public class Gui : MonoBehaviour
 			}
 			case CompletionState.Complementing: {
 				elapsedTimeFromLastInput_ += Time.deltaTime;
-				if (elapsedTimeFromLastInput_ > completionTimer + 0.5f /* timeout */) {
+				if (elapsedTimeFromLastInput_ > completionTimer + COMPLETION_TIMEOUT) {
 					StopCompletion();
 				}
 				completion_.Update();
@@ -269,7 +263,7 @@ public class Gui : MonoBehaviour
 		}
 
 		// update completion view position.
-		completionView_.position = inputField_.GetPositionBeforeCaret(currentComletionPrefix_.Length);
+		completionView_.position = inputField_.GetPositionBeforeCaret(completionPartialCode_.Length);
 	}
 
 	private void StartCompletion()
@@ -289,14 +283,10 @@ public class Gui : MonoBehaviour
 		completionState_ = CompletionState.Idle;
 	}
 
-	private void OnCompletionFinished(CompletionInfo[] completions)
+	private void OnCompletionFinished(Completion.Result result)
 	{
-		if (completions.Length > 0) {
-			// TODO: this is not smart... because all items have this information.
-			currentComletionPrefix_ = completions[0].prefix;
-			completionView_.SetCompletions(completions);
-		}
-		ResetAnnotation();
+		completionPartialCode_ = result.partialCode;
+		completionView_.SetCompletions(result.completions);
 		completionState_ = CompletionState.Idle;
 	}
 
@@ -362,11 +352,6 @@ public class Gui : MonoBehaviour
 		// stop completion to avoid hang.
 		completion_.Stop();
 
-		// auto-complete semicolon.
-		if (!code.EndsWith(";")) {
-			code += ";";
-		}
-
 		var result = Evaluator.Evaluate(code);
 		var item = output_.AddResultItem();
 
@@ -415,26 +400,6 @@ public class Gui : MonoBehaviour
 			item.log   = data.log;
 			item.meta  = data.meta;
 		}
-	}
-
-	private void ResetAnnotation()
-	{
-		elapsedTimeFromLastSelect_ = 0f;
-	}
-
-	private void UpdateAnnotation()
-	{
-		elapsedTimeFromLastSelect_ += Time.deltaTime;
-
-		var item = completionView_.selectedItem;
-		var hasDescription = (item != null) && item.hasDescription;
-		if (hasDescription) annotation_.text = item.description;
-
-		var isAnnotationVisible = elapsedTimeFromLastSelect_ >= annotationTimer;
-		annotation_.gameObject.SetActive(isAnnotationVisible && hasDescription);
-
-		annotation_.transform.position =
-			completionView_.selectedPosition + Vector3.right * (completionView_.width + 4f);
 	}
 
 	static public GameObject InstantiateInOutputView(GameObject prefab)
