@@ -415,6 +415,14 @@ public class Gui : MonoBehaviour
 		}
 		Log.Output(histories);
 	}
+
+	[Command(name = "close", description = "Close console.")]
+	static public void CloseCommand()
+	{
+		Utility.RunOnNextFrame(() => {
+			if (Gui.selected) Gui.selected.CloseWindow();
+		});
+	}
 }
 
 }
