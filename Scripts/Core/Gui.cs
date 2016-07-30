@@ -18,7 +18,6 @@ public class Gui : MonoBehaviour
 	static public Gui selected;
 
 	private Completion completion_ = new Completion();
-	public Queue<Log.Data> logData_ = new Queue<Log.Data>();
 	private History history_ = new History();
 
 	enum CompletionState {
@@ -149,7 +148,6 @@ public class Gui : MonoBehaviour
 	{
 		UpdateKeyEvents();
 		UpdateCompletion();
-		UpdateLogs();
 	}
 
 	private void ToggleWindowByKeys()
@@ -387,19 +385,7 @@ public class Gui : MonoBehaviour
 
 	public void OutputLog(Log.Data data)
 	{
-		// enqueue given datas temporarily to handle data from other threads.
-		logData_.Enqueue(data);
-	}
-
-	private void UpdateLogs()
-	{
-		while (logData_.Count > 0) {
-			var data = logData_.Dequeue();
-			var item = output_.AddLogItem();
-			item.level = data.level;
-			item.log   = data.log;
-			item.meta  = data.meta;
-		}
+		output_.OutputLog(data);
 	}
 
 	static public GameObject InstantiateInOutputView(GameObject prefab)
@@ -430,7 +416,6 @@ public class Gui : MonoBehaviour
 		yield return new WaitForEndOfFrame();
 		func();
 	}
-
 
 	[Command(name = "clear outputs", description = "Clear output view.")]
 	static public void ClearOutputCommand()
