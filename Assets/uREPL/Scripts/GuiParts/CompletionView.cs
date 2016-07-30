@@ -23,6 +23,8 @@ public class CompletionView : MonoBehaviour
 	private int currentIndex_ = 0;
 	private float scrollPos_ = 0;
 
+	public float delay = 0.1f;
+
 	public int itemCount
 	{
 		get { return content.childCount; }

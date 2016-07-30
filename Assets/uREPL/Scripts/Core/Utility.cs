@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Reflection;
 using System.Linq;
 
@@ -33,6 +34,29 @@ static public class Utility
 	static public void Inspect<T>(this T component) where T : Component
 	{
 		Inspector.Inspect(component);
+	}
+
+	static public void RunOnEndOfFrame(System.Action func)
+	{
+		Gui.selected.StartCoroutine(_RunOnEndOfFrame(func));
+	}
+
+	static private IEnumerator _RunOnEndOfFrame(System.Action func)
+	{
+		yield return new WaitForEndOfFrame();
+		func();
+	}
+
+	static public void RunOnNextFrame(System.Action func)
+	{
+		Gui.selected.StartCoroutine(_RunOnNextFrame(func));
+	}
+
+	static private IEnumerator _RunOnNextFrame(System.Action func)
+	{
+		yield return new WaitForEndOfFrame();
+		yield return new WaitForEndOfFrame();
+		func();
 	}
 }
 

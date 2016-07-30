@@ -3,7 +3,8 @@
 namespace uREPL
 {
 
-public class PresetCompletions : MonoBehaviour
+[RequireComponent(typeof(Gui))]
+public class Main : MonoBehaviour
 {
 	[HeaderAttribute("Completion Methods")]
 	public bool useMonoCompletion           = true;
