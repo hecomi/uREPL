@@ -70,8 +70,7 @@ public static class Inspector
 		}
 
 		Gui.selected.RunOnNextFrame(() => {
-			var obj = Gui.InstantiateInOutputContent(gameObjectViewPrefab);
-			var item = obj.GetComponent<GameObjectItem>();
+			var item = Gui.InstantiateInOutputView(gameObjectViewPrefab).GetComponent<GameObjectItem>();;
 			item.targetGameObject = gameObject;
 			item.title = gameObject.name;
 		});
@@ -112,10 +111,7 @@ public static class Inspector
 
 	static public void Output(ComponentInfo component)
 	{
-		var obj = Gui.InstantiateInOutputContent(componentViewPrefab);
-		if (obj == null) return;
-
-		var item = obj.GetComponent<ComponentItem>();
+		var item= Gui.InstantiateInOutputView(componentViewPrefab).GetComponent<ComponentItem>();
 		item.component = component.instance;
 		item.title = string.Format("<b><i>{0}</i></b> ({1})",
 			component.componentName, component.gameObjectPath);
