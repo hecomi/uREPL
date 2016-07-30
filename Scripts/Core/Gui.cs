@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace uREPL
 {
@@ -13,13 +14,8 @@ public class Gui : MonoBehaviour
 	static public Gui selected;
 
 	private Completion completion_ = new Completion();
-
 	public Queue<Log.Data> logData_ = new Queue<Log.Data>();
-
 	private History history_ = new History();
-	public History history { 
-		get { return history_; } 
-	}
 
 	private string currentComletionPrefix_ = "";
 
@@ -42,24 +38,14 @@ public class Gui : MonoBehaviour
 	#endregion
 
 	#region [content]
-	private CommandInputField inputField;
-	private CommandInputField multilineInputField;
-	private Transform outputContent;
-	private AnnotationView annotation;
-	private CompletionView completionView;
-	private GameObject resultItemPrefab;
-	private GameObject logItemPrefab;
-
-	public int caretPosition
-	{
-		get { return inputField.caretPosition;  }
-		set { inputField.caretPosition = value; }
-	}
+	private CommandInputField inputField_;
+	private OutputView output_;
+	private AnnotationView annotation_;
+	private CompletionView completionView_;
 	#endregion
 
 	#region [parameters]
 	[HeaderAttribute("Parameters")]
-	public int maxResultNum = 100;
 	public float completionTimer = 0.5f;
 	public float annotationTimer = 1f;
 	private float elapsedTimeFromLastInput_ = 0f;
@@ -85,18 +71,14 @@ public class Gui : MonoBehaviour
 	void InitObjects()
 	{
 		// Instances
-		var container  = transform.Find("Container");
-		inputField     = container.Find("Input Field").GetComponent<CommandInputField>();
-		outputContent  = container.Find("Output View/Content");
-		annotation     = transform.Find("Annotation View").GetComponent<AnnotationView>();
-		completionView = transform.Find("Completion View").GetComponent<CompletionView>();
-
-		// Prefabs
-		resultItemPrefab = Resources.Load<GameObject>("uREPL/Prefabs/Output/Result Item");
-		logItemPrefab    = Resources.Load<GameObject>("uREPL/Prefabs/Output/Log Item");
+		var container   = transform.Find("Container");
+		inputField_     = container.Find("Input Field").GetComponent<CommandInputField>();
+		output_         = container.Find("Output View").GetComponent<OutputView>();
+		annotation_     = transform.Find("Annotation View").GetComponent<AnnotationView>();
+		completionView_ = transform.Find("Completion View").GetComponent<CompletionView>();
 
 		// Settings
-		inputField.parentGui = this;
+		inputField_.parentGui = this;
 	}
 
 	private void InitCommands()
@@ -107,7 +89,7 @@ public class Gui : MonoBehaviour
 		keyEvent_.Add(KeyCode.RightArrow, StopCompletion);
 		keyEvent_.Add(KeyCode.Escape, StopCompletion);
 		keyEvent_.Add(KeyCode.Tab, () => {
-			if (completionView.hasItem) {
+			if (completionView_.hasItem) {
 				DoCompletion();
 			} else {
 				StartCompletion();
@@ -120,45 +102,35 @@ public class Gui : MonoBehaviour
 		keyEvent_.Add(KeyCode.P, KeyEvent.Option.Ctrl, Prev);
 		keyEvent_.Add(KeyCode.N, KeyEvent.Option.Ctrl, Next);
 		keyEvent_.Add(KeyCode.F, KeyEvent.Option.Ctrl, () => {
-			caretPosition = Mathf.Min(caretPosition + 1, inputField.text.Length);
+			inputField_.MoveCaretPosition(1);
 			StopCompletion();
 		});
 		keyEvent_.Add(KeyCode.B, KeyEvent.Option.Ctrl, () => {
-			caretPosition = Mathf.Max(caretPosition - 1, 0);
+			inputField_.MoveCaretPosition(-1);
 			StopCompletion();
 		});
 		keyEvent_.Add(KeyCode.A, KeyEvent.Option.Ctrl, () => {
-			inputField.MoveTextStart(false);
+			inputField_.MoveTextStart(false);
 			StopCompletion();
 		});
 		keyEvent_.Add(KeyCode.E, KeyEvent.Option.Ctrl, () => {
-			inputField.MoveTextEnd(false);
+			inputField_.MoveTextEnd(false);
 			StopCompletion();
 		});
 		keyEvent_.Add(KeyCode.H, KeyEvent.Option.Ctrl, () => {
-			if (caretPosition > 0) {
-				var isCaretPositionLast = caretPosition == inputField.text.Length;
-				inputField.text = inputField.text.Remove(caretPosition - 1, 1);
-				if (!isCaretPositionLast) {
-					--caretPosition;
-				}
-			}
+			inputField_.BackspaceOneCharacterFromCaretPosition();
 			StopCompletion();
 		});
 		keyEvent_.Add(KeyCode.D, KeyEvent.Option.Ctrl, () => {
-			if (caretPosition < inputField.text.Length) {
-				inputField.text = inputField.text.Remove(caretPosition, 1);
-			}
+			inputField_.DeleteOneCharacterFromCaretPosition();
 			StopCompletion();
 		});
 		keyEvent_.Add(KeyCode.K, KeyEvent.Option.Ctrl, () => {
-			if (caretPosition < inputField.text.Length) {
-				inputField.text = inputField.text.Remove(caretPosition);
-			}
+			inputField_.DeleteAllCharactersAfterCaretPosition();
 			StopCompletion();
 		});
 		keyEvent_.Add(KeyCode.L, KeyEvent.Option.Ctrl, () => {
-			ClearOutputView();
+			output_.Clear();
 		});
 	}
 
@@ -202,17 +174,17 @@ public class Gui : MonoBehaviour
 		ToggleWindowByKeys();
 
 		if (isWindowOpened_) {
-			if (inputField.isFocused) {
+			if (inputField_.isFocused) {
 				keyEvent_.Check();
 			} else {
 				keyEvent_.Clear();
 			}
 
 			if (IsEnterPressing()) {
-				if (completionView.hasItem) {
+				if (completionView_.hasItem) {
 					DoCompletion();
 				} else {
-					OnSubmit(inputField.text);
+					OnSubmit(inputField_.text);
 				}
 			}
 		}
@@ -222,8 +194,7 @@ public class Gui : MonoBehaviour
 	{
 		selected = this;
 		SetActive(true);
-		inputField.ActivateInputField();
-		inputField.Select();
+		inputField_.Focus();
 	}
 
 	public void CloseWindow()
@@ -237,40 +208,33 @@ public class Gui : MonoBehaviour
 	private void SetActive(bool active)
 	{
 		GetComponent<Canvas>().enabled = active;
-		inputField.gameObject.SetActive(active);
-		outputContent.gameObject.SetActive(active);
-		completionView.gameObject.SetActive(active);
+		inputField_.gameObject.SetActive(active);
+		output_.gameObject.SetActive(active);
+		completionView_.gameObject.SetActive(active);
 		isWindowOpened_ = active;
-	}
-
-	public void ClearOutputView()
-	{
-		for (int i = 0; i < outputContent.childCount; ++i) {
-			Destroy(outputContent.GetChild(i).gameObject);
-		}
 	}
 
 	private void Prev()
 	{
-		if (completionView.hasItem) {
-			completionView.Next();
+		if (completionView_.hasItem) {
+			completionView_.Next();
 			ResetAnnotation();
 		} else {
-			if (history_.IsFirst()) history_.SetInputtingCommand(inputField.text);
-			inputField.text = history_.Prev();
-			inputField.MoveTextEnd(false);
+			if (history_.IsFirst()) history_.SetInputtingCommand(inputField_.text);
+			inputField_.text = history_.Prev();
+			inputField_.MoveTextEnd(false);
 			completionState_ = CompletionState.Stop;
 		}
 	}
 
 	private void Next()
 	{
-		if (completionView.hasItem) {
-			completionView.Prev();
+		if (completionView_.hasItem) {
+			completionView_.Prev();
 			ResetAnnotation();
 		} else {
-			inputField.text = history_.Next();
-			inputField.MoveTextEnd(false);
+			inputField_.text = history_.Next();
+			inputField_.MoveTextEnd(false);
 			completionState_ = CompletionState.Stop;
 		}
 	}
@@ -305,14 +269,14 @@ public class Gui : MonoBehaviour
 		}
 
 		// update completion view position.
-		completionView.position = GetCompletionPosition();
+		completionView_.position = inputField_.GetPositionBeforeCaret(currentComletionPrefix_.Length);
 	}
 
 	private void StartCompletion()
 	{
-		if (string.IsNullOrEmpty(inputField.text)) return;
+		if (inputField_.IsNullOrEmpty()) return;
 
-		var code = inputField.text.Substring(0, caretPosition);
+		var code = inputField_.GetStringFromHeadToCaretPosition();
 		completion_.Start(code);
 
 		completionState_ = CompletionState.Complementing;
@@ -321,7 +285,7 @@ public class Gui : MonoBehaviour
 	private void StopCompletion()
 	{
 		completion_.Stop();
-		completionView.Reset();
+		completionView_.Reset();
 		completionState_ = CompletionState.Idle;
 	}
 
@@ -330,7 +294,7 @@ public class Gui : MonoBehaviour
 		if (completions.Length > 0) {
 			// TODO: this is not smart... because all items have this information.
 			currentComletionPrefix_ = completions[0].prefix;
-			completionView.SetCompletions(completions);
+			completionView_.SetCompletions(completions);
 		}
 		ResetAnnotation();
 		completionState_ = CompletionState.Idle;
@@ -339,70 +303,43 @@ public class Gui : MonoBehaviour
 	private void DoCompletion()
 	{
 		// for multiline input
-		if (inputField.text.EndsWith("\t")) {
-			inputField.text = inputField.text.Remove(inputField.text.Length - 1, 1);
-		}
+		inputField_.RemoveTabAtCaretPosition();
 
-		var completion = completionView.selectedCompletion;
-		inputField.text = inputField.text.Insert(caretPosition, completion);
-		completionView.Reset();
-
-		inputField.Select();
-		inputField.caretPosition = caretPosition + completion.Length;
+		var completion = completionView_.selectedCompletion;
+		inputField_.InsertToCaretPosition(completion);
+		inputField_.MoveCaretPosition(completion.Length);
+		inputField_.Select();
 
 		StopCompletion();
 	}
 
 	private void RegisterListeners()
 	{
-		inputField.onValueChanged.AddListener(OnValueChanged);
-		inputField.onEndEdit.AddListener(OnSubmit);
+		inputField_.onValueChanged.AddListener(OnValueChanged);
+		inputField_.onEndEdit.AddListener(OnSubmit);
 	}
 
 	private void UnregisterListeners()
 	{
-		inputField.onValueChanged.RemoveListener(OnValueChanged);
-		inputField.onEndEdit.RemoveListener(OnSubmit);
+		inputField_.onValueChanged.RemoveListener(OnValueChanged);
+		inputField_.onEndEdit.RemoveListener(OnSubmit);
 	}
 
 	private bool IsEnterPressing()
 	{
-		if (!inputField.multiLine) {
+		if (!inputField_.multiLine) {
 			return KeyUtil.Enter();
 		} else {
 			return (KeyUtil.Control() || KeyUtil.Shift()) && KeyUtil.Enter();
 		}
 	}
 
-	public Vector3 GetCompletionPosition()
-	{
-		if (inputField.isFocused) {
-			var generator = inputField.textComponent.cachedTextGenerator;
-			if (caretPosition < generator.characters.Count) {
-				var len = caretPosition;
-				var info = generator.characters[len];
-				var ppu  = inputField.textComponent.pixelsPerUnit;
-				var x = info.cursorPos.x / ppu;
-				var y = info.cursorPos.y / ppu;
-				var z = 0f;
-				var prefixWidth = 0f;
-				for (int i = 0; i < currentComletionPrefix_.Length && i < len; ++i) {
-					prefixWidth += generator.characters[len - 1 - i].charWidth;
-				}
-				prefixWidth /= ppu;
-				var inputTform = inputField.GetComponent<RectTransform>();
-				return inputTform.localPosition + new Vector3(x - prefixWidth, y, z);
-			}
-		}
-		return -9999f * Vector3.one;
-	}
-
 	private void OnValueChanged(string text)
 	{
-		if (!inputField.multiLine) {
+		if (!inputField_.multiLine) {
 			text = text.Replace("\n", "");
 			text = text.Replace("\r", "");
-			inputField.text = text;
+			inputField_.text = text;
 		}
 
 		if (completionState_ != CompletionState.Stop) {
@@ -410,7 +347,7 @@ public class Gui : MonoBehaviour
 			elapsedTimeFromLastInput_ = 0f;
 		}
 
-		RunOnEndOfFrame(completionView.Reset);
+		RunOnEndOfFrame(completionView_.Reset);
 	}
 
 	private void OnSubmit(string code)
@@ -431,15 +368,12 @@ public class Gui : MonoBehaviour
 		}
 
 		var result = Evaluator.Evaluate(code);
-		var itemObj = InstantiateInOutputContent(resultItemPrefab);
-		var item = itemObj.GetComponent<ResultItem>();
-
-		RemoveExceededItem();
+		var item = output_.AddResultItem();
 
 		if (item) {
 			switch (result.type) {
 				case CompileResult.Type.Success: {
-					inputField.text = "";
+					inputField_.Clear();
 					history_.Add(result.code);
 					history_.Reset();
 					item.type   = CompileResult.Type.Success;
@@ -450,7 +384,7 @@ public class Gui : MonoBehaviour
 				case CompileResult.Type.Partial: {
 					// This block should not be reached because the given code is 
 					// added a semicolon to end of it. 
-					inputField.text = "";
+					inputField_.Clear();
 					item.type   = CompileResult.Type.Partial;
 					item.input  = result.code;
 					item.output = "The given code is something wrong: " + code;
@@ -466,13 +400,6 @@ public class Gui : MonoBehaviour
 		}
 	}
 
-	private void RemoveExceededItem()
-	{
-		if (outputContent.childCount > maxResultNum) {
-			Destroy(outputContent.GetChild(0).gameObject);
-		}
-	}
-
 	public void OutputLog(Log.Data data)
 	{
 		// enqueue given datas temporarily to handle data from other threads.
@@ -483,12 +410,11 @@ public class Gui : MonoBehaviour
 	{
 		while (logData_.Count > 0) {
 			var data = logData_.Dequeue();
-			var item = InstantiateInOutputContent(logItemPrefab).GetComponent<LogItem>();
+			var item = output_.AddLogItem();
 			item.level = data.level;
 			item.log   = data.log;
 			item.meta  = data.meta;
 		}
-		RemoveExceededItem();
 	}
 
 	private void ResetAnnotation()
@@ -500,29 +426,21 @@ public class Gui : MonoBehaviour
 	{
 		elapsedTimeFromLastSelect_ += Time.deltaTime;
 
-		var item = completionView.selectedItem;
+		var item = completionView_.selectedItem;
 		var hasDescription = (item != null) && item.hasDescription;
-		if (hasDescription) annotation.text = item.description;
+		if (hasDescription) annotation_.text = item.description;
 
 		var isAnnotationVisible = elapsedTimeFromLastSelect_ >= annotationTimer;
-		annotation.gameObject.SetActive(isAnnotationVisible && hasDescription);
+		annotation_.gameObject.SetActive(isAnnotationVisible && hasDescription);
 
-		annotation.transform.position =
-			completionView.selectedPosition + Vector3.right * (completionView.width + 4f);
+		annotation_.transform.position =
+			completionView_.selectedPosition + Vector3.right * (completionView_.width + 4f);
 	}
 
-	static public GameObject InstantiateInOutputContent(GameObject prefab)
+	static public GameObject InstantiateInOutputView(GameObject prefab)
 	{
 		if (selected == null) return null;
-
-		var obj = Instantiate(
-			prefab,
-			selected.outputContent.position,
-			selected.outputContent.rotation) as GameObject;
-		obj.transform.SetParent(selected.outputContent);
-		obj.transform.localScale = Vector3.one;
-
-		return obj;
+		return selected.output_.AddObject(prefab);
 	}
 
 	private void RunOnEndOfFrame(System.Action func)
@@ -546,6 +464,35 @@ public class Gui : MonoBehaviour
 		yield return new WaitForEndOfFrame();
 		yield return new WaitForEndOfFrame();
 		func();
+	}
+
+
+	[Command(name = "clear outputs", description = "Clear output view.")]
+	static public void ClearOutputCommand()
+	{
+		if (Gui.selected == null) return;
+		Gui.selected.RunOnNextFrame(Gui.selected.output_.Clear);
+	}
+
+	[Command(name = "clear histories", description = "Clear all input histories.")]
+	static public void ClearHistoryCommand()
+	{
+		if (Gui.selected == null) return;
+		Gui.selected.RunOnNextFrame(Gui.selected.history_.Clear);
+	}
+
+	[Command(name = "show histories", description = "show command histoies.")]
+	static public void ShowHistory()
+	{
+		if (Gui.selected == null) return;
+
+		string histories = "";
+		int num = Gui.selected.history_.Count;
+		foreach (var command in Gui.selected.history_.list.ToArray().Reverse()) {
+			histories += string.Format("{0}: {1}\n", num, command);
+			--num;
+		}
+		Log.Output(histories);
 	}
 }
 
