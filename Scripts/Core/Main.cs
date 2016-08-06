@@ -3,7 +3,7 @@
 namespace uREPL
 {
 
-[RequireComponent(typeof(Gui))]
+[RequireComponent(typeof(Window))]
 public class Main : MonoBehaviour
 {
 	[HeaderAttribute("Completion Methods")]
@@ -13,6 +13,12 @@ public class Main : MonoBehaviour
 	public bool useGameObjectPathCompletion = true;
 
 	void Start()
+	{
+		Evaluator.Initialize();
+		AddDefaultCompletionPlugins();
+	}
+
+	void AddDefaultCompletionPlugins()
 	{
 		if (useMonoCompletion)           gameObject.AddComponent<MonoCompletion>();
 		if (useCommandCompletion)        gameObject.AddComponent<CommandCompletion>();
