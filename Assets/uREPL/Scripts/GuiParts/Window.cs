@@ -8,14 +8,14 @@ using System.Linq;
 namespace uREPL
 {
 
-public class Gui : MonoBehaviour
+public class Window : MonoBehaviour
 {
 	#region [const]
 	private const float COMPLETION_TIMEOUT = 0.5f;
 	#endregion
 
 	#region [core]
-	static public Gui selected;
+	static public Window selected;
 
 	private Completion completion_ = new Completion();
 	private History history_ = new History();
@@ -53,9 +53,7 @@ public class Gui : MonoBehaviour
 
 		completion_.AddCompletionFinishedListener(OnCompletionFinished);
 
-		Evaluator.Initialize();
-
-		isWindowOpened_ = GetComponent<Canvas>().enabled;
+		isWindowOpened_ = GetComponent<Canvas>().isActiveAndEnabled;
 		if (isWindowOpened_) {
 			selected = this;
 		}
@@ -70,7 +68,7 @@ public class Gui : MonoBehaviour
 		completionView_ = transform.Find("Completion View").GetComponent<CompletionView>();
 
 		// Settings
-		inputField_.parentGui = this;
+		inputField_.parentWindow = this;
 	}
 
 	private void InitCommands()
@@ -277,7 +275,7 @@ public class Gui : MonoBehaviour
 
 	private void OnCompletionFinished(Completion.Result result)
 	{
-		completionPartialCode_ = result.partialCode;
+		completionPartialCode_ = result.partialCode ?? "";
 		completionView_.SetCompletions(result.completions);
 		completionState_ = CompletionState.Idle;
 	}
@@ -384,32 +382,32 @@ public class Gui : MonoBehaviour
 
 	static public GameObject InstantiateInOutputView(GameObject prefab)
 	{
-		if (selected == null) return null;
-		return selected.output_.AddObject(prefab);
+		if (Window.selected == null) return null;
+		return Window.selected.output_.AddObject(prefab);
 	}
 
 	[Command(name = "clear outputs", description = "Clear output view.")]
 	static public void ClearOutputCommand()
 	{
-		if (Gui.selected == null) return;
-		Utility.RunOnNextFrame(Gui.selected.output_.Clear);
+		if (Window.selected == null) return;
+		Utility.RunOnNextFrame(Window.selected.output_.Clear);
 	}
 
 	[Command(name = "clear histories", description = "Clear all input histories.")]
 	static public void ClearHistoryCommand()
 	{
-		if (Gui.selected == null) return;
-		Utility.RunOnNextFrame(Gui.selected.history_.Clear);
+		if (Window.selected == null) return;
+		Utility.RunOnNextFrame(Window.selected.history_.Clear);
 	}
 
 	[Command(name = "show histories", description = "show command histoies.")]
 	static public void ShowHistory()
 	{
-		if (Gui.selected == null) return;
+		if (Window.selected == null) return;
 
 		string histories = "";
-		int num = Gui.selected.history_.Count;
-		foreach (var command in Gui.selected.history_.list.ToArray().Reverse()) {
+		int num = Window.selected.history_.Count;
+		foreach (var command in Window.selected.history_.list.ToArray().Reverse()) {
 			histories += string.Format("{0}: {1}\n", num, command);
 			--num;
 		}
@@ -420,7 +418,7 @@ public class Gui : MonoBehaviour
 	static public void CloseCommand()
 	{
 		Utility.RunOnNextFrame(() => {
-			if (Gui.selected) Gui.selected.CloseWindow();
+			if (Window.selected) Window.selected.CloseWindow();
 		});
 	}
 }

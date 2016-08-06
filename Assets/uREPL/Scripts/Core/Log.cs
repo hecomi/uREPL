@@ -77,7 +77,7 @@ static public class Log
 			method.DeclaringType.FullName,
 			method.Name);
 #endif
-		Gui.selected.OutputLog(new Data(log, meta, level));
+		Window.selected.OutputLog(new Data(log, meta, level));
 	}
 }
 

@@ -8,7 +8,7 @@ namespace uREPL
 
 public class CommandInputField : InputField
 {
-	public Gui parentGui { get; set; }
+	public Window parentWindow { get; set; }
 
 	// To change default behavior and to support multiple gui,
 	// override InputFiled method here.
@@ -18,7 +18,7 @@ public class CommandInputField : InputField
 
 		// To support multiple gui, set the window that this input filed is belonging to 
 		// as the current active window.
-		Gui.selected = parentGui;
+		Window.selected = parentWindow;
 
 		bool consumedEvent = false;
 		var e = new Event();
