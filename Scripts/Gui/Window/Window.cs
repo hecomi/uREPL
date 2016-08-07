@@ -50,11 +50,17 @@ public class Window : MonoBehaviour
 	#endregion
 
 	#region [content]
-	private CommandInputField inputField_;
+	private CommandView commandView_;
+	public CommandView commandView 
+	{
+		get { return commandView_; }
+		private set { commandView_ = value; }
+	}
+
 	public CommandInputField inputField
 	{
-		get { return inputField_; }
-		private set { inputField_ = value; }
+		get { return commandView.inputField; }
+		private set { commandView.inputField = value; }
 	}
 
 	private OutputView outputView_;
@@ -81,7 +87,7 @@ public class Window : MonoBehaviour
 	}
 	public bool hasCompletion
 	{
-		get { return completionView_.hasItem; }
+		get { return completionView.hasItem; }
 	}
 	#endregion
 
@@ -101,13 +107,13 @@ public class Window : MonoBehaviour
 	void InitObjects()
 	{
 		// Instances
-		var container   = transform.Find("Container");
-		inputField     = container.Find("Input Field").GetComponent<CommandInputField>();
-		outputView         = container.Find("Output View").GetComponent<OutputView>();
-		completionView_ = transform.Find("Completion View").GetComponent<CompletionView>();
+		var container  = transform.Find("Container");
+		commandView = container.Find("Command View").GetComponent<CommandView>();
+		outputView = container.Find("Output View").GetComponent<OutputView>();
+		completionView = transform.Find("Completion View").GetComponent<CompletionView>();
 
 		// Settings
-		inputField.parentWindow = this;
+		commandView.Initialize(this);
 	}
 
 	void Start()
@@ -150,7 +156,7 @@ public class Window : MonoBehaviour
 		GetComponent<Canvas>().enabled = active;
 		inputField.gameObject.SetActive(active);
 		outputView.gameObject.SetActive(active);
-		completionView_.gameObject.SetActive(active);
+		completionView.gameObject.SetActive(active);
 		isWindowOpened_ = active;
 	}
 
@@ -168,14 +174,14 @@ public class Window : MonoBehaviour
 			}
 			case CompletionState.WaitingForCompletion: {
 				elapsedTimeFromLastInput_ += Time.deltaTime;
-				if (elapsedTimeFromLastInput_ >= completionView_.delay) {
+				if (elapsedTimeFromLastInput_ >= completionView.delay) {
 					StartCompletion();
 				}
 				break;
 			}
 			case CompletionState.Complementing: {
 				elapsedTimeFromLastInput_ += Time.deltaTime;
-				if (elapsedTimeFromLastInput_ > completionView_.delay + completionTIMEOUT) {
+				if (elapsedTimeFromLastInput_ > completionView.delay + completionTIMEOUT) {
 					StopCompletion();
 				}
 				completion.Update();
@@ -184,7 +190,9 @@ public class Window : MonoBehaviour
 		}
 
 		// update completion view position.
-		completionView_.position = inputField.GetPositionBeforeCaret(completionPartialCode_.Length);
+		var completionPosition = inputField.GetPositionBeforeCaret(completionPartialCode_.Length);
+		var commandViewPosition = commandView.GetComponent<RectTransform>().localPosition;
+		completionView.position = commandViewPosition + completionPosition;
 	}
 
 	public void StartCompletion()
@@ -200,20 +208,20 @@ public class Window : MonoBehaviour
 	public void StopCompletion()
 	{
 		completion.Stop();
-		completionView_.Reset();
+		completionView.Reset();
 		completionState = CompletionState.Idle;
 	}
 
 	private void OnCompletionFinished(Completion.Result result)
 	{
 		completionPartialCode_ = result.partialCode ?? "";
-		completionView_.SetCompletions(result.completions);
+		completionView.SetCompletions(result.completions);
 		completionState = CompletionState.Idle;
 	}
 
 	public void DoCompletion()
 	{
-		var completion = completionView_.selectedCompletion;
+		var completion = completionView.selectedCompletion;
 		inputField.InsertToCaretPosition(completion);
 		inputField.MoveCaretPosition(completion.Length);
 		inputField.Focus();
@@ -246,7 +254,7 @@ public class Window : MonoBehaviour
 			elapsedTimeFromLastInput_ = 0f;
 		}
 
-		Utility.RunOnEndOfFrame(completionView_.Reset);
+		Utility.RunOnEndOfFrame(completionView.Reset);
 	}
 
 	public void OnSubmit(string code)
