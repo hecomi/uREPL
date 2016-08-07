@@ -7,6 +7,11 @@ public class KeyBinding
 {
 	private Window window_ = null;
 
+	private CommandView commandView
+	{
+		get { return window_.commandView; }
+	}
+
 	private CommandInputField inputField
 	{
 		get { return window_.inputField; }
@@ -63,7 +68,7 @@ public class KeyBinding
 				window_.StartCompletion();
 			}
 		});
-		keyEvent_.Add(KeyCode.M, KeyEvent.Option.Ctrl, inputField.ToggleMultiline);
+		keyEvent_.Add(KeyCode.M, KeyEvent.Option.Ctrl, commandView.ToggleLineType);
 	}
 
 	private void InitializeEmacsLikeKeys()
