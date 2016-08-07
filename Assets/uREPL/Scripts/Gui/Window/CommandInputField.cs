@@ -218,6 +218,19 @@ public class CommandInputField : InputField
 			}
 		}
 	}
+
+	public void ToggleMultiline()
+	{
+		var layout = GetComponent<LayoutElement>();
+		if (multiLine) {
+			lineType = LineType.SingleLine;
+			if (layout) layout.minHeight = 29;
+			text = text.Replace('\n', ' ');
+		} else {
+			lineType = LineType.MultiLineNewline;
+			if (layout) layout.minHeight = 100;
+		}
+	}
 }
 
 }

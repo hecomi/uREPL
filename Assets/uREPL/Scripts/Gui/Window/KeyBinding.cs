@@ -63,6 +63,7 @@ public class KeyBinding
 				window_.StartCompletion();
 			}
 		});
+		keyEvent_.Add(KeyCode.M, KeyEvent.Option.Ctrl, inputField.ToggleMultiline);
 	}
 
 	private void InitializeEmacsLikeKeys()
