@@ -78,11 +78,11 @@ public class KeyBinding
 			StopCompletion();
 		});
 		keyEvent_.Add(KeyCode.A, KeyEvent.Option.Ctrl, () => {
-			inputField.MoveTextStart(false);
+			inputField.MoveCaretPositionToLineHead();
 			StopCompletion();
 		});
 		keyEvent_.Add(KeyCode.E, KeyEvent.Option.Ctrl, () => {
-			inputField.MoveTextEnd(false);
+			inputField.MoveCaretPositionToLineEnd();
 			StopCompletion();
 		});
 		keyEvent_.Add(KeyCode.H, KeyEvent.Option.Ctrl, () => {
@@ -94,7 +94,7 @@ public class KeyBinding
 			StopCompletion();
 		});
 		keyEvent_.Add(KeyCode.K, KeyEvent.Option.Ctrl, () => {
-			inputField.DeleteAllCharactersAfterCaretPosition();
+			inputField.DeleteCharactersToLineEndAfterCaretPosition();
 			StopCompletion();
 		});
 		keyEvent_.Add(KeyCode.L, KeyEvent.Option.Ctrl, window_.outputView.Clear);
@@ -126,7 +126,9 @@ public class KeyBinding
 	{
 		if (completionView.hasItem) {
 			completionView.Next();
-		} else if (!isMultiline) {
+		} else if (isMultiline) {
+			inputField.MoveUp();
+		} else {
 			if (history.IsFirst()) history.SetInputtingCommand(inputField.text);
 			inputField.text = history.Prev();
 			inputField.MoveTextEnd(false);
@@ -138,8 +140,10 @@ public class KeyBinding
 	{
 		if (completionView.hasItem) {
 			completionView.Prev();
-		} else if (!isMultiline) {
-			inputField.text = history.Next();
+		} else if (isMultiline) {
+			inputField.MoveDown();
+		} else {
+ 			inputField.text = history.Next();
 			inputField.MoveTextEnd(false);
 			completionState = Window.CompletionState.Stop;
 		}
@@ -161,12 +165,10 @@ public class KeyBinding
 				keyEvent_.Clear();
 			}
 
-			if (IsEnterPressing()) {
-				if (window_.hasCompletion) {
-					window_.DoCompletion();
-				} else {
-					window_.OnSubmit(inputField.text);
-				}
+			if (window_.hasCompletion && KeyUtil.Enter()) {
+				window_.DoCompletion();
+			} else if (IsEnterPressing()) {
+				window_.OnSubmit(inputField.text);
 			}
 		}
 	}

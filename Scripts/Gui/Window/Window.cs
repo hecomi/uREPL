@@ -213,9 +213,6 @@ public class Window : MonoBehaviour
 
 	public void DoCompletion()
 	{
-		// for multiline input
-		inputField.RemoveTabAtCaretPosition();
-
 		var completion = completionView_.selectedCompletion;
 		inputField.InsertToCaretPosition(completion);
 		inputField.MoveCaretPosition(completion.Length);
