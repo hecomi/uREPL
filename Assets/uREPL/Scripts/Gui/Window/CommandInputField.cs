@@ -26,11 +26,20 @@ public class CommandInputField : InputField
 			if (e.rawType == EventType.KeyDown) {
 				consumedEvent = true;
 
-				// Skip because these keys are used for histroy selection.
-				switch (e.keyCode) {
-					case KeyCode.UpArrow:
-					case KeyCode.DownArrow:
-						continue;
+				// Skip because these keys are used for histroy selection in single-line mode.
+				if (!multiLine) {
+					switch (e.keyCode) {
+						case KeyCode.UpArrow:
+						case KeyCode.DownArrow:
+							continue;
+					}
+				}
+
+				// Skip if completion view is open.
+				if (parentWindow.hasCompletion) {
+					if (e.keyCode == KeyCode.Tab || KeyUtil.Enter()) {
+						break;
+					}
 				}
 
 				var shouldContinue = KeyPressed(e);
@@ -64,6 +73,35 @@ public class CommandInputField : InputField
 		caretPosition = Mathf.Clamp(caretPosition + x, 0, text.Length);
 	}
 
+	public void MoveCaretPositionToLineHead()
+	{
+		if (multiLine) {
+			if (caretPosition == 0) return;
+			var lastEnd = text.LastIndexOf('\n', caretPosition - 1);
+			if (lastEnd != -1) {
+				caretPosition = lastEnd + 1;
+			} else {
+				MoveTextStart(false);
+			}
+		} else {
+			MoveTextStart(false);
+		}
+	}
+
+	public void MoveCaretPositionToLineEnd()
+	{
+		if (multiLine) {
+			var nextEnd = text.IndexOf('\n', caretPosition);
+			if (nextEnd != -1) {
+				caretPosition = nextEnd;
+			} else {
+				MoveTextEnd(false);
+			}
+		} else {
+			MoveTextEnd(false);
+		}
+	}
+
 	public void BackspaceOneCharacterFromCaretPosition()
 	{
 		if (caretPosition > 0) {
@@ -82,10 +120,23 @@ public class CommandInputField : InputField
 		}
 	}
 
-	public void DeleteAllCharactersAfterCaretPosition()
+	public void DeleteCharactersToLineEndAfterCaretPosition()
 	{
-		if (caretPosition < text.Length) {
-			text = text.Remove(caretPosition);
+		if (caretPosition == text.Length) return;
+
+		if (multiLine) {
+			var currentLineEnd = text.IndexOf('\n', caretPosition);
+			if (currentLineEnd != -1) {
+				// to remove the line when the current line is empty.
+				var count = Mathf.Max(currentLineEnd - caretPosition, 1);
+				text = text.Remove(caretPosition, count);
+			} else {
+				text = text.Remove(caretPosition);
+			}
+		} else {
+			if (caretPosition < text.Length) {
+				text = text.Remove(caretPosition);
+			}
 		}
 	}
 
@@ -102,14 +153,6 @@ public class CommandInputField : InputField
 	public void InsertToCaretPosition(string str)
 	{
 		text = text.Insert(caretPosition, str);
-	}
-
-	public void RemoveTabAtCaretPosition()
-	{
-		// TODO: see the caret position instead of the end of the text.
-		if (text.EndsWith("\t")) {
-			text = text.Remove(text.Length - 1, 1);
-		}
 	}
 
 	public Vector3 GetPositionBeforeCaret(int offsetLen)
@@ -144,6 +187,36 @@ public class CommandInputField : InputField
 	{
 		ActivateInputField();
 		Select();
+	}
+
+	public void MoveUp()
+	{
+		if (!multiLine) return;
+
+		var currentLineHead = text.LastIndexOf('\n', Mathf.Max(caretPosition - 1, 0)) + 1;
+		if (currentLineHead != 0) {
+			var charCountFromLineHead = caretPosition - currentLineHead;
+			var preLineHead = text.LastIndexOf('\n', currentLineHead - 2) + 1;
+			var preLineEnd = text.IndexOf('\n', preLineHead);
+			caretPosition = Mathf.Min(preLineHead + charCountFromLineHead, preLineEnd);
+		}
+	}
+
+	public void MoveDown()
+	{
+		if (!multiLine) return;
+
+		var currentLineHead = text.LastIndexOf('\n', Mathf.Max(caretPosition - 1, 0)) + 1;
+		var charCountFromLineHead = caretPosition - currentLineHead;
+		var nextLineHead = text.IndexOf('\n', currentLineHead) + 1;
+		if (nextLineHead != 0) {
+			var nextLineEnd = text.IndexOf('\n', nextLineHead);
+			if (nextLineEnd != -1) {
+				caretPosition = Mathf.Min(nextLineHead + charCountFromLineHead, nextLineEnd);
+			} else {
+				MoveTextEnd(false);
+			}
+		}
 	}
 }
 
