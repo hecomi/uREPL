@@ -145,10 +145,23 @@ public static class Commands
 		// To consider commands with spaces, check if the head of the given code is consistent
 		// with any command name. command list is ranked in descending order of the command string length.
 		var commandInfo = Commands.GetAll().FirstOrDefault(
-			x => (code.Length >= x.command.Length) && 
+			x => (code.Length >= x.command.Length) &&
 			     (code.Substring(0, x.command.Length) == x.command));
+
+		// There is no command:
 		if (commandInfo == null) {
 			return code;
+		}
+
+		// Check command format
+		if (commandInfo.parameters.Length == 0) {
+			if (code.Trim() != commandInfo.command) {
+				return code;
+			}
+		} else {
+			if (code[commandInfo.command.Length] != ' ') {
+				return code;
+			}
 		}
 
 		// Remove last semicolon.
