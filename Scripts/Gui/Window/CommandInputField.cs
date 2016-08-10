@@ -122,7 +122,11 @@ public class CommandInputField : InputField
 
 	public void DeleteCharactersToLineEndAfterCaretPosition()
 	{
-		if (caretPosition == text.Length) return;
+		if (caretPosition == text.Length) {
+			BackspaceOneCharacterFromCaretPosition();
+			MoveCaretPositionToLineHead();
+			return;
+		}
 
 		if (multiLine) {
 			var currentLineEnd = text.IndexOf('\n', caretPosition);
@@ -193,30 +197,32 @@ public class CommandInputField : InputField
 	{
 		if (!multiLine) return;
 
-		var currentLineHead = text.LastIndexOf('\n', Mathf.Max(caretPosition - 1, 0)) + 1;
-		if (currentLineHead != 0) {
-			var charCountFromLineHead = caretPosition - currentLineHead;
-			var preLineHead = text.LastIndexOf('\n', currentLineHead - 2) + 1;
-			var preLineEnd = text.IndexOf('\n', preLineHead);
-			caretPosition = Mathf.Min(preLineHead + charCountFromLineHead, preLineEnd);
-		}
+		if (caretPosition == 0) return;
+
+		var currentLineHead = text.LastIndexOf('\n', caretPosition - 1) + 1;
+		if (currentLineHead == 0) return;
+
+		var charCountFromLineHead = caretPosition - currentLineHead;
+		var preLineHead = text.LastIndexOf('\n', currentLineHead - 2) + 1;
+		var preLineEnd = text.IndexOf('\n', preLineHead);
+		caretPosition = Mathf.Min(preLineHead + charCountFromLineHead, preLineEnd);
 	}
 
 	public void MoveDown()
 	{
 		if (!multiLine) return;
 
-		var currentLineHead = text.LastIndexOf('\n', Mathf.Max(caretPosition - 1, 0)) + 1;
+		var currentLineHead = caretPosition == 0 ? 0 :
+			text.LastIndexOf('\n', caretPosition - 1) + 1;
+
+		var currentLineEnd = text.IndexOf('\n', caretPosition);
+		if (currentLineEnd == -1) return;
+
 		var charCountFromLineHead = caretPosition - currentLineHead;
-		var nextLineHead = text.IndexOf('\n', currentLineHead) + 1;
-		if (nextLineHead != 0) {
-			var nextLineEnd = text.IndexOf('\n', nextLineHead);
-			if (nextLineEnd != -1) {
-				caretPosition = Mathf.Min(nextLineHead + charCountFromLineHead, nextLineEnd);
-			} else {
-				MoveTextEnd(false);
-			}
-		}
+		var nextLineHead = currentLineEnd + 1;
+		var nextLineEnd = text.IndexOf('\n', nextLineHead);
+		if (nextLineEnd == -1) nextLineEnd = text.Length;
+		caretPosition = Mathf.Min(nextLineHead + charCountFromLineHead, nextLineEnd);
 	}
 }
 
