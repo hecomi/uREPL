@@ -199,12 +199,16 @@ public class CommandInputField : InputField
 
 		if (caretPosition == 0) return;
 
-		var currentLineHead = text.LastIndexOf('\n', caretPosition - 1) + 1;
-		if (currentLineHead == 0) return;
+		var preLineEnd = text.LastIndexOf('\n', caretPosition - 1);
+		if (preLineEnd == -1) return;
+		if (preLineEnd == 0) {
+			caretPosition = 0;
+			return;
+		}
 
+		var currentLineHead = preLineEnd + 1;
 		var charCountFromLineHead = caretPosition - currentLineHead;
 		var preLineHead = text.LastIndexOf('\n', currentLineHead - 2) + 1;
-		var preLineEnd = text.IndexOf('\n', preLineHead);
 		caretPosition = Mathf.Min(preLineHead + charCountFromLineHead, preLineEnd);
 	}
 
