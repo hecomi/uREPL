@@ -62,17 +62,30 @@ public class MonoCompletion : CompletionPlugin
 		return cnt % 2 == 1;
 	}
 
-	public override CompletionInfo[] GetCompletions(string input)
+	private CompletionInfo[] ConvertToCompletionInfoArray(string[] result, string prefix)
 	{
-		bool isComplemented = false;
+		return (result == null) ? null : result
+			.Select(completion => new CompletionInfo(
+				prefix,
+				prefix + completion,
+				"M",
+				new Color32(50, 70, 240, 255)))
+			.Select(completion => {
+				var type = types_.list.FirstOrDefault(x => x.name == completion.code);
+				if (type != null) {
+					completion.description = type.description;
+				}
+				return completion;
+			})
+			.ToArray();
+	}
+
+	private CompletionInfo[] GetCustomCompletions(string input, string codeAddedPreviously = "")
+	{
 		string[] result = null;
 		string prefix = "";
+		bool isComplemented = false;
 		int index = 0;
-
-		// skip if inside quotation
-		if (IsInsideQuotation(input)) {
-			return null;
-		}
 
 		// split by '=, \s'
 		var inputParts = input.Split(new char[] { '=', ' ', '	' });
@@ -88,7 +101,7 @@ public class MonoCompletion : CompletionPlugin
 		index = GetPosIfInsideBracket(input, "<", ">");
 		if (!isComplemented && index != -1) {
 			input = input.Substring(index);
-			result = Evaluator.GetCompletions(input, out prefix);
+			result = Evaluator.GetCompletions(codeAddedPreviously + input, out prefix);
 			isComplemented = true;
 		}
 
@@ -96,30 +109,51 @@ public class MonoCompletion : CompletionPlugin
 		index = GetPosIfInsideBracket(input, "(", ")");
 		if (!isComplemented && index != -1) {
 			input = input.Substring(index);
-			result = Evaluator.GetCompletions(input, out prefix);
+			result = Evaluator.GetCompletions(codeAddedPreviously + input, out prefix);
 			isComplemented = true;
 		}
 
 		// otherwise
 		if (!isComplemented) {
-			result = Evaluator.GetCompletions(input, out prefix);
+			result = Evaluator.GetCompletions(codeAddedPreviously + input, out prefix);
 			isComplemented = true;
 		}
 
-		return (result == null) ? null : result
-			.Select(completion => new CompletionInfo(
-				prefix,
-				prefix + completion,
-				"M",
-				new Color32(50, 70, 240, 255)))
-			.Select(completion => {
-				var type = types_.list.FirstOrDefault(x => x.name == completion.code);
-				if (type != null) {
-					completion.description = type.description;
-				}
-				return completion;
-			})
-			.ToArray();
+		return ConvertToCompletionInfoArray(result, prefix);
+	}
+
+	public override CompletionInfo[] GetCompletions(string input)
+	{
+		// skip if inside quotation
+		if (IsInsideQuotation(input)) {
+			return null;
+		}
+
+		// At first, try to complement the non-edited input.
+		string prefix;
+		var result = Evaluator.GetCompletions(input, out prefix);
+		if (result != null) {
+			return ConvertToCompletionInfoArray(result, prefix);
+		}
+
+		// Next, try to complement input whose last line is edited.
+		// (If there is only on line, skip it.)
+		var lines = input.Split(new char[] { '\n' });
+		if (lines.Length == 1) {
+			return GetCustomCompletions(input);
+		}
+
+		var lastLine = lines.Last();
+		System.Array.Clear(lines, lines.Length - 1, 1);
+		var linesExceptForLast = string.Join("", lines);
+
+		var completions = GetCustomCompletions(lastLine, linesExceptForLast);
+		if (completions != null) {
+			return completions;
+		}
+
+		// At last, try to complete only last line
+		return GetCustomCompletions(lastLine);
 	}
 }
 
