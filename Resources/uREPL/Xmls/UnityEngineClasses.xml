@@ -47,7 +47,7 @@
 		</type>
 		<type>
 			<name>AnimationCurve</name>
-			<desc>A collection of curves form an AnimationClip.</desc>
+			<desc>Store a collection of Keyframes that can be evaluated over time.</desc>
 		</type>
 		<type>
 			<name>AnimationEvent</name>
@@ -367,7 +367,7 @@
 		</type>
 		<type>
 			<name>Display</name>
-			<desc>Provides access to a display / screen for rendering operations. </desc>
+			<desc>Provides access to a display / screen for rendering operations.</desc>
 		</type>
 		<type>
 			<name>DistanceJoint2D</name>
@@ -920,7 +920,7 @@
 		</type>
 		<type>
 			<name>Rect</name>
-			<desc>A 2D Rectangle defined by x, y position and width, height.</desc>
+			<desc>A 2D Rectangle defined by X and Y position, width and height.</desc>
 		</type>
 		<type>
 			<name>RectOffset</name>
@@ -980,7 +980,7 @@
 		</type>
 		<type>
 			<name>RuntimeAnimatorController</name>
-			<desc>Runtime reprentation of the AnimatorController. It can be used to change the Animator's controller during runtime.</desc>
+			<desc>Runtime representation of the AnimatorController. It can be used to change the Animator's controller during runtime.</desc>
 		</type>
 		<type>
 			<name>SamsungTV</name>
@@ -1000,7 +1000,7 @@
 		</type>
 		<type>
 			<name>Security</name>
-			<desc>Webplayer security related class.</desc>
+			<desc>Webplayer security related class. Note supported from 5.4.0.</desc>
 		</type>
 		<type>
 			<name>Shader</name>
@@ -1092,7 +1092,7 @@
 		</type>
 		<type>
 			<name>SystemInfo</name>
-			<desc>Access system information.</desc>
+			<desc>Access system and hardware information.</desc>
 		</type>
 		<type>
 			<name>Terrain</name>
@@ -1200,7 +1200,7 @@
 		</type>
 		<type>
 			<name>WaitForSeconds</name>
-			<desc>Suspends the coroutine execution for the given amount of seconds.</desc>
+			<desc>Suspends the coroutine execution for the given amount of seconds using scaled time.</desc>
 		</type>
 		<type>
 			<name>WebCamDevice</name>
@@ -1245,6 +1245,10 @@
 		<type>
 			<name>YieldInstruction</name>
 			<desc>Base class for all yield instructions.</desc>
+		</type>
+		<type>
+			<name></name>
+			<desc></desc>
 		</type>
 	</types>
 </root>
