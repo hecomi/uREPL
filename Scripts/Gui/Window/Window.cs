@@ -12,7 +12,7 @@ namespace uREPL
 public class Window : MonoBehaviour
 {
 	#region [constant values]
-	private const float completionTIMEOUT = 0.5f;
+	private const float COMPLETION_TIMEOUT = 0.5f;
 	#endregion
 
 	#region [core]
@@ -121,6 +121,7 @@ public class Window : MonoBehaviour
 
 		// Settings
 		commandView.Initialize(this);
+		completionView.Initialize(this);
 	}
 
 	void Start()
@@ -181,14 +182,14 @@ public class Window : MonoBehaviour
 			}
 			case CompletionState.WaitingForCompletion: {
 				elapsedTimeFromLastInput_ += Time.deltaTime;
-				if (elapsedTimeFromLastInput_ >= completionView.delay) {
+				if (elapsedTimeFromLastInput_ >= parameters.completionDelay) {
 					StartCompletion();
 				}
 				break;
 			}
 			case CompletionState.Complementing: {
 				elapsedTimeFromLastInput_ += Time.deltaTime;
-				if (elapsedTimeFromLastInput_ > completionView.delay + completionTIMEOUT) {
+				if (elapsedTimeFromLastInput_ > parameters.completionDelay + COMPLETION_TIMEOUT) {
 					StopCompletion();
 				}
 				completion.Update();

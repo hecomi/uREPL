@@ -28,10 +28,9 @@ public class MainEditor : Editor
 		set { editor.completionFoldOut = value; }
 	}
 
-	public void DrawCompletionGUI()
+	private void DrawCompletionPluginGUI()
 	{
-		editor.completionFoldOut = EditorGUILayout.Foldout(editor.completionFoldOut, "Completion");
-
+		editor.completionFoldOut = EditorGUILayout.Foldout(editor.completionFoldOut, "Completion Plugin");
 		if (editor.completionFoldOut) {
 			++EditorGUI.indentLevel;
 			Toggle("Mono", ref parameters.useMonoCompletion);
@@ -43,14 +42,33 @@ public class MainEditor : Editor
 		}
 	}
 
+	private void DrawCompletoinParametersGUI()
+	{
+		editor.parametersFoldOut = EditorGUILayout.Foldout(editor.parametersFoldOut, "Parameters");
+		if (editor.parametersFoldOut) {
+			++EditorGUI.indentLevel;
+			Float("Completion Delay", ref parameters.completionDelay);
+			Float("Annotation Delay", ref parameters.annotationDelay);
+			EditorGUILayout.Separator();
+			--EditorGUI.indentLevel;
+		}
+	}
+
 	public override void OnInspectorGUI()
 	{
-		DrawCompletionGUI();
+		DrawCompletionPluginGUI();
+		DrawCompletoinParametersGUI();
 	}
 
 	public void Toggle(string name, ref bool param)
 	{
 		var result = EditorGUILayout.Toggle(name, param);
+		if (result != param) param = result;
+	}
+
+	public void Float(string name, ref float param)
+	{
+		var result = EditorGUILayout.FloatField(name, param);
 		if (result != param) param = result;
 	}
 }

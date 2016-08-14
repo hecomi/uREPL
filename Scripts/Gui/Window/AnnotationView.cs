@@ -14,8 +14,6 @@ public class AnnotationView : MonoBehaviour
 	}
 
 	private CompletionView completion_;
-
-	public float delay = 0.5f;
 }
 
 }
