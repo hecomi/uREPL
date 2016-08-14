@@ -38,6 +38,7 @@ static public class Utility
 
 	static public void RunOnEndOfFrame(System.Action func)
 	{
+		if (!Window.selected) return;
 		Window.selected.StartCoroutine(_RunOnEndOfFrame(func));
 	}
 
@@ -49,6 +50,7 @@ static public class Utility
 
 	static public void RunOnNextFrame(System.Action func)
 	{
+		if (!Window.selected) return;
 		Window.selected.StartCoroutine(_RunOnNextFrame(func));
 	}
 

@@ -163,8 +163,8 @@ public class CommandInputField : InputField
 	{
 		if (isFocused) {
 			var generator = textComponent.cachedTextGenerator;
-			if (caretPosition < generator.characters.Count) {
-				var len = caretPosition;
+			var len = caretPosition - m_DrawStart;
+			if (len < generator.characterCount) {
 				var info = generator.characters[len];
 				var ppu  = textComponent.pixelsPerUnit;
 				var x = info.cursorPos.x / ppu;
