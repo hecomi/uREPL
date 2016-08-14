@@ -4,13 +4,13 @@ uREPL
 uREPL is an in-game powerful REPL envinronment for Unity3D that supports following functions:
 
 - Any Unity-supported C# code evaluation at run time.
-- completions.
 - Emacs-like keyboard shortcuts.
-- History.
-- Output logs.
-- *GameObject* and *Component* inspecor.
+- Multi-Line input.
+- Customizable completions.
 - Command definition just by adding an attribute.
-- Additional completion plugins.
+- *GameObject* and *Component* inspecor.
+- Output logs.
+- History.
 
 
 Demo
@@ -55,6 +55,7 @@ Keybinds
 | `ctrl + d`                | remove character after cursor position.      |
 | `ctrl + k`                | remove all characters after cursor position. |
 | `ctrl + l`                | clear all outputs.                           |
+| `ctrl + m`                | toggle single-line / multi-line mode.        |
 | `ctrl + n`, `up arrow`    | show next history.                           |
 | `ctrl + p`, `down arrow`  | show previous history.                       |
 | `ctrl + tab`              | show complementions.                         |
@@ -238,13 +239,11 @@ Others
 - Multiple GUI
   - You can locate multiple GUIs in a scene.
 - Builds
-  - Almost all functions are available even for builds.
+  - Almost all functions are available even in the built binary.
 
 
 TODOs
 -----
-- Multiline input.
-- VR support.
 - Various debug mode.
 - Various useful commands.
 - More log types (e.g. image, graph).
@@ -257,6 +256,7 @@ Version
 -------
 | Data       | Version | Description                 |
 | ---------- | ------- | --------------------------- |
+| 2015/11/29 |  0.3.0  | Add multi-line input.       |
 | 2015/11/29 |  0.2.0  | Add command with arguments. |
 | 2015/11/27 |  0.1.0  | Add inspectors.             |
 | 2015/11/01 |  0.0.1  | Start project.              |
