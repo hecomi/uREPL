@@ -8,6 +8,7 @@ using System.Linq;
 namespace uREPL
 {
 
+[RequireComponent(typeof(Main))]
 public class Window : MonoBehaviour
 {
 	#region [constant values]
@@ -17,6 +18,12 @@ public class Window : MonoBehaviour
 	#region [core]
 	static public Window selected;
 	private bool isWindowOpened_ = false;
+
+	public Main main { get; set; }
+	public Parameters parameters 
+	{ 
+		get { return main.parameters; }
+	}
 
 	private Completion completion_ = new Completion();
 	public Completion completion
@@ -107,7 +114,7 @@ public class Window : MonoBehaviour
 	void InitObjects()
 	{
 		// Instances
-		var container  = transform.Find("Container");
+		var container = transform.Find("Container");
 		commandView = container.Find("Command View").GetComponent<CommandView>();
 		outputView = container.Find("Output View").GetComponent<OutputView>();
 		completionView = transform.Find("Completion View").GetComponent<CompletionView>();
