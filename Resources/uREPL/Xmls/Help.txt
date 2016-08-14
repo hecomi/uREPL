@@ -1,0 +1,44 @@
+- Keybinds
+
+  - Single-Line Input
+	- Ctrl + a      : move to head.
+	- Ctrl + e      : move to end.
+	- Ctrl + f      : move forward.
+	- Ctrl + b      : move back.
+	- Ctrl + h      : remove one character before cursor position.
+	- Ctrl + d      : remove one character after cursor position.
+	- Ctrl + k      : remove all characters after cursor position.
+	- Ctrl + l      : clear all outputs.
+	- Ctrl + n      : show next history.
+	- Ctrl + p      : show previous history.
+	- Ctrl + m      : switch to multi-line mode.
+	- Up arrow      : show next history.
+	- Down arrow    : show previous history.
+	- Tab           : show complementions.
+	- Enter         : run input command.
+
+  - Multi-Line Input
+	- Ctrl + a      : move to head.
+	- Ctrl + e      : move to end.
+	- Ctrl + f      : move forward.
+	- Ctrl + b      : move back.
+	- Ctrl + n      : move down.
+	- Ctrl + p      : move up.
+	- Ctrl + h      : remove one character before cursor position.
+	- Ctrl + d      : remove one character after cursor position.
+	- Ctrl + k      : remove all characters after cursor position.
+	- Ctrl + l      : clear all outputs.
+	- Ctrl + m      : switch to multi-line mode.
+	- Up arrow      : move up.
+	- Down arrow    : move down.
+	- Shift + Enter : run input command.
+	- Ctrl  + Enter : run input command.
+
+  - Completion
+    - Up arrow      : select lower item.
+    - Down arrow    : select upper item.
+    - Ctrl + n      : select lower item.
+    - Ctrl + p      : select upper item.
+    - Tab           : insert selected completion.
+    - Esc           : hide complementions.
+    - Enter         : insert selected completion.

@@ -43,7 +43,7 @@ public class CommandInfo
 
 public static class Commands
 {
-	private const string helpTextFile = "uREPL/Xmls/uReplHelp";
+	private const string helpTextFile = "uREPL/Xmls/Help";
 	static private CommandInfo[] commands_;
 
 	[Command(name = "help", description = "show help")]
