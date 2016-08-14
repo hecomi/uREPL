@@ -28,7 +28,9 @@ public class CommandCompletion : CompletionPlugin
 					x.command + " ",
 					"C",
 					new Color32(200, 50, 30, 255),
-					x.description))
+					string.Format("{0} <color=#888888ff>- <i>{1}</i></color>",
+						x.description,
+						x.GetTaggedFormat())))
 				.ToArray();
 	}
 }

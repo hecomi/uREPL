@@ -29,15 +29,60 @@ public class CommandInfo
 	public string className;
 	public string description;
 	public string command;
-	public ParameterInfo[] parameters;
+	public MethodInfo method;
 
-	public CommandInfo(string className, string methodName, string description, string command, ParameterInfo[] parameters)
+	public CommandInfo(
+		string className, 
+		string methodName, 
+		string description, 
+		string command, 
+		MethodInfo method)
 	{
 		this.className   = className;
 		this.methodName  = methodName;
 		this.description = description;
 		this.command     = string.IsNullOrEmpty(command) ? methodName : command;
-		this.parameters  = parameters;
+		this.method      = method;
+	}
+
+	public bool HasArguments()
+	{
+		return method.GetParameters().Length > 0;
+	}
+
+	public string GetFormat(string[] args)
+	{
+		return string.Format("{0}.{1}({2});", 
+			className, 
+			string.Join(", ", args),
+			methodName);
+	}
+
+	public string GetFormat()
+	{
+		return string.Format("{0} {1}.{2}{3}({4})", 
+			method.ReturnType.Name,
+			className, 
+			methodName,
+			(method.IsGenericMethod ? "<T>" : ""),
+			string.Join(", ", method.GetParameters().Select(
+				param => (param.ParameterType.Name + " " + param.Name)).ToArray())
+		);
+	}
+
+	public string GetTaggedFormat()
+	{
+		return string.Format("{0} {1}. <b>{2}</b>{3}({4})", 
+			method.ReturnType.Name,
+			className, 
+			methodName,
+			(method.IsGenericMethod ? "<T>" : ""),
+			string.Join(", ", method.GetParameters().Select(
+				param => string.Format("{0} <b>{1}</b>",
+					param.ParameterType.Name,
+					param.Name)
+			).ToArray())
+		);
 	}
 }
 
@@ -78,12 +123,9 @@ public static class Commands
 					.Select(attr => new CommandInfo(
 						type.FullName,
 						method.Name,
-						string.Format("{0} <color=#888888ff>(<i>{1}.{2}()</i>)</color>",
-							attr.description,
-							type.FullName,
-							method.Name),
+						attr.description,
 						attr.name,
-						method.GetParameters()))))
+						method))))
 			.OrderByDescending(x => x.command.Length)
 			.ToArray());
 	}
@@ -157,7 +199,7 @@ public static class Commands
 		code = code.TrimEnd(';');
 
 		// Check command format
-		if (commandInfo.parameters.Length == 0) {
+		if (commandInfo.HasArguments()) {
 			if (code.Trim() != commandInfo.command) {
 				return code;
 			}
@@ -183,9 +225,7 @@ public static class Commands
 		var args = code.Split(new string[] { " " }, System.StringSplitOptions.RemoveEmptyEntries);
 
 		// Convert the command into the code.
-		code  = string.Format("{0}.{1}(", commandInfo.className, commandInfo.methodName);
-		code += string.Join(", ", args);
-		code += ");";
+		code = commandInfo.GetFormat(args);
 
 		// Replace temporary quates placeholders to actual expressions.
 		code = ConvertPlaceholderToBlock(code, quates);
