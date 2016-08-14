@@ -6,11 +6,16 @@ namespace uREPL
 [RequireComponent(typeof(Window))]
 public class Main : MonoBehaviour
 {
-	[HeaderAttribute("Completion Methods")]
-	public bool useMonoCompletion           = true;
-	public bool useCommandCompletion        = true;
-	public bool useGameObjectNameCompletion = true;
-	public bool useGameObjectPathCompletion = true;
+	public Parameters parameters;
+
+#if UNITY_EDITOR
+	public EditorParameters editor;
+#endif
+
+	void Awake()
+	{
+		GetComponent<Window>().main = this;
+	}
 
 	void Start()
 	{
@@ -20,10 +25,10 @@ public class Main : MonoBehaviour
 
 	void AddDefaultCompletionPlugins()
 	{
-		if (useMonoCompletion)           gameObject.AddComponent<MonoCompletion>();
-		if (useCommandCompletion)        gameObject.AddComponent<CommandCompletion>();
-		if (useGameObjectNameCompletion) gameObject.AddComponent<GameObjectNameCompletion>();
-		if (useGameObjectPathCompletion) gameObject.AddComponent<GameObjectPathCompletion>();
+		if (parameters.useMonoCompletion)           gameObject.AddComponent<MonoCompletion>();
+		if (parameters.useCommandCompletion)        gameObject.AddComponent<CommandCompletion>();
+		if (parameters.useGameObjectNameCompletion) gameObject.AddComponent<GameObjectNameCompletion>();
+		if (parameters.useGameObjectPathCompletion) gameObject.AddComponent<GameObjectPathCompletion>();
 	}
 }
 
