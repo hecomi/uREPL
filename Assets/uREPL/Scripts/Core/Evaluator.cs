@@ -142,12 +142,6 @@ public static class Evaluator
 	{
 		Log.Output(GetUsing());
 	}
-
-	[Command(name = "test", description = "test(string, float)")]
-	static public void Test(string hoge, float fuga)
-	{
-		Debug.Log(hoge + " " + fuga);
-	}
 }
 
 }
