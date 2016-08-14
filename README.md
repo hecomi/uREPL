@@ -216,14 +216,14 @@ Inspector
 You can inspect *GameObject* by calling `GameObject.Inspect()`. This shows position, rotation, scale, and components added to it.
 
 <img src="https://raw.githubusercontent.com/wiki/hecomi/uREPL/images/gameobject_inspector.png"
-	alt="log examples"
+	alt="gameobject inspector"
 	width="720"
 	height="405" />
 
 You can also inspect *Component* by clicking the inspect icon or calling `Component.Inspect()`.
 
 <img src="https://raw.githubusercontent.com/wiki/hecomi/uREPL/images/component_inspector.png"
-	alt="log examples"
+	alt="component inspector"
 	width="720"
 	height="405" />
 
@@ -231,6 +231,15 @@ See following movies for more detail.
 - [GameObject Demo](https://www.youtube.com/watch?v=CF3S3TsJajU)
 - [Component Demo](https://www.youtube.com/watch?v=WdfmlPrrxX0)
 
+
+Multi-Line
+----------
+Toggle single-line and multi-line modes by `Ctrl-m` or clicking the right-top icon in the input area.
+
+<img src="https://raw.githubusercontent.com/wiki/hecomi/uREPL/images/multiline.png"
+	alt="multiline mode"
+	width="720"
+	height="405" />
 
 Others
 ------
