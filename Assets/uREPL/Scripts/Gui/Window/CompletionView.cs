@@ -8,6 +8,8 @@ namespace uREPL
 
 public class CompletionView : MonoBehaviour
 {
+	public Window parentWindow { get; set; }
+
 	private AnnotationView annotation_;
 	private float elapsedTimeFromLastSelect_ = 0f;
 
@@ -22,8 +24,6 @@ public class CompletionView : MonoBehaviour
 
 	private int currentIndex_ = 0;
 	private float scrollPos_ = 0;
-
-	public float delay = 0.1f;
 
 	public int itemCount
 	{
@@ -78,6 +78,11 @@ public class CompletionView : MonoBehaviour
 		get { return rect.rect.width; }
 	}
 
+	public void Initialize(Window window)
+	{
+		parentWindow = window;
+	}
+
 	void Awake()
 	{
 		rect    = GetComponent<RectTransform>();
@@ -109,7 +114,7 @@ public class CompletionView : MonoBehaviour
 		var hasDescription = (selectedItem != null) && selectedItem.hasDescription;
 		if (hasDescription) annotation_.text = selectedItem.description;
 
-		var isAnnotationVisible = elapsedTimeFromLastSelect_ >= annotation_.delay;
+		var isAnnotationVisible = elapsedTimeFromLastSelect_ >= parentWindow.parameters.annotationDelay;
 		annotation_.gameObject.SetActive(hasDescription && isAnnotationVisible);
 
 		annotation_.transform.position = selectedPosition + Vector3.right * (width + 4f);

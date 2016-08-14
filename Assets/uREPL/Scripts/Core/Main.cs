@@ -7,28 +7,31 @@ namespace uREPL
 public class Main : MonoBehaviour
 {
 	public Parameters parameters;
-
-#if UNITY_EDITOR
 	public EditorParameters editor;
-#endif
 
 	void Awake()
 	{
-		GetComponent<Window>().main = this;
-	}
-
-	void Start()
-	{
 		Evaluator.Initialize();
-		AddDefaultCompletionPlugins();
+		GetComponent<Window>().main = this;
+		UpdateAllDefaultCompletionPlugins();
 	}
 
-	void AddDefaultCompletionPlugins()
+	void Update()
 	{
-		if (parameters.useMonoCompletion)           gameObject.AddComponent<MonoCompletion>();
-		if (parameters.useCommandCompletion)        gameObject.AddComponent<CommandCompletion>();
-		if (parameters.useGameObjectNameCompletion) gameObject.AddComponent<GameObjectNameCompletion>();
-		if (parameters.useGameObjectPathCompletion) gameObject.AddComponent<GameObjectPathCompletion>();
+		UpdateAllDefaultCompletionPlugins();
+	}
+
+	void UpdateAllDefaultCompletionPlugins()
+	{
+		UpdateCompletionPlugin<MonoCompletion>(parameters.useMonoCompletion);
+		UpdateCompletionPlugin<CommandCompletion>(parameters.useCommandCompletion);
+		UpdateCompletionPlugin<GameObjectNameCompletion>(parameters.useGameObjectNameCompletion);
+		UpdateCompletionPlugin<GameObjectPathCompletion>(parameters.useGameObjectPathCompletion);
+	}
+
+	private void UpdateCompletionPlugin<T>(bool enabled) where T : MonoBehaviour
+	{
+		(GetComponent<T>() ?? gameObject.AddComponent<T>()).enabled = enabled; 
 	}
 }
 
