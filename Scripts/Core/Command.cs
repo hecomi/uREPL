@@ -153,19 +153,20 @@ public static class Commands
 			return code;
 		}
 
+		// Remove last semicolon.
+		code = code.TrimEnd(';');
+
 		// Check command format
 		if (commandInfo.parameters.Length == 0) {
 			if (code.Trim() != commandInfo.command) {
 				return code;
 			}
 		} else {
-			if (code[commandInfo.command.Length] != ' ') {
+			if (code.Length < commandInfo.command.Length + 1 ||
+				code[commandInfo.command.Length] != ' ') {
 				return code;
 			}
 		}
-
-		// Remove last semicolon.
-		code = code.TrimEnd(';');
 
 		// Remove command and get only arguments.
 		code = code.Substring(commandInfo.command.Length);
