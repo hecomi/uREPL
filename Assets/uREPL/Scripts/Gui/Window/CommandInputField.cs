@@ -69,7 +69,13 @@ public class CommandInputField : InputField
 
 	public void MoveCaretPosition(int x)
 	{
-		caretPosition = Mathf.Clamp(caretPosition + x, 0, text.Length);
+		SetCaretPosition(Mathf.Clamp(caretPosition + x, 0, text.Length));
+	}
+
+	public void SetCaretPosition(int pos)
+	{
+		caretPosition = Mathf.Clamp(pos, 0, text.Length);
+		UpdateLabel();
 	}
 
 	public void MoveCaretPositionToLineHead()
@@ -78,7 +84,7 @@ public class CommandInputField : InputField
 			if (caretPosition == 0) return;
 			var lastEnd = text.LastIndexOf('\n', caretPosition - 1);
 			if (lastEnd != -1) {
-				caretPosition = lastEnd + 1;
+				SetCaretPosition(lastEnd + 1);
 			} else {
 				MoveTextStart(false);
 			}
@@ -92,7 +98,7 @@ public class CommandInputField : InputField
 		if (multiLine) {
 			var nextEnd = text.IndexOf('\n', caretPosition);
 			if (nextEnd != -1) {
-				caretPosition = nextEnd;
+				SetCaretPosition(nextEnd);
 			} else {
 				MoveTextEnd(false);
 			}
@@ -107,7 +113,7 @@ public class CommandInputField : InputField
 			var isCaretPositionLast = caretPosition == text.Length;
 			text = text.Remove(caretPosition - 1, 1);
 			if (!isCaretPositionLast) {
-				--caretPosition;
+				MoveCaretPosition(-1);
 			}
 		}
 	}
@@ -161,17 +167,17 @@ public class CommandInputField : InputField
 	public Vector3 GetPositionBeforeCaret(int offsetLen)
 	{
 		if (isFocused) {
-			var generator = textComponent.cachedTextGenerator;
-			var len = caretPosition - m_DrawStart;
-			if (len < generator.characterCount) {
-				var info = generator.characters[len];
+			var characters = textComponent.cachedTextGenerator.characters;
+			var len = m_CaretPosition - m_DrawStart;
+			if (len > 0 && len < characters.Count) {
+				var info = characters[len];
 				var ppu  = textComponent.pixelsPerUnit;
 				var x = info.cursorPos.x / ppu;
 				var y = info.cursorPos.y / ppu;
 				var z = 0f;
 				var prefixWidth = 0f;
 				for (int i = 0; i < offsetLen && i < len; ++i) {
-					prefixWidth += generator.characters[len - 1 - i].charWidth;
+					prefixWidth += characters[len - 1 - i].charWidth;
 				}
 				prefixWidth /= ppu;
 				var inputTform = GetComponent<RectTransform>();
@@ -201,14 +207,14 @@ public class CommandInputField : InputField
 		var preLineEnd = text.LastIndexOf('\n', caretPosition - 1);
 		if (preLineEnd == -1) return;
 		if (preLineEnd == 0) {
-			caretPosition = 0;
+			SetCaretPosition(0);
 			return;
 		}
 
 		var currentLineHead = preLineEnd + 1;
 		var charCountFromLineHead = caretPosition - currentLineHead;
 		var preLineHead = text.LastIndexOf('\n', currentLineHead - 2) + 1;
-		caretPosition = Mathf.Min(preLineHead + charCountFromLineHead, preLineEnd);
+		SetCaretPosition(Mathf.Min(preLineHead + charCountFromLineHead, preLineEnd));
 	}
 
 	public void MoveDown()
@@ -225,7 +231,7 @@ public class CommandInputField : InputField
 		var nextLineHead = currentLineEnd + 1;
 		var nextLineEnd = text.IndexOf('\n', nextLineHead);
 		if (nextLineEnd == -1) nextLineEnd = text.Length;
-		caretPosition = Mathf.Min(nextLineHead + charCountFromLineHead, nextLineEnd);
+		SetCaretPosition(Mathf.Min(nextLineHead + charCountFromLineHead, nextLineEnd));
 	}
 }
 
