@@ -26,13 +26,12 @@ public class CommandInputField : InputField
 			if (e.rawType == EventType.KeyDown) {
 				consumedEvent = true;
 
-				// Skip because these keys are used for histroy selection in single-line mode.
-				if (!multiLine) {
-					switch (e.keyCode) {
-						case KeyCode.UpArrow:
-						case KeyCode.DownArrow:
-							continue;
-					}
+				// Skip because these keys are used for histroy selection in single-line mode
+				// and for move cursor manually in multi-line mode.
+				switch (e.keyCode) {
+					case KeyCode.UpArrow:
+					case KeyCode.DownArrow:
+						continue;
 				}
 
 				// Skip if completion view is open.
