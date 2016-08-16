@@ -54,8 +54,8 @@ public class CommandInfo
 	{
 		return string.Format("{0}.{1}({2});", 
 			className, 
-			string.Join(", ", args),
-			methodName);
+			methodName,
+			string.Join(", ", args));
 	}
 
 	public string GetFormat()
