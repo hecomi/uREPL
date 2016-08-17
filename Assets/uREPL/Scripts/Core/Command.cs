@@ -200,7 +200,7 @@ public static class Commands
 
 		// Check command format
 		if (commandInfo.HasArguments()) {
-			if (code.Trim() != commandInfo.command) {
+			if (code.Substring(0, commandInfo.command.Length) != commandInfo.command) {
 				return code;
 			}
 		} else {
