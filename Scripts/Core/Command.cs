@@ -204,8 +204,7 @@ public static class Commands
 				return code;
 			}
 		} else {
-			if (code.Length < commandInfo.command.Length + 1 ||
-				code[commandInfo.command.Length] != ' ') {
+			if (code.Length > commandInfo.command.Length) {
 				return code;
 			}
 		}
