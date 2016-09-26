@@ -49,9 +49,13 @@ public class Completion
 	public void Stop()
 	{
 		if (thread_ != null) {
-			thread_.Abort();
-			hasCompletionFinished_ = true;
+			if (!thread_.Join(1000)) {
+				Debug.LogError("uREPL completion thread stopped unexpectedly...");
+				thread_.Abort();
+			}
 		}
+		thread_ = null;
+		hasCompletionFinished_ = true;
 	}
 
 	public void Update()
