@@ -130,11 +130,14 @@ public class MonoCompletion : CompletionPlugin
 		}
 
 		// At first, try to complement the non-edited input.
+		// NOTE: this cause crash when input matches some patterns (e.g. "for (")
+		/*
 		string prefix;
 		var result = Evaluator.GetCompletions(input, out prefix);
 		if (result != null) {
 			return ConvertToCompletionInfoArray(result, prefix);
 		}
+		*/
 
 		// Next, try to complement input whose last line is edited.
 		// (If there is only on line, skip it.)
