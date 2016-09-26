@@ -118,7 +118,7 @@ public static class Evaluator
 
 	static public string[] GetCompletions(string input, out string prefix)
 	{
-		return Mono.CSharp.Evaluator.GetCompletions(input, out prefix);
+        return Mono.CSharp.Evaluator.GetCompletions(input, out prefix);
 	}
 
 	static public string GetVars()
