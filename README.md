@@ -265,7 +265,8 @@ Version
 -------
 | Data       | Version | Description                 |
 | ---------- | ------- | --------------------------- |
-| 2015/11/29 |  0.3.0  | Add multi-line input.       |
+| 2016/10/29 |  0.3.1  | Fix bugs.                   |
+| 2016/08/15 |  0.3.0  | Add multi-line input.       |
 | 2015/11/29 |  0.2.0  | Add command with arguments. |
 | 2015/11/27 |  0.1.0  | Add inspectors.             |
 | 2015/11/01 |  0.0.1  | Start project.              |
