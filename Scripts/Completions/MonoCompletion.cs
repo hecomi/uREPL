@@ -113,6 +113,14 @@ public class MonoCompletion : CompletionPlugin
 			isComplemented = true;
 		}
 
+		// completion inner parenthesis (2)
+		index = GetPosIfInsideBracket(input, "[", "]");
+		if (!isComplemented && index != -1) {
+			input = input.Substring(index);
+			result = Evaluator.GetCompletions(codeAddedPreviously + input, out prefix);
+			isComplemented = true;
+		}
+
 		// otherwise
 		if (!isComplemented) {
 			result = Evaluator.GetCompletions(codeAddedPreviously + input, out prefix);
