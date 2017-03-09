@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System;
-using System.Reflection;
+
+namespace uREPL
+{
 
 public class ReadonlyFieldItem : FieldItem
 {
@@ -17,4 +19,6 @@ public class ReadonlyFieldItem : FieldItem
 	{
 		value = componentType.GetField(fieldName).GetValue(component);
 	}
+}
+
 }
