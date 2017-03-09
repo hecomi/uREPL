@@ -11,6 +11,7 @@ public class Parameters
 	public bool useCommandCompletion        = true;
 	public bool useGameObjectNameCompletion = true;
 	public bool useGameObjectPathCompletion = true;
+	public bool useGlobalClassCompletion    = true;
 	#endregion
 
 	#region [Parameters]

@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+namespace uREPL
+{
+
 public abstract class FieldItem : MonoBehaviour
 {
 	protected Text labelText;
@@ -30,4 +33,6 @@ public abstract class FieldItem : MonoBehaviour
 	{
 		labelText = transform.FindChild("Label").GetComponent<Text>();
 	}
+}
+
 }

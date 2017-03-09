@@ -60,6 +60,7 @@ public static class Evaluator
 	static private void SetUsings()
 	{
 		Mono.CSharp.Evaluator.Run("using uREPL;");
+		Mono.CSharp.Evaluator.Run("using System;");
 		Mono.CSharp.Evaluator.Run("using UnityEngine;");
 		// #if UNITY_EDITOR
 		// Mono.CSharp.Evaluator.Run("using UnityEditor;");

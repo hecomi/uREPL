@@ -27,6 +27,7 @@ public class Main : MonoBehaviour
 		UpdateCompletionPlugin<CommandCompletion>(parameters.useCommandCompletion);
 		UpdateCompletionPlugin<GameObjectNameCompletion>(parameters.useGameObjectNameCompletion);
 		UpdateCompletionPlugin<GameObjectPathCompletion>(parameters.useGameObjectPathCompletion);
+		UpdateCompletionPlugin<GlobalClassCompletion>(parameters.useGlobalClassCompletion);
 	}
 
 	private void UpdateCompletionPlugin<T>(bool enabled) where T : MonoBehaviour

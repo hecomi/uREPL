@@ -37,6 +37,7 @@ public class MainEditor : Editor
 			Toggle("Command", ref parameters.useCommandCompletion);
 			Toggle("GameObject Name", ref parameters.useGameObjectNameCompletion);
 			Toggle("GameObject Path", ref parameters.useGameObjectPathCompletion);
+			Toggle("Global Class", ref parameters.useGlobalClassCompletion);
 			EditorGUILayout.Separator();
 			--EditorGUI.indentLevel;
 		}
