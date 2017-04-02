@@ -6,12 +6,10 @@ namespace uREPL
 
 public class CommandCompletion : CompletionPlugin
 {
-	static public CommandCompletion instance;
 	private CommandInfo[] commands_;
 
 	protected override void OnEnable()
 	{
-		instance = this;
 		commands_ = Commands.GetAll();
 
 		base.OnEnable();

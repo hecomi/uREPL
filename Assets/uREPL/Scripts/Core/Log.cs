@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace uREPL
@@ -77,7 +76,16 @@ static public class Log
 			method.DeclaringType.FullName,
 			method.Name);
 #endif
-		Window.selected.OutputLog(new Data(log, meta, level));
+        if (Window.selected) {
+            Window.selected.OutputLog(new Data(log, meta, level));
+        } else {
+            var msg = string.Format("{0} ({1})", log, meta);
+            switch (level) {
+                case Level.Verbose : UnityEngine.Debug.Log(msg);        break;
+                case Level.Warn    : UnityEngine.Debug.LogWarning(msg); break;
+                case Level.Error   : UnityEngine.Debug.LogError(msg);   break;
+            }
+        }
 	}
 }
 
