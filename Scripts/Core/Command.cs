@@ -86,6 +86,67 @@ public class CommandInfo
 	}
 }
 
+public static class CommandUtil
+{
+	public class ParseBlockResult
+	{
+		public List<string> matches = new List<string>();
+		public string input;
+		public string output;
+		public string pattern;
+		public string placeholder;
+
+		public ParseBlockResult(
+			string input,
+			string pattern,
+			string placeholder)
+		{
+			this.input = this.output = input;
+			this.pattern = pattern;
+			this.placeholder = placeholder;
+		}
+	}
+
+	static public ParseBlockResult ConvertBlockToPlaceholder(
+		string input,
+		string pattern,
+		string placeholder)
+	{
+		var result = new ParseBlockResult(input, pattern, placeholder);
+
+		var regex = new Regex(pattern);
+		var n = 0;
+		for (var m = regex.Match(input); m.Success; m = m.NextMatch(), ++n) {
+			result.matches.Add(m.Value);
+			result.output = regex.Replace(result.output, string.Format(placeholder, n), 1);
+		}
+
+		return result;
+	}
+
+	static public string ConvertPlaceholderToBlock(
+		string input,
+		ParseBlockResult result)
+	{
+		for (int i = 0; i < result.matches.Count; ++i) {
+			var placeholder = string.Format(result.placeholder, i);
+			input = input.Replace(placeholder, result.matches[i]);
+		}
+
+		return input;
+	}
+
+    static public ParseBlockResult ConvertParenToPlaceholder(string input)
+    {
+		return ConvertBlockToPlaceholder(input, "\\([^\\)]+\\)", "<%paren{0}%>");
+    }
+
+    static public ParseBlockResult ConvertQuateToPlaceholder(string input)
+    {
+		return ConvertBlockToPlaceholder(input, "\"[^\"(\\\")]+\"", "<%quate{0}%>");
+    }
+}
+
 public static class Commands
 {
 	private const string helpTextFile = "uREPL/Xmls/Help";
@@ -130,55 +191,7 @@ public static class Commands
 			.ToArray());
 	}
 
-	internal class ParseBlockResult
-	{
-		public List<string> matches = new List<string>();
-		public string input;
-		public string output;
-		public string pattern;
-		public string placeholder;
-
-		public ParseBlockResult(
-			string input,
-			string pattern,
-			string placeholder)
-		{
-			this.input = this.output = input;
-			this.pattern = pattern;
-			this.placeholder = placeholder;
-		}
-	}
-
-	static private ParseBlockResult ConvertBlockToPlaceholder(
-		string input,
-		string pattern,
-		string placeholder)
-	{
-		var result = new ParseBlockResult(input, pattern, placeholder);
-
-		var regex = new Regex(pattern);
-		var n = 0;
-		for (var m = regex.Match(input); m.Success; m = m.NextMatch(), ++n) {
-			result.matches.Add(m.Value);
-			result.output = regex.Replace(result.output, string.Format(placeholder, n), 1);
-		}
-
-		return result;
-	}
-
-	static private string ConvertPlaceholderToBlock(
-		string input,
-		ParseBlockResult result)
-	{
-		for (int i = 0; i < result.matches.Count; ++i) {
-			var placeholder = string.Format(result.placeholder, i);
-			input = input.Replace(placeholder, result.matches[i]);
-		}
-
-		return input;
-	}
-
-	static public string ConvertIntoCodeIfCommand(string code)
+	static public bool ConvertIntoCodeIfCommand(ref string code)
 	{
 		// NOTE: If two or more commands that have a same name are registered,
 		//       the first one will be used here. It is not correct but works well because
@@ -186,13 +199,14 @@ public static class Commands
 
 		// To consider commands with spaces, check if the head of the given code is consistent
 		// with any command name. command list is ranked in descending order of the command string length.
+        var tmpCode = code;
 		var commandInfo = Commands.GetAll().FirstOrDefault(
-			x => (code.Length >= x.command.Length) &&
-			     (code.Substring(0, x.command.Length) == x.command));
+			x => (tmpCode.Length >= x.command.Length) &&
+			     (tmpCode.Substring(0, x.command.Length) == x.command));
 
 		// There is no command:
 		if (commandInfo == null) {
-			return code;
+			return false;
 		}
 
 		// Remove last semicolon.
@@ -201,11 +215,11 @@ public static class Commands
 		// Check command format
 		if (commandInfo.HasArguments()) {
 			if (code.Substring(0, commandInfo.command.Length) != commandInfo.command) {
-				return code;
+				return false;
 			}
 		} else {
 			if (code.Length > commandInfo.command.Length) {
-				return code;
+				return false;
 			}
 		}
 
@@ -213,26 +227,26 @@ public static class Commands
 		code = code.Substring(commandInfo.command.Length);
 
 		// Store parentheses.
-		var parentheses = ConvertBlockToPlaceholder(code, "\\([^\\)]+\\)", "<%paren{0}%>");
+		var parentheses = CommandUtil.ConvertParenToPlaceholder(code);
 		code = parentheses.output;
 
 		// Store quatation blocks.
-		var quates = ConvertBlockToPlaceholder(code, "\"[^\"(\\\")]+\"", "<%quate{0}%>");
+		var quates = CommandUtil.ConvertQuateToPlaceholder(code);
 		code = quates.output;
 
 		// Split arguments with space.
 		var args = code.Split(new string[] { " " }, System.StringSplitOptions.RemoveEmptyEntries);
 
-		// Convert the command into the code.
+		// Convert the command into the Class.Method() style.
 		code = commandInfo.GetFormat(args);
 
 		// Replace temporary quates placeholders to actual expressions.
-		code = ConvertPlaceholderToBlock(code, quates);
+		code = CommandUtil.ConvertPlaceholderToBlock(code, quates);
 
 		// Replace temporary parentheses placeholders to actual expressions.
-		code = ConvertPlaceholderToBlock(code, parentheses);
+		code = CommandUtil.ConvertPlaceholderToBlock(code, parentheses);
 
-		return code;
+		return true;
 	}
 }
 

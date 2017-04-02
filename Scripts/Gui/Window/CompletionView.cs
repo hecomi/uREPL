@@ -128,7 +128,7 @@ public class CompletionView : MonoBehaviour
 	public void SetCompletions(CompletionInfo[] completions)
 	{
 		Reset();
-		if (completions.Length == 0) return;
+		if (completions == null || completions.Length == 0) return;
 
 		foreach (var info in completions.Reverse()) {
 			var itemObject = Instantiate(

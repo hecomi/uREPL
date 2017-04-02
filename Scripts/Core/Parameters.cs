@@ -9,6 +9,7 @@ public class Parameters
 	#region [Completion Plugin]
 	public bool useMonoCompletion           = true;
 	public bool useCommandCompletion        = true;
+	public bool useRuntimeCommandCompletion = true;
 	public bool useGameObjectNameCompletion = true;
 	public bool useGameObjectPathCompletion = true;
 	public bool useGlobalClassCompletion    = true;

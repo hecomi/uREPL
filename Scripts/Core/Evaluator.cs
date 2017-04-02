@@ -1,7 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Linq;
 
 namespace uREPL
 {
@@ -76,10 +73,13 @@ public static class Evaluator
 		var result = new CompileResult();
 		result.code = code;
 
-		// find commands at first and expand it if found.
-		code = Commands.ConvertIntoCodeIfCommand(code);
+		// find commands and expand it if found.
+        if (RuntimeCommands.ConvertIntoCodeIfCommand(ref code) || 
+            Commands.ConvertIntoCodeIfCommand(ref code)) {
+            // the give code is a command and converted into an actua code.
+        }
 
-		// if not match, eval the code using Mono.
+		// eval the code using Mono.
 		object ret = null;
 		bool hasReturnValue = false;
 
