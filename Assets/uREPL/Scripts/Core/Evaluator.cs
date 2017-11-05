@@ -33,6 +33,7 @@ public static class Evaluator
 		if (isInitialized) return;
 		isInitialized = true;
 
+		Mono.Initialize();
 		ReferenceAllAssemblies();
 		SetUsings();
 
@@ -47,20 +48,20 @@ public static class Evaluator
 		for (int n = 0; n < 2;) {
 			foreach (var assembly in System.AppDomain.CurrentDomain.GetAssemblies()) {
 				if (assembly == null) continue;
-				Mono.CSharp.Evaluator.ReferenceAssembly(assembly);
+				Mono.ReferenceAssembly(assembly);
 			}
-			Mono.CSharp.Evaluator.Evaluate("null;");
+			Mono.Evaluate("null;");
 			n++;
 		}
 	}
 
 	static private void SetUsings()
 	{
-		Mono.CSharp.Evaluator.Run("using uREPL;");
-		Mono.CSharp.Evaluator.Run("using System;");
-		Mono.CSharp.Evaluator.Run("using UnityEngine;");
+		Mono.Run("using uREPL;");
+		Mono.Run("using System;");
+		Mono.Run("using UnityEngine;");
 		// #if UNITY_EDITOR
-		// Mono.CSharp.Evaluator.Run("using UnityEditor;");
+		// Mono.Run("using UnityEditor;");
 		// #endif
 	}
 
@@ -76,23 +77,23 @@ public static class Evaluator
 		// find commands and expand it if found.
         if (RuntimeCommands.ConvertIntoCodeIfCommand(ref code) || 
             Commands.ConvertIntoCodeIfCommand(ref code)) {
-            // the give code is a command and converted into an actua code.
+            // the give code is a command and converted into an actual code.
         }
 
 		// eval the code using Mono.
 		object ret = null;
 		bool hasReturnValue = false;
 
-		var originalOutput = Mono.CSharp.Evaluator.MessageOutput;
+		var originalOutput = Mono.MessageOutput;
 		var errorWriter = new System.IO.StringWriter();
 		bool isPartial = false;
-		Mono.CSharp.Evaluator.MessageOutput = errorWriter;
+		Mono.MessageOutput = errorWriter;
 		try {
-			isPartial = Mono.CSharp.Evaluator.Evaluate(code, out ret, out hasReturnValue) != null;
+			isPartial = Mono.Evaluate(code, out ret, out hasReturnValue) != null;
 		} catch (System.Exception e) {
 			errorWriter.Write(e.Message);
 		}
-		Mono.CSharp.Evaluator.MessageOutput = originalOutput;
+		Mono.MessageOutput = originalOutput;
 
 		var error = errorWriter.ToString();
 		if (!string.IsNullOrEmpty(error)) {
@@ -119,17 +120,17 @@ public static class Evaluator
 
 	static public string[] GetCompletions(string input, out string prefix)
 	{
-        return Mono.CSharp.Evaluator.GetCompletions(input, out prefix);
+        return Mono.GetCompletions(input, out prefix);
 	}
 
 	static public string GetVars()
 	{
-		return Mono.CSharp.Evaluator.GetVars();
+		return Mono.GetVars();
 	}
 
 	static public string GetUsing()
 	{
-		return Mono.CSharp.Evaluator.GetUsing();
+		return Mono.GetUsing();
 	}
 
 	[Command(name = "show vars", description = "Show all local variables")]
