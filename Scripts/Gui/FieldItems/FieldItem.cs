@@ -31,7 +31,7 @@ public abstract class FieldItem : MonoBehaviour
 
 	void Awake()
 	{
-		labelText = transform.FindChild("Label").GetComponent<Text>();
+		labelText = transform.Find("Label").GetComponent<Text>();
 	}
 }
 

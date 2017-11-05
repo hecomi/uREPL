@@ -87,7 +87,7 @@ public class CompletionView : MonoBehaviour
 	{
 		rect    = GetComponent<RectTransform>();
 		scroll  = GetComponent<ScrollRect>();
-		content = transform.FindChild(contentGameObjectName);
+		content = transform.Find(contentGameObjectName);
 		annotation_ = transform.parent.Find("Annotation View").GetComponent<AnnotationView>();
 	}
 
