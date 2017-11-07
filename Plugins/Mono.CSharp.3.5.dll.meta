@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 0ce6e0b87a2c346f89a6018161c1ff95
-timeCreated: 1509869384
+guid: b4338bf9c66854d31ada89c7b162f539
+timeCreated: 1510073806
 licenseType: Pro
 PluginImporter:
   externalObjects: {}
@@ -65,8 +65,7 @@ PluginImporter:
       Standalone: LinuxUniversal
     second:
       enabled: 1
-      settings:
-        CPU: AnyCPU
+      settings: {}
   - first:
       Standalone: OSXIntel
     second:
@@ -83,8 +82,7 @@ PluginImporter:
       Standalone: OSXUniversal
     second:
       enabled: 1
-      settings:
-        CPU: AnyCPU
+      settings: {}
   - first:
       Standalone: Win
     second:
