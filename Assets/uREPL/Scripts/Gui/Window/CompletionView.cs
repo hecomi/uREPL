@@ -21,6 +21,7 @@ public class CompletionView : MonoBehaviour
 	private Transform content;
 	private ScrollRect scroll;
 	private RectTransform rect;
+	private RectTransform contentRect;
 
 	private int currentIndex_ = 0;
 	private float scrollPos_ = 0;
@@ -88,6 +89,7 @@ public class CompletionView : MonoBehaviour
 		rect    = GetComponent<RectTransform>();
 		scroll  = GetComponent<ScrollRect>();
 		content = transform.Find(contentGameObjectName);
+		contentRect = content.GetComponent<RectTransform>();
 		annotation_ = transform.parent.Find("Annotation View").GetComponent<AnnotationView>();
 	}
 
@@ -104,7 +106,13 @@ public class CompletionView : MonoBehaviour
 	{
 		var targetScrollPos = (itemCount <= 1) ? 0f : 1f * currentIndex_ / (itemCount - 1);
 		scrollPos_ += (targetScrollPos - scrollPos_) * scrollDamping;
-		scroll.verticalNormalizedPosition = scrollPos_;
+		if (scroll != null) {
+			scroll.verticalNormalizedPosition = scrollPos_;
+			// TODO: make the completion view flexible with uGUI instead of this code.
+			if (contentRect.rect.width != rect.rect.width) {
+				rect.sizeDelta = new Vector2(contentRect.rect.width, rect.rect.height);
+			}
+		}
 	}
 
 	private void UpdateAnnotation()
@@ -143,7 +151,7 @@ public class CompletionView : MonoBehaviour
 			item.SetCompletion(info.code, info.prefix);
 		}
 
-#if UNITY_5_2 || UNITY_5_3 || UNITY_5_4
+#if UNITY_5_2 || UNITY_5_3_OR_NEWER
 		LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
 #endif
 	}
@@ -185,7 +193,9 @@ public class CompletionView : MonoBehaviour
 		Clear();
 		currentIndex_ = 0;
 		scrollPos_ = 0;
-		scroll.verticalNormalizedPosition = scrollPos_;
+		if (scroll != null) {
+			scroll.verticalNormalizedPosition = scrollPos_;
+		}
 		ResetAnnotation();
 	}
 }
