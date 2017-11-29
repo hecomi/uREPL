@@ -88,7 +88,7 @@ public class MonoCompletion : CompletionPlugin
 		int index = 0;
 
 		// split by '=, \s'
-		var inputParts = input.Split(new char[] { '=', ' ', '	' });
+		var inputParts = input.Split(new char[] { '=', ' ', '	' }, StringSplitOptions.None);
 		input = inputParts.Last();
 
 		// completion inner block
@@ -126,6 +126,8 @@ public class MonoCompletion : CompletionPlugin
 			result = Evaluator.GetCompletions(codeAddedPreviously + input, out prefix);
 			isComplemented = true;
 		}
+
+		if (string.IsNullOrEmpty(prefix)) return null;
 
 		return ConvertToCompletionInfoArray(result, prefix);
 	}

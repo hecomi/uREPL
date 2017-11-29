@@ -28,6 +28,8 @@ public class GlobalClassCompletion : CompletionPlugin
 	{
 		var parts = input.Split(new char[] { '\n', ' ', '\t', '=', '{', '}', '(', ')', '<', '>' });
         var lastPart = parts.Last();
+		if (string.IsNullOrEmpty(lastPart)) return null;
+
 		return globalClassNames_
 			.Where(name => name.IndexOf(lastPart) == 0)
 			.Select(name => new CompletionInfo(
