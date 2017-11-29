@@ -46,19 +46,13 @@ static public class Mono
 	static public void Initialize()
 	{
 		var settings = new global::Mono.CSharp.CompilerSettings();
+		foreach (var assembly in System.AppDomain.CurrentDomain.GetAssemblies()) {
+			if (assembly == null) continue;
+			settings.AssemblyReferences.Add(assembly.FullName);
+		}
 		var printer = new global::Mono.CSharp.ConsoleReportPrinter(reporter);
 		var context = new global::Mono.CSharp.CompilerContext(settings, printer);
 		evaluator = new global::Mono.CSharp.Evaluator(context);
-	}
-
-	static public void ReferenceAssembly(System.Reflection.Assembly asm)
-	{
-		evaluator.ReferenceAssembly(asm);
-	}
-
-	static public object Evaluate(string input)
-	{
-		return evaluator.Evaluate(input);
 	}
 
 	static public string Evaluate(string input, out object result, out bool result_set)
