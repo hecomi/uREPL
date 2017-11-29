@@ -83,19 +83,14 @@ public static class Evaluator
 		// eval the code using Mono.
 		object ret = null;
 		bool hasReturnValue = false;
-
-		var originalOutput = Mono.MessageOutput;
-		var errorWriter = new System.IO.StringWriter();
 		bool isPartial = false;
-		Mono.MessageOutput = errorWriter;
 		try {
 			isPartial = Mono.Evaluate(code, out ret, out hasReturnValue) != null;
 		} catch (System.Exception e) {
-			errorWriter.Write(e.Message);
+			UnityEngine.Debug.LogError(e.Message);
 		}
-		Mono.MessageOutput = originalOutput;
 
-		var error = errorWriter.ToString();
+		var error = Mono.lastOutput;
 		if (!string.IsNullOrEmpty(error)) {
 			error = error.Replace("{interactive}", "");
 			var lastLineBreakPos = error.LastIndexOf('\n');
@@ -106,7 +101,6 @@ public static class Evaluator
 			result.error = error;
 			return result;
 		}
-		errorWriter.Dispose();
 
 		if (isPartial) {
 			result.type = CompileResult.Type.Partial;
