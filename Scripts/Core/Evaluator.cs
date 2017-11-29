@@ -34,25 +34,12 @@ public static class Evaluator
 		isInitialized = true;
 
 		Mono.Initialize();
-		ReferenceAllAssemblies();
 		SetUsings();
 
 		Log.Initialize();
 		Inspector.Initialize();
-	}
 
-	static private void ReferenceAllAssemblies()
-	{
-		// See the detailed information about this hack at:
-		//   http://forum.unity3d.com/threads/mono-csharp-evaluator.102162/
-		for (int n = 0; n < 2;) {
-			foreach (var assembly in System.AppDomain.CurrentDomain.GetAssemblies()) {
-				if (assembly == null) continue;
-				Mono.ReferenceAssembly(assembly);
-			}
-			Mono.Evaluate("null;");
-			n++;
-		}
+		Evaluate("null;");
 	}
 
 	static private void SetUsings()
