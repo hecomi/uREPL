@@ -26,7 +26,8 @@ Demo
 Environment
 -----------
 - Mac / Windows
-- Unity 5
+- Unity 2017.x .NET 4.6 (from v0.5.0)
+    - Unity 5.x .NET 3.5 (until v0.4.0)
 
 
 Installation
