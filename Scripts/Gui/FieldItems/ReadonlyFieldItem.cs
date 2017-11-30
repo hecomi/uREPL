@@ -12,7 +12,7 @@ public class ReadonlyFieldItem : FieldItem
 	public override object value
 	{
 		get { return Convert.ChangeType(valueText.text, fieldType);  }
-		protected set { valueText.text = value.ToString(); }
+		protected set { valueText.text = (value == null) ? "null" : value.ToString(); }
 	}
 
 	void Update()
