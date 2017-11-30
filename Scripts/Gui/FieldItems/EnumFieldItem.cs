@@ -15,9 +15,9 @@ public class EnumFieldItem : FieldItem
 		{
 			return Convert.ChangeType(
 				Enum.Parse(
-					typeof(KeyCode),
+					fieldType,
 					dropdown.captionText.text),
-				typeof(KeyCode));
+				fieldType);
 		}
 		protected set
 		{
@@ -42,8 +42,6 @@ public class EnumFieldItem : FieldItem
 
 	void Init()
 	{
-		fieldType = typeof(KeyCode);
-
 		dropdown.options.Clear();
 		foreach (var value in Enum.GetValues(fieldType)) {
 			var item = new Dropdown.OptionData();
