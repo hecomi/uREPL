@@ -267,12 +267,17 @@ public class Window : MonoBehaviour
 
 	public void OnSubmit(string code)
 	{
+		Submit(code);
+	}
+
+	public void Submit(string code, bool checkEnterKey = true)
+	{
 		code = code.Trim();
 
 		// do nothing if following states:
 		// - the input text is empty.
 		// - receive the endEdit event without the enter key (e.g. lost focus).
-		if (string.IsNullOrEmpty(code) || !keyBinding_.IsEnterPressing()) return;
+		if (string.IsNullOrEmpty(code) || (checkEnterKey && !keyBinding_.IsEnterPressing())) return;
 
 		// stop completion to avoid hang.
 		completion.Stop();
