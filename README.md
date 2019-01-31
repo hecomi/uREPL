@@ -61,6 +61,7 @@ Keybinds
 | `ctrl + p`, `down arrow`  | show previous history.                       |
 | `ctrl + tab`              | show complementions.                         |
 | `enter`                   | run input command.                           |
+| `F1`                      | toggle window display on/off.                |
 
 ### Completion
 | Key                       | Description                                  |
