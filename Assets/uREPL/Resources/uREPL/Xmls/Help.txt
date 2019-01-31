@@ -16,6 +16,7 @@
 	- Down arrow    : show previous history.
 	- Tab           : show complementions.
 	- Enter         : run input command.
+	- F1            : toggle window display on/off.
 
   - Multi-Line Input
 	- Ctrl + a      : move to head.
@@ -33,6 +34,7 @@
 	- Down arrow    : move down.
 	- Shift + Enter : run input command.
 	- Ctrl  + Enter : run input command.
+	- F1            : toggle window display on/off.
 
   - Completion
     - Up arrow      : select lower item.
