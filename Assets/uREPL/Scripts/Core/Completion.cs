@@ -41,7 +41,9 @@ public class Completion
 		thread_ = new Thread(() => {
 			var completions = CompletionPluginManager.GetCompletions(code);
 			result_.completions = completions;
-			result_.partialCode = completions[0].prefix ?? "";
+			result_.partialCode = 
+                (completions.Length == 0) ? "" : 
+                (completions[0].prefix ?? "");
 		});
 		thread_.Start();
 	}
