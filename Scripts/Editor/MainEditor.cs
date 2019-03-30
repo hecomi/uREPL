@@ -35,6 +35,7 @@ public class MainEditor : Editor
 			++EditorGUI.indentLevel;
 			Toggle("Mono", ref parameters.useMonoCompletion);
 			Toggle("Command", ref parameters.useCommandCompletion);
+			Toggle("Runtime Command", ref parameters.useRuntimeCommandCompletion);
 			Toggle("GameObject Name", ref parameters.useGameObjectNameCompletion);
 			Toggle("GameObject Path", ref parameters.useGameObjectPathCompletion);
 			Toggle("Global Class", ref parameters.useGlobalClassCompletion);
@@ -55,22 +56,39 @@ public class MainEditor : Editor
 		}
 	}
 
+	private void DrawPreLoadCommand()
+	{
+		EditorGUILayout.LabelField("Pre-Load Command");
+		var code = EditorGUILayout.TextArea(main.preLoadCode, GUILayout.MinHeight(40f));
+		if (code != main.preLoadCode) {
+			main.preLoadCode = code;
+			EditorUtility.SetDirty(main);
+		}
+	}
+
 	public override void OnInspectorGUI()
 	{
 		DrawCompletionPluginGUI();
 		DrawCompletoinParametersGUI();
+		DrawPreLoadCommand();
 	}
 
 	public void Toggle(string name, ref bool param)
 	{
 		var result = EditorGUILayout.Toggle(name, param);
-		if (result != param) param = result;
+		if (result != param) {
+			param = result;
+			EditorUtility.SetDirty(main);
+		}
 	}
 
 	public void Float(string name, ref float param)
 	{
 		var result = EditorGUILayout.FloatField(name, param);
-		if (result != param) param = result;
+		if (result != param) {
+			param = result;
+			EditorUtility.SetDirty(main);
+		}
 	}
 }
 

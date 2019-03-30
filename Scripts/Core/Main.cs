@@ -8,10 +8,12 @@ public class Main : MonoBehaviour
 {
 	public Parameters parameters;
 	public EditorParameters editor;
+	public string preLoadCode = "/* Write code here which you want to run just after start. */";
 
 	void Awake()
 	{
 		Evaluator.Initialize();
+		RunPreLoadCode();
 		GetComponent<Window>().main = this;
 		UpdateAllDefaultCompletionPlugins();
 	}
@@ -19,6 +21,11 @@ public class Main : MonoBehaviour
 	void Update()
 	{
 		UpdateAllDefaultCompletionPlugins();
+	}
+
+	void RunPreLoadCode()
+	{
+		Evaluator.Evaluate(preLoadCode, false);
 	}
 
 	void UpdateAllDefaultCompletionPlugins()
