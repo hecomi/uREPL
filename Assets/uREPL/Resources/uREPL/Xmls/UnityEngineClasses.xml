@@ -1,1254 +1,1254 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-	<types>
-		<type>
-			<name>AccelerationEvent</name>
-			<desc>Structure describing acceleration status of the device.</desc>
-		</type>
-		<type>
-			<name>AnchoredJoint2D</name>
-			<desc>Parent class for all joints that have anchor points.</desc>
-		</type>
-		<type>
-			<name>AndroidInput</name>
-			<desc>AndroidInput provides support for off-screen touch input, such as a touchpad.</desc>
-		</type>
-		<type>
-			<name>AndroidJavaClass</name>
-			<desc>AndroidJavaClass is the Unity representation of a generic instance of java.lang.Class.</desc>
-		</type>
-		<type>
-			<name>AndroidJavaObject</name>
-			<desc>AndroidJavaObject is the Unity representation of a generic instance of java.lang.Object.</desc>
-		</type>
-		<type>
-			<name>AndroidJavaProxy</name>
-			<desc>This class can be used to implement any java interface. Any java vm method invocation matching the interface on the proxy object will automatically be passed to the c# implementation.</desc>
-		</type>
-		<type>
-			<name>AndroidJNI</name>
-			<desc>'Raw' JNI interface to Android Dalvik (Java) VM from Mono (CS/JS).</desc>
-		</type>
-		<type>
-			<name>AndroidJNIHelper</name>
-			<desc>Helper interface for JNI interaction; signature creation and method lookups.</desc>
-		</type>
-		<type>
-			<name>Animation</name>
-			<desc>The animation component is used to play back animations.</desc>
-		</type>
-		<type>
-			<name>AnimationClip</name>
-			<desc>Stores keyframe based animations.</desc>
-		</type>
-		<type>
-			<name>AnimationClipPair</name>
-			<desc>This class defines a pair of clips used by AnimatorOverrideController.</desc>
-		</type>
-		<type>
-			<name>AnimationCurve</name>
-			<desc>Store a collection of Keyframes that can be evaluated over time.</desc>
-		</type>
-		<type>
-			<name>AnimationEvent</name>
-			<desc>AnimationEvent lets you call a script function similar to SendMessage as part of playing back an animation.</desc>
-		</type>
-		<type>
-			<name>AnimationInfo</name>
-			<desc>Information about what animation clips is played and its weight.</desc>
-		</type>
-		<type>
-			<name>AnimationState</name>
-			<desc>The AnimationState gives full control over animation blending.</desc>
-		</type>
-		<type>
-			<name>Animator</name>
-			<desc>Interface to control the Mecanim animation system.</desc>
-		</type>
-		<type>
-			<name>AnimatorClipInfo</name>
-			<desc>Information about clip been played and blended by the Animator.</desc>
-		</type>
-		<type>
-			<name>AnimatorControllerParameter</name>
-			<desc>Used to communicate between scripting and the controller. Some parameters can be set in scripting and used by the controller, while other parameters are based on Custom Curves in Animation Clips and can be sampled using the scripting API.</desc>
-		</type>
-		<type>
-			<name>AnimatorOverrideController</name>
-			<desc>Interface to control AnimatorOverrideController.</desc>
-		</type>
-		<type>
-			<name>AnimatorStateInfo</name>
-			<desc>Information about the current or next state.</desc>
-		</type>
-		<type>
-			<name>AnimatorTransitionInfo</name>
-			<desc>Information about the current transition.</desc>
-		</type>
-		<type>
-			<name>AnimatorUtility</name>
-			<desc>Various utilities for animator manipulation.</desc>
-		</type>
-		<type>
-			<name>Application</name>
-			<desc>Access to application run-time data.</desc>
-		</type>
-		<type>
-			<name>AreaEffector2D</name>
-			<desc>Applies forces within an area.</desc>
-		</type>
-		<type>
-			<name>AssetBundle</name>
-			<desc>AssetBundles let you stream additional assets via the WWW class and instantiate them at runtime. AssetBundles are created via BuildPipeline.BuildAssetBundle.</desc>
-		</type>
-		<type>
-			<name>AssetBundleCreateRequest</name>
-			<desc>Asynchronous create request for an AssetBundle.</desc>
-		</type>
-		<type>
-			<name>AssetBundleManifest</name>
-			<desc>Manifest for all the assetBundle in the build.</desc>
-		</type>
-		<type>
-			<name>AssetBundleRequest</name>
-			<desc>Asynchronous load request from an AssetBundle.</desc>
-		</type>
-		<type>
-			<name>AsyncOperation</name>
-			<desc>Asynchronous operation coroutine.</desc>
-		</type>
-		<type>
-			<name>AudioChorusFilter</name>
-			<desc>The Audio Chorus Filter takes an Audio Clip and processes it creating a chorus effect.</desc>
-		</type>
-		<type>
-			<name>AudioClip</name>
-			<desc>A container for audio data.</desc>
-		</type>
-		<type>
-			<name>AudioConfiguration</name>
-			<desc>Specifies the current properties or desired properties to be set for the audio system.</desc>
-		</type>
-		<type>
-			<name>AudioDistortionFilter</name>
-			<desc>The Audio Distortion Filter distorts the sound from an AudioSource or.</desc>
-		</type>
-		<type>
-			<name>AudioEchoFilter</name>
-			<desc>The Audio Echo Filter repeats a sound after a given Delay, attenuating.</desc>
-		</type>
-		<type>
-			<name>AudioHighPassFilter</name>
-			<desc>The Audio High Pass Filter passes high frequencies of an AudioSource and.</desc>
-		</type>
-		<type>
-			<name>AudioListener</name>
-			<desc>Representation of a listener in 3D space.</desc>
-		</type>
-		<type>
-			<name>AudioLowPassFilter</name>
-			<desc>The Audio Low Pass Filter filter passes low frequencies of an.</desc>
-		</type>
-		<type>
-			<name>AudioReverbFilter</name>
-			<desc>The Audio Reverb Filter takes an Audio Clip and distortionates it in a.</desc>
-		</type>
-		<type>
-			<name>AudioReverbZone</name>
-			<desc>Reverb Zones are used when you want to create location based ambient effects in the scene.</desc>
-		</type>
-		<type>
-			<name>AudioSettings</name>
-			<desc>Controls the global audio settings from script.</desc>
-		</type>
-		<type>
-			<name>AudioSource</name>
-			<desc>A representation of audio sources in 3D.</desc>
-		</type>
-		<type>
-			<name>Avatar</name>
-			<desc>Avatar definition.</desc>
-		</type>
-		<type>
-			<name>AvatarBuilder</name>
-			<desc>Class to build avatars from user scripts.</desc>
-		</type>
-		<type>
-			<name>Behaviour</name>
-			<desc>Behaviours are Components that can be enabled or disabled.</desc>
-		</type>
-		<type>
-			<name>BillboardAsset</name>
-			<desc>BillboardAsset describes how a billboard is rendered.</desc>
-		</type>
-		<type>
-			<name>BillboardRenderer</name>
-			<desc>Renders a billboard.</desc>
-		</type>
-		<type>
-			<name>BitStream</name>
-			<desc>The BitStream class represents seralized variables, packed into a stream.</desc>
-		</type>
-		<type>
-			<name>BoneWeight</name>
-			<desc>Skinning bone weights of a vertex in the mesh.</desc>
-		</type>
-		<type>
-			<name>BoundingSphere</name>
-			<desc>Describes a single bounding sphere for use by a CullingGroup.</desc>
-		</type>
-		<type>
-			<name>Bounds</name>
-			<desc>Represents an axis aligned bounding box.</desc>
-		</type>
-		<type>
-			<name>BoxCollider</name>
-			<desc>A box-shaped primitive collider.</desc>
-		</type>
-		<type>
-			<name>BoxCollider2D</name>
-			<desc>Collider for 2D physics representing an axis-aligned rectangle.</desc>
-		</type>
-		<type>
-			<name>Caching</name>
-			<desc>The Caching class lets you manage cached AssetBundles, downloaded using WWW.LoadFromCacheOrDownload.</desc>
-		</type>
-		<type>
-			<name>Camera</name>
-			<desc>A Camera is a device through which the player views the world.</desc>
-		</type>
-		<type>
-			<name>Canvas</name>
-			<desc>Element that can be used for screen rendering.</desc>
-		</type>
-		<type>
-			<name>CanvasGroup</name>
-			<desc>A Canvas placable element that can be used to modify children Alpha, Raycasting, Enabled state.</desc>
-		</type>
-		<type>
-			<name>CanvasRenderer</name>
-			<desc>A component that will render to the screen after all normal rendering has completed when attached to a Canvas. Designed for GUI application.</desc>
-		</type>
-		<type>
-			<name>CapsuleCollider</name>
-			<desc>A capsule-shaped primitive collider.</desc>
-		</type>
-		<type>
-			<name>CharacterController</name>
-			<desc>A CharacterController allows you to easily do movement constrained by collisions without having to deal with a rigidbody.</desc>
-		</type>
-		<type>
-			<name>CharacterInfo</name>
-			<desc>Specification for how to render a character from the font texture. See Font.characterInfo.</desc>
-		</type>
-		<type>
-			<name>CharacterJoint</name>
-			<desc>Character Joints are mainly used for Ragdoll effects.</desc>
-		</type>
-		<type>
-			<name>CircleCollider2D</name>
-			<desc>Collider for 2D physics representing an circle.</desc>
-		</type>
-		<type>
-			<name>Cloth</name>
-			<desc>The Cloth class provides an interface to cloth simulation physics.</desc>
-		</type>
-		<type>
-			<name>ClothSkinningCoefficient</name>
-			<desc>The ClothSkinningCoefficient struct is used to set up how a Cloth component is allowed to move with respect to the SkinnedMeshRenderer it is attached to.</desc>
-		</type>
-		<type>
-			<name>ClothSphereColliderPair</name>
-			<desc>A pair of SphereColliders used to define shapes for Cloth objects to collide against.</desc>
-		</type>
-		<type>
-			<name>Collider</name>
-			<desc>A base class of all colliders.</desc>
-		</type>
-		<type>
-			<name>Collider2D</name>
-			<desc>Parent class for collider types used with 2D gameplay.</desc>
-		</type>
-		<type>
-			<name>Collision</name>
-			<desc>Describes a collision.</desc>
-		</type>
-		<type>
-			<name>Collision2D</name>
-			<desc>Information returned by a collision in 2D physics.</desc>
-		</type>
-		<type>
-			<name>Color</name>
-			<desc>Representation of RGBA colors.</desc>
-		</type>
-		<type>
-			<name>Color32</name>
-			<desc>Representation of RGBA colors in 32 bit format.</desc>
-		</type>
-		<type>
-			<name>ColorUtility</name>
-			<desc>A collection of common color functions.</desc>
-		</type>
-		<type>
-			<name>CombineInstance</name>
-			<desc>Struct used to describe meshes to be combined using Mesh.CombineMeshes.</desc>
-		</type>
-		<type>
-			<name>Compass</name>
-			<desc>Interface into compass functionality.</desc>
-		</type>
-		<type>
-			<name>Component</name>
-			<desc>Base class for everything attached to GameObjects.</desc>
-		</type>
-		<type>
-			<name>ComputeBuffer</name>
-			<desc>Data buffer to hold data for compute shaders.</desc>
-		</type>
-		<type>
-			<name>ComputeShader</name>
-			<desc>Compute Shader asset.</desc>
-		</type>
-		<type>
-			<name>ConfigurableJoint</name>
-			<desc>The configurable joint is an extremely flexible joint giving you complete control over rotation and linear motion.</desc>
-		</type>
-		<type>
-			<name>ConstantForce</name>
-			<desc>A force applied constantly.</desc>
-		</type>
-		<type>
-			<name>ConstantForce2D</name>
-			<desc>Applies both linear and angular (torque) forces continuously to the rigidbody each physics update.</desc>
-		</type>
-		<type>
-			<name>ContactPoint</name>
-			<desc>Describes a contact point where the collision occurs.</desc>
-		</type>
-		<type>
-			<name>ContactPoint2D</name>
-			<desc>Details about a specific point of contact involved in a 2D physics collision.</desc>
-		</type>
-		<type>
-			<name>ControllerColliderHit</name>
-			<desc>ControllerColliderHit is used by CharacterController.OnControllerColliderHit to give detailed information about the collision and how to deal with it.</desc>
-		</type>
-		<type>
-			<name>Coroutine</name>
-			<desc>MonoBehaviour.StartCoroutine returns a Coroutine. Instances of this class are only used to reference these coroutines and do not hold any exposed properties or functions.</desc>
-		</type>
-		<type>
-			<name>CrashReport</name>
-			<desc>Holds data for a single application crash event and provides access to all gathered crash reports.</desc>
-		</type>
-		<type>
-			<name>Cubemap</name>
-			<desc>Class for handling cube maps, Use this to create or modify existing cube map assets.</desc>
-		</type>
-		<type>
-			<name>CullingGroup</name>
-			<desc>Describes a set of bounding spheres that should have their visibility and distances maintained.</desc>
-		</type>
-		<type>
-			<name>CullingGroupEvent</name>
-			<desc>Provides information about the current and previous states of one sphere in a CullingGroup.</desc>
-		</type>
-		<type>
-			<name>Cursor</name>
-			<desc>Cursor API for setting the cursor that is used for rendering.</desc>
-		</type>
-		<type>
-			<name>Debug</name>
-			<desc>Class containing methods to ease debugging while developing a game.</desc>
-		</type>
-		<type>
-			<name>DetailPrototype</name>
-			<desc>Detail prototype used by the Terrain GameObject.</desc>
-		</type>
-		<type>
-			<name>Display</name>
-			<desc>Provides access to a display / screen for rendering operations.</desc>
-		</type>
-		<type>
-			<name>DistanceJoint2D</name>
-			<desc>Joint that keeps two Rigidbody2D objects a fixed distance apart.</desc>
-		</type>
-		<type>
-			<name>DrivenRectTransformTracker</name>
-			<desc>A component can be designed drive a RectTransform. The DrivenRectTransformTracker struct is used to specify which RectTransforms it is driving.</desc>
-		</type>
-		<type>
-			<name>DynamicGI</name>
-			<desc>Allows to control the dynamic Global Illumination.</desc>
-		</type>
-		<type>
-			<name>EdgeCollider2D</name>
-			<desc>Collider for 2D physics representing an arbitrary set of connected edges (lines) defined by its vertices.</desc>
-		</type>
-		<type>
-			<name>Effector2D</name>
-			<desc>A base class for all 2D effectors.</desc>
-		</type>
-		<type>
-			<name>EllipsoidParticleEmitter</name>
-			<desc>Class used to allow GameObject.AddComponent / GameObject.GetComponent to be used.</desc>
-		</type>
-		<type>
-			<name>Event</name>
-			<desc>A UnityGUI event.</desc>
-		</type>
-		<type>
-			<name>FixedJoint</name>
-			<desc>The Fixed joint groups together 2 rigidbodies, making them stick together in their bound position.</desc>
-		</type>
-		<type>
-			<name>Flare</name>
-			<desc>A flare asset. Read more about flares in the components reference.</desc>
-		</type>
-		<type>
-			<name>FlareLayer</name>
-			<desc>FlareLayer component.</desc>
-		</type>
-		<type>
-			<name>Font</name>
-			<desc>Script interface for font assets.</desc>
-		</type>
-		<type>
-			<name>GameObject</name>
-			<desc>Base class for all entities in Unity scenes.</desc>
-		</type>
-		<type>
-			<name>GeometryUtility</name>
-			<desc>Utility class for common geometric functions.</desc>
-		</type>
-		<type>
-			<name>Gizmos</name>
-			<desc>Gizmos are used to give visual debugging or setup aids in the scene view.</desc>
-		</type>
-		<type>
-			<name>GL</name>
-			<desc>Low-level graphics library.</desc>
-		</type>
-		<type>
-			<name>Gradient</name>
-			<desc>Gradient used for animating colors.</desc>
-		</type>
-		<type>
-			<name>GradientAlphaKey</name>
-			<desc>Alpha key used by Gradient.</desc>
-		</type>
-		<type>
-			<name>GradientColorKey</name>
-			<desc>Color key used by Gradient.</desc>
-		</type>
-		<type>
-			<name>Graphics</name>
-			<desc>Raw interface to Unity's drawing functions.</desc>
-		</type>
-		<type>
-			<name>GUI</name>
-			<desc>The GUI class is the interface for Unity's GUI with manual positioning.</desc>
-		</type>
-		<type>
-			<name>GUI.GroupScope</name>
-			<desc>Disposable helper class for managing BeginGroup / EndGroup.</desc>
-		</type>
-		<type>
-			<name>GUI.ScrollViewScope</name>
-			<desc>Disposable helper class for managing BeginScrollView / EndScrollView.</desc>
-		</type>
-		<type>
-			<name>GUIContent</name>
-			<desc>The contents of a GUI element.</desc>
-		</type>
-		<type>
-			<name>GUIElement</name>
-			<desc>Base class for images and text strings displayed in a GUI.</desc>
-		</type>
-		<type>
-			<name>GUILayer</name>
-			<desc>
-				Component added to a camera to make it render 2D GUI elements.</desc>
-		</type>
-		<type>
-			<name>GUILayout</name>
-			<desc>The GUILayout class is the interface for Unity gui with automatic layout.</desc>
-		</type>
-		<type>
-			<name>GUILayout.AreaScope</name>
-			<desc>Disposable helper class for managing BeginArea / EndArea.</desc>
-		</type>
-		<type>
-			<name>GUILayout.HorizontalScope</name>
-			<desc>Disposable helper class for managing BeginHorizontal / EndHorizontal.</desc>
-		</type>
-		<type>
-			<name>GUILayout.ScrollViewScope</name>
-			<desc>Disposable helper class for managing BeginScrollView / EndScrollView.</desc>
-		</type>
-		<type>
-			<name>GUILayout.VerticalScope</name>
-			<desc>Disposable helper class for managing BeginVertical / EndVertical.</desc>
-		</type>
-		<type>
-			<name>GUILayoutOption</name>
-			<desc>Class internally used to pass layout options into GUILayout functions. You don't use these directly, but construct them with the layouting functions in the GUILayout class.</desc>
-		</type>
-		<type>
-			<name>GUILayoutUtility</name>
-			<desc>Utility functions for implementing and extending the GUILayout class.</desc>
-		</type>
-		<type>
-			<name>GUISettings</name>
-			<desc>General settings for how the GUI behaves.</desc>
-		</type>
-		<type>
-			<name>GUISkin</name>
-			<desc>Defines how GUI looks and behaves.</desc>
-		</type>
-		<type>
-			<name>GUIStyle</name>
-			<desc>Styling information for GUI elements.</desc>
-		</type>
-		<type>
-			<name>GUIStyleState</name>
-			<desc>Specialized values for the given states used by GUIStyle objects.</desc>
-		</type>
-		<type>
-			<name>GUIText</name>
-			<desc>A text string displayed in a GUI.</desc>
-		</type>
-		<type>
-			<name>GUITexture</name>
-			<desc>A texture image used in a 2D GUI.</desc>
-		</type>
-		<type>
-			<name>GUIUtility</name>
-			<desc>Utility class for making new GUI controls.</desc>
-		</type>
-		<type>
-			<name>Gyroscope</name>
-			<desc>Interface into the Gyroscope.</desc>
-		</type>
-		<type>
-			<name>Handheld</name>
-			<desc>Interface into functionality unique to handheld devices.</desc>
-		</type>
-		<type>
-			<name>Hash128</name>
-			<desc>Represent the hash value.</desc>
-		</type>
-		<type>
-			<name>HingeJoint</name>
-			<desc>The HingeJoint groups together 2 rigid bodies, constraining them to move like connected by a hinge.</desc>
-		</type>
-		<type>
-			<name>HingeJoint2D</name>
-			<desc>Joint that allows a Rigidbody2D object to rotate around a point in space or a point on another object.</desc>
-		</type>
-		<type>
-			<name>HostData</name>
-			<desc>This is the data structure for holding individual host information.</desc>
-		</type>
-		<type>
-			<name>HumanBone</name>
-			<desc>The mapping between a bone in the model and the conceptual bone in the Mecanim human anatomy.</desc>
-		</type>
-		<type>
-			<name>HumanDescription</name>
-			<desc>Class that holds humanoid avatar parameters to pass to the AvatarBuilder.BuildHumanAvatar function.</desc>
-		</type>
-		<type>
-			<name>HumanLimit</name>
-			<desc>This class stores the rotation limits that define the muscle for a single human bone.</desc>
-		</type>
-		<type>
-			<name>HumanTrait</name>
-			<desc>Details of all the human bone and muscle types defined by Mecanim.</desc>
-		</type>
-		<type>
-			<name>Input</name>
-			<desc>Interface into the Input system.</desc>
-		</type>
-		<type>
-			<name>Joint</name>
-			<desc>Joint is the base class for all joints.</desc>
-		</type>
-		<type>
-			<name>Joint2D</name>
-			<desc>Parent class for joints to connect Rigidbody2D objects.</desc>
-		</type>
-		<type>
-			<name>JointAngleLimits2D</name>
-			<desc>Angular limits on the rotation of a Rigidbody2D object around a HingeJoint2D.</desc>
-		</type>
-		<type>
-			<name>JointDrive</name>
-			<desc>How the joint's movement will behave along its local X axis.</desc>
-		</type>
-		<type>
-			<name>JointLimits</name>
-			<desc>JointLimits is used by the HingeJoint to limit the joints angle.</desc>
-		</type>
-		<type>
-			<name>JointMotor</name>
-			<desc>The JointMotor is used to motorize a joint.</desc>
-		</type>
-		<type>
-			<name>JointMotor2D</name>
-			<desc>Parameters for the optional motor force applied to a Joint2D.</desc>
-		</type>
-		<type>
-			<name>JointSpring</name>
-			<desc>JointSpring is used add a spring force to HingeJoint and PhysicMaterial.</desc>
-		</type>
-		<type>
-			<name>JointSuspension2D</name>
-			<desc>Joint suspension is used to define how suspension works on a WheelJoint2D.</desc>
-		</type>
-		<type>
-			<name>JointTranslationLimits2D</name>
-			<desc>Motion limits of a Rigidbody2D object along a SliderJoint2D.</desc>
-		</type>
-		<type>
-			<name>Keyframe</name>
-			<desc>A single keyframe that can be injected into an animation curve.</desc>
-		</type>
-		<type>
-			<name>LayerMask</name>
-			<desc>LayerMask allow you to display the LayerMask popup menu in the inspector.</desc>
-		</type>
-		<type>
-			<name>LensFlare</name>
-			<desc>Script interface for a Lens flare component.</desc>
-		</type>
-		<type>
-			<name>Light</name>
-			<desc>Script interface for light components.</desc>
-		</type>
-		<type>
-			<name>LightmapData</name>
-			<desc>Data of a lightmap.</desc>
-		</type>
-		<type>
-			<name>LightmapSettings</name>
-			<desc>Stores lightmaps of the scene.</desc>
-		</type>
-		<type>
-			<name>LightProbeGroup</name>
-			<desc>Light Probe Group.</desc>
-		</type>
-		<type>
-			<name>LightProbes</name>
-			<desc>Stores light probes for the scene.</desc>
-		</type>
-		<type>
-			<name>LineRenderer</name>
-			<desc>The line renderer is used to draw free-floating lines in 3D space.</desc>
-		</type>
-		<type>
-			<name>LocationInfo</name>
-			<desc>Structure describing device location.</desc>
-		</type>
-		<type>
-			<name>LocationService</name>
-			<desc>Interface into location functionality.</desc>
-		</type>
-		<type>
-			<name>LOD</name>
-			<desc>Structure for building a LOD for passing to the SetLODs function.</desc>
-		</type>
-		<type>
-			<name>LODGroup</name>
-			<desc>LODGroup lets you group multiple Renderers into LOD levels.</desc>
-		</type>
-		<type>
-			<name>MasterServer</name>
-			<desc>The Master Server is used to make matchmaking between servers and clients easy.</desc>
-		</type>
-		<type>
-			<name>MatchTargetWeightMask</name>
-			<desc>To specify position and rotation weight mask for Animator::MatchTarget.</desc>
-		</type>
-		<type>
-			<name>Material</name>
-			<desc>The material class.</desc>
-		</type>
-		<type>
-			<name>MaterialPropertyBlock</name>
-			<desc>A block of material values to apply.</desc>
-		</type>
-		<type>
-			<name>Mathf</name>
-			<desc>A collection of common math functions.</desc>
-		</type>
-		<type>
-			<name>Matrix4x4</name>
-			<desc>A standard 4x4 transformation matrix.</desc>
-		</type>
-		<type>
-			<name>Mesh</name>
-			<desc>A class that allows creating or modifying meshes from scripts.</desc>
-		</type>
-		<type>
-			<name>MeshCollider</name>
-			<desc>A mesh collider allows you to do collision detection between meshes and primitives.</desc>
-		</type>
-		<type>
-			<name>MeshFilter</name>
-			<desc>A class to access the Mesh of the mesh filter.</desc>
-		</type>
-		<type>
-			<name>MeshParticleEmitter</name>
-			<desc>Class used to allow GameObject.AddComponent / GameObject.GetComponent to be used.</desc>
-		</type>
-		<type>
-			<name>MeshRenderer</name>
-			<desc>Renders meshes inserted by the MeshFilter or TextMesh.</desc>
-		</type>
-		<type>
-			<name>Microphone</name>
-			<desc>Use this class to record to an AudioClip using a connected microphone.</desc>
-		</type>
-		<type>
-			<name>MonoBehaviour</name>
-			<desc>MonoBehaviour is the base class every script derives from.</desc>
-		</type>
-		<type>
-			<name>Motion</name>
-			<desc>Base class for AnimationClips and BlendTrees.</desc>
-		</type>
-		<type>
-			<name>MovieTexture</name>
-			<desc>Movie Textures are textures onto which movies are played back.</desc>
-		</type>
-		<type>
-			<name>NavMesh</name>
-			<desc>Singleton class to access the baked NavMesh.</desc>
-		</type>
-		<type>
-			<name>NavMeshAgent</name>
-			<desc>Navigation mesh agent.</desc>
-		</type>
-		<type>
-			<name>NavMeshHit</name>
-			<desc>Result information for NavMesh queries.</desc>
-		</type>
-		<type>
-			<name>NavMeshObstacle</name>
-			<desc>An obstacle for NavMeshAgents to avoid.</desc>
-		</type>
-		<type>
-			<name>NavMeshPath</name>
-			<desc>A path as calculated by the navigation system.</desc>
-		</type>
-		<type>
-			<name>NavMeshTriangulation</name>
-			<desc>Contains data describing a triangulation of a navmesh.</desc>
-		</type>
-		<type>
-			<name>Network</name>
-			<desc>The network class is at the heart of the network implementation and provides the core functions.</desc>
-		</type>
-		<type>
-			<name>NetworkMessageInfo</name>
-			<desc>This data structure contains information on a message just received from the network.</desc>
-		</type>
-		<type>
-			<name>NetworkPlayer</name>
-			<desc>The NetworkPlayer is a data structure with which you can locate another player over the network.</desc>
-		</type>
-		<type>
-			<name>NetworkView</name>
-			<desc>The network view is the binding material of multiplayer games.</desc>
-		</type>
-		<type>
-			<name>NetworkViewID</name>
-			<desc>The NetworkViewID is a unique identifier for a network view instance in a multiplayer game.</desc>
-		</type>
-		<type>
-			<name>Object</name>
-			<desc>Base class for all objects Unity can reference.</desc>
-		</type>
-		<type>
-			<name>OcclusionArea</name>
-			<desc>OcclusionArea is an area in which occlusion culling is performed.</desc>
-		</type>
-		<type>
-			<name>OcclusionPortal</name>
-			<desc>The portal for dynamically changing occlusion at runtime.</desc>
-		</type>
-		<type>
-			<name>OffMeshLink</name>
-			<desc>Link allowing movement outside the planar navigation mesh.</desc>
-		</type>
-		<type>
-			<name>OffMeshLinkData</name>
-			<desc>State of OffMeshLink.</desc>
-		</type>
-		<type>
-			<name>Particle</name>
-			<desc>(Legacy Particle system).</desc>
-		</type>
-		<type>
-			<name>ParticleAnimator</name>
-			<desc>(Legacy Particles) Particle animators move your particles over time, you use them to apply wind, drag and color cycling to your particle emitters.</desc>
-		</type>
-		<type>
-			<name>ParticleCollisionEvent</name>
-			<desc>Information about a particle collision.</desc>
-		</type>
-		<type>
-			<name>ParticleEmitter</name>
-			<desc>(Legacy Particles) Script interface for particle emitters.</desc>
-		</type>
-		<type>
-			<name>ParticlePhysicsExtensions</name>
-			<desc>Method extension for Physics in Particle System.</desc>
-		</type>
-		<type>
-			<name>ParticleRenderer</name>
-			<desc>(Legacy Particles) Renders particles on to the screen.</desc>
-		</type>
-		<type>
-			<name>ParticleSystem</name>
-			<desc>Script interface for particle systems (Shuriken).</desc>
-		</type>
-		<type>
-			<name>ParticleSystem.Particle</name>
-			<desc>Script interface for a Particle.</desc>
-		</type>
-		<type>
-			<name>ParticleSystemRenderer</name>
-			<desc>Renders particles on to the screen (Shuriken).</desc>
-		</type>
-		<type>
-			<name>PhysicMaterial</name>
-			<desc>Physics material describes how to handle colliding objects (friction, bounciness).</desc>
-		</type>
-		<type>
-			<name>Physics</name>
-			<desc>Global physics properties and helper methods.</desc>
-		</type>
-		<type>
-			<name>Physics2D</name>
-			<desc>Global settings and helpers for 2D physics.</desc>
-		</type>
-		<type>
-			<name>PhysicsMaterial2D</name>
-			<desc>Asset type that defines the surface properties of a Collider2D.</desc>
-		</type>
-		<type>
-			<name>PhysicsUpdateBehaviour2D</name>
-			<desc>A base type for 2D physics components that required a callback during FixedUpdate.</desc>
-		</type>
-		<type>
-			<name>Ping</name>
-			<desc>Ping any given IP address (given in dot notation).</desc>
-		</type>
-		<type>
-			<name>Plane</name>
-			<desc>Representation of a plane in 3D space.</desc>
-		</type>
-		<type>
-			<name>PlatformEffector2D</name>
-			<desc>Applies "platform" behaviour such as one-way collisions etc.</desc>
-		</type>
-		<type>
-			<name>PlayerPrefs</name>
-			<desc>Stores and accesses player preferences between game sessions.</desc>
-		</type>
-		<type>
-			<name>PlayerPrefsException</name>
-			<desc>An exception thrown by the PlayerPrefs class in a  web player build.</desc>
-		</type>
-		<type>
-			<name>PointEffector2D</name>
-			<desc>Applies forces to attract/repulse against a point.</desc>
-		</type>
-		<type>
-			<name>PolygonCollider2D</name>
-			<desc>Collider for 2D physics representing an arbitrary polygon defined by its vertices.</desc>
-		</type>
-		<type>
-			<name>ProceduralMaterial</name>
-			<desc>Class for ProceduralMaterial handling.</desc>
-		</type>
-		<type>
-			<name>ProceduralPropertyDescription</name>
-			<desc>Describes a ProceduralProperty.</desc>
-		</type>
-		<type>
-			<name>ProceduralTexture</name>
-			<desc>Class for ProceduralTexture handling.</desc>
-		</type>
-		<type>
-			<name>Profiler</name>
-			<desc>Controls the Profiler from script.</desc>
-		</type>
-		<type>
-			<name>Projector</name>
-			<desc>A script interface for a projector component.</desc>
-		</type>
-		<type>
-			<name>QualitySettings</name>
-			<desc>Script interface for Quality Settings.</desc>
-		</type>
-		<type>
-			<name>Quaternion</name>
-			<desc>Quaternions are used to represent rotations.</desc>
-		</type>
-		<type>
-			<name>Random</name>
-			<desc>Class for generating random data.</desc>
-		</type>
-		<type>
-			<name>Ray</name>
-			<desc>Representation of rays.</desc>
-		</type>
-		<type>
-			<name>Ray2D</name>
-			<desc>A ray in 2D space.</desc>
-		</type>
-		<type>
-			<name>RaycastHit</name>
-			<desc>Structure used to get information back from a raycast.</desc>
-		</type>
-		<type>
-			<name>RaycastHit2D</name>
-			<desc>Information returned about an object detected by a raycast in 2D physics.</desc>
-		</type>
-		<type>
-			<name>Rect</name>
-			<desc>A 2D Rectangle defined by X and Y position, width and height.</desc>
-		</type>
-		<type>
-			<name>RectOffset</name>
-			<desc>Offsets for rectangles, borders, etc.</desc>
-		</type>
-		<type>
-			<name>RectTransform</name>
-			<desc>Position, size, anchor and pivot information for a rectangle.</desc>
-		</type>
-		<type>
-			<name>RectTransformUtility</name>
-			<desc>Utility class containing helper methods for working with  RectTransform.</desc>
-		</type>
-		<type>
-			<name>ReflectionProbe</name>
-			<desc>The reflection probe is used to capture the surroundings into a texture which is passed to the shaders and used for reflections.</desc>
-		</type>
-		<type>
-			<name>RenderBuffer</name>
-			<desc>Color or depth buffer part of a RenderTexture.</desc>
-		</type>
-		<type>
-			<name>Renderer</name>
-			<desc>General functionality for all renderers.</desc>
-		</type>
-		<type>
-			<name>RenderSettings</name>
-			<desc>The Render Settings contain values for a range of visual elements in your scene, like fog and ambient light.</desc>
-		</type>
-		<type>
-			<name>RenderTargetSetup</name>
-			<desc>Fully describes setup of RenderTarget.</desc>
-		</type>
-		<type>
-			<name>RenderTexture</name>
-			<desc>Render textures are textures that can be rendered to.</desc>
-		</type>
-		<type>
-			<name>Resolution</name>
-			<desc>Represents a display resolution.</desc>
-		</type>
-		<type>
-			<name>ResourceRequest</name>
-			<desc>Asynchronous load request from the Resources bundle.</desc>
-		</type>
-		<type>
-			<name>Resources</name>
-			<desc>The Resources class allows you to find and access Objects including assets.</desc>
-		</type>
-		<type>
-			<name>Rigidbody</name>
-			<desc>Control of an object's position through physics simulation.</desc>
-		</type>
-		<type>
-			<name>Rigidbody2D</name>
-			<desc>Rigidbody physics component for 2D sprites.</desc>
-		</type>
-		<type>
-			<name>RuntimeAnimatorController</name>
-			<desc>Runtime representation of the AnimatorController. It can be used to change the Animator's controller during runtime.</desc>
-		</type>
-		<type>
-			<name>SamsungTV</name>
-			<desc>Interface into SamsungTV specific functionality.</desc>
-		</type>
-		<type>
-			<name>SamsungTV.OpenAPI</name>
-			<desc>Access to TV specific information.</desc>
-		</type>
-		<type>
-			<name>Screen</name>
-			<desc>Access to display information.</desc>
-		</type>
-		<type>
-			<name>ScriptableObject</name>
-			<desc>A class you can derive from if you want to create objects that don't need to be attached to game objects.</desc>
-		</type>
-		<type>
-			<name>Security</name>
-			<desc>Webplayer security related class. Note supported from 5.4.0.</desc>
-		</type>
-		<type>
-			<name>Shader</name>
-			<desc>Shader scripts used for all rendering.</desc>
-		</type>
-		<type>
-			<name>ShaderVariantCollection</name>
-			<desc>ShaderVariantCollection records which shader variants are actually used in each shader.</desc>
-		</type>
-		<type>
-			<name>ShaderVariantCollection.ShaderVariant</name>
-			<desc>Identifies a specific variant of a shader.</desc>
-		</type>
-		<type>
-			<name>SkeletonBone</name>
-			<desc>Details of the Transform name mapped to a model's skeleton bone and its default position and rotation in the T-pose.</desc>
-		</type>
-		<type>
-			<name>SkinnedMeshRenderer</name>
-			<desc>The Skinned Mesh filter.</desc>
-		</type>
-		<type>
-			<name>Skybox</name>
-			<desc>A script interface for the skybox component.</desc>
-		</type>
-		<type>
-			<name>SleepTimeout</name>
-			<desc>Constants for special values of Screen.sleepTimeout.</desc>
-		</type>
-		<type>
-			<name>SliderJoint2D</name>
-			<desc>Joint that restricts the motion of a Rigidbody2D object to a single line.</desc>
-		</type>
-		<type>
-			<name>Social</name>
-			<desc>Generic access to the Social API.</desc>
-		</type>
-		<type>
-			<name>SoftJointLimit</name>
-			<desc>The limits defined by the CharacterJoint.</desc>
-		</type>
-		<type>
-			<name>SoftJointLimitSpring</name>
-			<desc>The configuration of the spring attached to the joint's limits: linear and angular. Used by CharacterJoint and ConfigurableJoint.</desc>
-		</type>
-		<type>
-			<name>SortingLayer</name>
-			<desc>SortingLayer allows you to set the render order of multiple sprites easily. There is always a default SortingLayer named "Default" which all sprites are added to initially. Added more SortingLayers to easily control the order of rendering of groups of sprites. Layers can be ordered before or after the default layer.</desc>
-		</type>
-		<type>
-			<name>SparseTexture</name>
-			<desc>Class for handling Sparse Textures.</desc>
-		</type>
-		<type>
-			<name>SphereCollider</name>
-			<desc>A sphere-shaped primitive collider.</desc>
-		</type>
-		<type>
-			<name>SplatPrototype</name>
-			<desc>A Splat prototype is just a texture that is used by the TerrainData.</desc>
-		</type>
-		<type>
-			<name>SpringJoint</name>
-			<desc>The spring joint ties together 2 rigid bodies, spring forces will be automatically applied to keep the object at the given distance.</desc>
-		</type>
-		<type>
-			<name>SpringJoint2D</name>
-			<desc>Joint that attempts to keep two Rigidbody2D objects a set distance apart by applying a force between them.</desc>
-		</type>
-		<type>
-			<name>Sprite</name>
-			<desc>Represents a Sprite object for use in 2D gameplay.</desc>
-		</type>
-		<type>
-			<name>SpriteRenderer</name>
-			<desc>Renders a Sprite for 2D graphics.</desc>
-		</type>
-		<type>
-			<name>StateMachineBehaviour</name>
-			<desc>StateMachineBehaviour is a component that can be added to a state machine state. It's the base class every script on a state derives from.</desc>
-		</type>
-		<type>
-			<name>StaticBatchingUtility</name>
-			<desc>StaticBatchingUtility can prepare your objects to take advantage of Unity's static batching.</desc>
-		</type>
-		<type>
-			<name>SurfaceEffector2D</name>
-			<desc>Applies tangent forces along the surfaces of colliders.</desc>
-		</type>
-		<type>
-			<name>SystemInfo</name>
-			<desc>Access system and hardware information.</desc>
-		</type>
-		<type>
-			<name>Terrain</name>
-			<desc>The Terrain component renders the terrain.</desc>
-		</type>
-		<type>
-			<name>TerrainCollider</name>
-			<desc>A heightmap based collider.</desc>
-		</type>
-		<type>
-			<name>TerrainData</name>
-			<desc>The TerrainData class stores heightmaps, detail mesh positions, tree instances, and terrain texture alpha maps.</desc>
-		</type>
-		<type>
-			<name>TextAsset</name>
-			<desc>Text file assets.</desc>
-		</type>
-		<type>
-			<name>TextGenerationSettings</name>
-			<desc>A struct that stores the settings for TextGeneration.</desc>
-		</type>
-		<type>
-			<name>TextGenerator</name>
-			<desc>Class that can be used to generate text for rendering.</desc>
-		</type>
-		<type>
-			<name>TextMesh</name>
-			<desc>A script interface for the text mesh component.</desc>
-		</type>
-		<type>
-			<name>Texture</name>
-			<desc>Base class for texture handling. Contains functionality that is common to both Texture2D and RenderTexture classes.</desc>
-		</type>
-		<type>
-			<name>Texture2D</name>
-			<desc>Class for texture handling.</desc>
-		</type>
-		<type>
-			<name>Texture3D</name>
-			<desc>Class for handling 3D Textures, Use this to create 3D texture assets.</desc>
-		</type>
-		<type>
-			<name>Time</name>
-			<desc>The interface to get time information from Unity.</desc>
-		</type>
-		<type>
-			<name>Touch</name>
-			<desc>Structure describing the status of a finger touching the screen.</desc>
-		</type>
-		<type>
-			<name>TouchScreenKeyboard</name>
-			<desc>Interface into the native iPhone, Android, Windows Phone and Windows Store Apps on-screen keyboards - it is not available on other platforms.</desc>
-		</type>
-		<type>
-			<name>TrailRenderer</name>
-			<desc>The trail renderer is used to make trails behind objects in the scene as they move about.</desc>
-		</type>
-		<type>
-			<name>Transform</name>
-			<desc>Position, rotation and scale of an object.</desc>
-		</type>
-		<type>
-			<name>Tree</name>
-			<desc>Tree Component for the tree creator.</desc>
-		</type>
-		<type>
-			<name>TreeInstance</name>
-			<desc>Contains information about a tree placed in the Terrain game object.</desc>
-		</type>
-		<type>
-			<name>TreePrototype</name>
-			<desc>Simple class that contains a pointer to a tree prototype.</desc>
-		</type>
-		<type>
-			<name>UICharInfo</name>
-			<desc>Class that specifes some information about a renderable character.</desc>
-		</type>
-		<type>
-			<name>UILineInfo</name>
-			<desc>Information about a generated line of text.</desc>
-		</type>
-		<type>
-			<name>UIVertex</name>
-			<desc>Vertex class used by a Canvas for managing vertices.</desc>
-		</type>
-		<type>
-			<name>Vector2</name>
-			<desc>Representation of 2D vectors and points.</desc>
-		</type>
-		<type>
-			<name>Vector3</name>
-			<desc>Representation of 3D vectors and points.</desc>
-		</type>
-		<type>
-			<name>Vector4</name>
-			<desc>Representation of four-dimensional vectors.</desc>
-		</type>
-		<type>
-			<name>WaitForEndOfFrame</name>
-			<desc>Waits until the end of the frame after all cameras and GUI is rendered, just before displaying the frame on screen.</desc>
-		</type>
-		<type>
-			<name>WaitForFixedUpdate</name>
-			<desc>Waits until next fixed frame rate update function. See Also: FixedUpdate.</desc>
-		</type>
-		<type>
-			<name>WaitForSeconds</name>
-			<desc>Suspends the coroutine execution for the given amount of seconds using scaled time.</desc>
-		</type>
-		<type>
-			<name>WebCamDevice</name>
-			<desc>A structure describing the webcam device.</desc>
-		</type>
-		<type>
-			<name>WebCamTexture</name>
-			<desc>WebCam Textures are textures onto which the live video input is rendered.</desc>
-		</type>
-		<type>
-			<name>WebGLInput</name>
-			<desc>WebGLInput provides support for WebGL-specific functionalities.</desc>
-		</type>
-		<type>
-			<name>WheelCollider</name>
-			<desc>A special collider for vehicle wheels.</desc>
-		</type>
-		<type>
-			<name>WheelFrictionCurve</name>
-			<desc>WheelFrictionCurve is used by the WheelCollider to describe friction properties of the wheel tire.</desc>
-		</type>
-		<type>
-			<name>WheelHit</name>
-			<desc>Contact information for the wheel, reported by WheelCollider.</desc>
-		</type>
-		<type>
-			<name>WheelJoint2D</name>
-			<desc>The wheel joint allows the simulation of wheels by providing a constraining suspension motion with an optional motor.</desc>
-		</type>
-		<type>
-			<name>WindZone</name>
-			<desc>Wind Zones add realism to the trees you create by making them wave their branches and leaves as if blown by the wind.</desc>
-		</type>
-		<type>
-			<name>WWW</name>
-			<desc>Simple access to web pages.</desc>
-		</type>
-		<type>
-			<name>WWWForm</name>
-			<desc>Helper class to generate form data to post to web servers using the WWW class.</desc>
-		</type>
-		<type>
-			<name>YieldInstruction</name>
-			<desc>Base class for all yield instructions.</desc>
-		</type>
-		<type>
-			<name></name>
-			<desc></desc>
-		</type>
-	</types>
+    <types>
+        <type>
+            <name>AccelerationEvent</name>
+            <desc>Structure describing acceleration status of the device.</desc>
+        </type>
+        <type>
+            <name>AnchoredJoint2D</name>
+            <desc>Parent class for all joints that have anchor points.</desc>
+        </type>
+        <type>
+            <name>AndroidInput</name>
+            <desc>AndroidInput provides support for off-screen touch input, such as a touchpad.</desc>
+        </type>
+        <type>
+            <name>AndroidJavaClass</name>
+            <desc>AndroidJavaClass is the Unity representation of a generic instance of java.lang.Class.</desc>
+        </type>
+        <type>
+            <name>AndroidJavaObject</name>
+            <desc>AndroidJavaObject is the Unity representation of a generic instance of java.lang.Object.</desc>
+        </type>
+        <type>
+            <name>AndroidJavaProxy</name>
+            <desc>This class can be used to implement any java interface. Any java vm method invocation matching the interface on the proxy object will automatically be passed to the c# implementation.</desc>
+        </type>
+        <type>
+            <name>AndroidJNI</name>
+            <desc>'Raw' JNI interface to Android Dalvik (Java) VM from Mono (CS/JS).</desc>
+        </type>
+        <type>
+            <name>AndroidJNIHelper</name>
+            <desc>Helper interface for JNI interaction; signature creation and method lookups.</desc>
+        </type>
+        <type>
+            <name>Animation</name>
+            <desc>The animation component is used to play back animations.</desc>
+        </type>
+        <type>
+            <name>AnimationClip</name>
+            <desc>Stores keyframe based animations.</desc>
+        </type>
+        <type>
+            <name>AnimationClipPair</name>
+            <desc>This class defines a pair of clips used by AnimatorOverrideController.</desc>
+        </type>
+        <type>
+            <name>AnimationCurve</name>
+            <desc>Store a collection of Keyframes that can be evaluated over time.</desc>
+        </type>
+        <type>
+            <name>AnimationEvent</name>
+            <desc>AnimationEvent lets you call a script function similar to SendMessage as part of playing back an animation.</desc>
+        </type>
+        <type>
+            <name>AnimationInfo</name>
+            <desc>Information about what animation clips is played and its weight.</desc>
+        </type>
+        <type>
+            <name>AnimationState</name>
+            <desc>The AnimationState gives full control over animation blending.</desc>
+        </type>
+        <type>
+            <name>Animator</name>
+            <desc>Interface to control the Mecanim animation system.</desc>
+        </type>
+        <type>
+            <name>AnimatorClipInfo</name>
+            <desc>Information about clip been played and blended by the Animator.</desc>
+        </type>
+        <type>
+            <name>AnimatorControllerParameter</name>
+            <desc>Used to communicate between scripting and the controller. Some parameters can be set in scripting and used by the controller, while other parameters are based on Custom Curves in Animation Clips and can be sampled using the scripting API.</desc>
+        </type>
+        <type>
+            <name>AnimatorOverrideController</name>
+            <desc>Interface to control AnimatorOverrideController.</desc>
+        </type>
+        <type>
+            <name>AnimatorStateInfo</name>
+            <desc>Information about the current or next state.</desc>
+        </type>
+        <type>
+            <name>AnimatorTransitionInfo</name>
+            <desc>Information about the current transition.</desc>
+        </type>
+        <type>
+            <name>AnimatorUtility</name>
+            <desc>Various utilities for animator manipulation.</desc>
+        </type>
+        <type>
+            <name>Application</name>
+            <desc>Access to application run-time data.</desc>
+        </type>
+        <type>
+            <name>AreaEffector2D</name>
+            <desc>Applies forces within an area.</desc>
+        </type>
+        <type>
+            <name>AssetBundle</name>
+            <desc>AssetBundles let you stream additional assets via the WWW class and instantiate them at runtime. AssetBundles are created via BuildPipeline.BuildAssetBundle.</desc>
+        </type>
+        <type>
+            <name>AssetBundleCreateRequest</name>
+            <desc>Asynchronous create request for an AssetBundle.</desc>
+        </type>
+        <type>
+            <name>AssetBundleManifest</name>
+            <desc>Manifest for all the assetBundle in the build.</desc>
+        </type>
+        <type>
+            <name>AssetBundleRequest</name>
+            <desc>Asynchronous load request from an AssetBundle.</desc>
+        </type>
+        <type>
+            <name>AsyncOperation</name>
+            <desc>Asynchronous operation coroutine.</desc>
+        </type>
+        <type>
+            <name>AudioChorusFilter</name>
+            <desc>The Audio Chorus Filter takes an Audio Clip and processes it creating a chorus effect.</desc>
+        </type>
+        <type>
+            <name>AudioClip</name>
+            <desc>A container for audio data.</desc>
+        </type>
+        <type>
+            <name>AudioConfiguration</name>
+            <desc>Specifies the current properties or desired properties to be set for the audio system.</desc>
+        </type>
+        <type>
+            <name>AudioDistortionFilter</name>
+            <desc>The Audio Distortion Filter distorts the sound from an AudioSource or.</desc>
+        </type>
+        <type>
+            <name>AudioEchoFilter</name>
+            <desc>The Audio Echo Filter repeats a sound after a given Delay, attenuating.</desc>
+        </type>
+        <type>
+            <name>AudioHighPassFilter</name>
+            <desc>The Audio High Pass Filter passes high frequencies of an AudioSource and.</desc>
+        </type>
+        <type>
+            <name>AudioListener</name>
+            <desc>Representation of a listener in 3D space.</desc>
+        </type>
+        <type>
+            <name>AudioLowPassFilter</name>
+            <desc>The Audio Low Pass Filter filter passes low frequencies of an.</desc>
+        </type>
+        <type>
+            <name>AudioReverbFilter</name>
+            <desc>The Audio Reverb Filter takes an Audio Clip and distortionates it in a.</desc>
+        </type>
+        <type>
+            <name>AudioReverbZone</name>
+            <desc>Reverb Zones are used when you want to create location based ambient effects in the scene.</desc>
+        </type>
+        <type>
+            <name>AudioSettings</name>
+            <desc>Controls the global audio settings from script.</desc>
+        </type>
+        <type>
+            <name>AudioSource</name>
+            <desc>A representation of audio sources in 3D.</desc>
+        </type>
+        <type>
+            <name>Avatar</name>
+            <desc>Avatar definition.</desc>
+        </type>
+        <type>
+            <name>AvatarBuilder</name>
+            <desc>Class to build avatars from user scripts.</desc>
+        </type>
+        <type>
+            <name>Behaviour</name>
+            <desc>Behaviours are Components that can be enabled or disabled.</desc>
+        </type>
+        <type>
+            <name>BillboardAsset</name>
+            <desc>BillboardAsset describes how a billboard is rendered.</desc>
+        </type>
+        <type>
+            <name>BillboardRenderer</name>
+            <desc>Renders a billboard.</desc>
+        </type>
+        <type>
+            <name>BitStream</name>
+            <desc>The BitStream class represents seralized variables, packed into a stream.</desc>
+        </type>
+        <type>
+            <name>BoneWeight</name>
+            <desc>Skinning bone weights of a vertex in the mesh.</desc>
+        </type>
+        <type>
+            <name>BoundingSphere</name>
+            <desc>Describes a single bounding sphere for use by a CullingGroup.</desc>
+        </type>
+        <type>
+            <name>Bounds</name>
+            <desc>Represents an axis aligned bounding box.</desc>
+        </type>
+        <type>
+            <name>BoxCollider</name>
+            <desc>A box-shaped primitive collider.</desc>
+        </type>
+        <type>
+            <name>BoxCollider2D</name>
+            <desc>Collider for 2D physics representing an axis-aligned rectangle.</desc>
+        </type>
+        <type>
+            <name>Caching</name>
+            <desc>The Caching class lets you manage cached AssetBundles, downloaded using WWW.LoadFromCacheOrDownload.</desc>
+        </type>
+        <type>
+            <name>Camera</name>
+            <desc>A Camera is a device through which the player views the world.</desc>
+        </type>
+        <type>
+            <name>Canvas</name>
+            <desc>Element that can be used for screen rendering.</desc>
+        </type>
+        <type>
+            <name>CanvasGroup</name>
+            <desc>A Canvas placable element that can be used to modify children Alpha, Raycasting, Enabled state.</desc>
+        </type>
+        <type>
+            <name>CanvasRenderer</name>
+            <desc>A component that will render to the screen after all normal rendering has completed when attached to a Canvas. Designed for GUI application.</desc>
+        </type>
+        <type>
+            <name>CapsuleCollider</name>
+            <desc>A capsule-shaped primitive collider.</desc>
+        </type>
+        <type>
+            <name>CharacterController</name>
+            <desc>A CharacterController allows you to easily do movement constrained by collisions without having to deal with a rigidbody.</desc>
+        </type>
+        <type>
+            <name>CharacterInfo</name>
+            <desc>Specification for how to render a character from the font texture. See Font.characterInfo.</desc>
+        </type>
+        <type>
+            <name>CharacterJoint</name>
+            <desc>Character Joints are mainly used for Ragdoll effects.</desc>
+        </type>
+        <type>
+            <name>CircleCollider2D</name>
+            <desc>Collider for 2D physics representing an circle.</desc>
+        </type>
+        <type>
+            <name>Cloth</name>
+            <desc>The Cloth class provides an interface to cloth simulation physics.</desc>
+        </type>
+        <type>
+            <name>ClothSkinningCoefficient</name>
+            <desc>The ClothSkinningCoefficient struct is used to set up how a Cloth component is allowed to move with respect to the SkinnedMeshRenderer it is attached to.</desc>
+        </type>
+        <type>
+            <name>ClothSphereColliderPair</name>
+            <desc>A pair of SphereColliders used to define shapes for Cloth objects to collide against.</desc>
+        </type>
+        <type>
+            <name>Collider</name>
+            <desc>A base class of all colliders.</desc>
+        </type>
+        <type>
+            <name>Collider2D</name>
+            <desc>Parent class for collider types used with 2D gameplay.</desc>
+        </type>
+        <type>
+            <name>Collision</name>
+            <desc>Describes a collision.</desc>
+        </type>
+        <type>
+            <name>Collision2D</name>
+            <desc>Information returned by a collision in 2D physics.</desc>
+        </type>
+        <type>
+            <name>Color</name>
+            <desc>Representation of RGBA colors.</desc>
+        </type>
+        <type>
+            <name>Color32</name>
+            <desc>Representation of RGBA colors in 32 bit format.</desc>
+        </type>
+        <type>
+            <name>ColorUtility</name>
+            <desc>A collection of common color functions.</desc>
+        </type>
+        <type>
+            <name>CombineInstance</name>
+            <desc>Struct used to describe meshes to be combined using Mesh.CombineMeshes.</desc>
+        </type>
+        <type>
+            <name>Compass</name>
+            <desc>Interface into compass functionality.</desc>
+        </type>
+        <type>
+            <name>Component</name>
+            <desc>Base class for everything attached to GameObjects.</desc>
+        </type>
+        <type>
+            <name>ComputeBuffer</name>
+            <desc>Data buffer to hold data for compute shaders.</desc>
+        </type>
+        <type>
+            <name>ComputeShader</name>
+            <desc>Compute Shader asset.</desc>
+        </type>
+        <type>
+            <name>ConfigurableJoint</name>
+            <desc>The configurable joint is an extremely flexible joint giving you complete control over rotation and linear motion.</desc>
+        </type>
+        <type>
+            <name>ConstantForce</name>
+            <desc>A force applied constantly.</desc>
+        </type>
+        <type>
+            <name>ConstantForce2D</name>
+            <desc>Applies both linear and angular (torque) forces continuously to the rigidbody each physics update.</desc>
+        </type>
+        <type>
+            <name>ContactPoint</name>
+            <desc>Describes a contact point where the collision occurs.</desc>
+        </type>
+        <type>
+            <name>ContactPoint2D</name>
+            <desc>Details about a specific point of contact involved in a 2D physics collision.</desc>
+        </type>
+        <type>
+            <name>ControllerColliderHit</name>
+            <desc>ControllerColliderHit is used by CharacterController.OnControllerColliderHit to give detailed information about the collision and how to deal with it.</desc>
+        </type>
+        <type>
+            <name>Coroutine</name>
+            <desc>MonoBehaviour.StartCoroutine returns a Coroutine. Instances of this class are only used to reference these coroutines and do not hold any exposed properties or functions.</desc>
+        </type>
+        <type>
+            <name>CrashReport</name>
+            <desc>Holds data for a single application crash event and provides access to all gathered crash reports.</desc>
+        </type>
+        <type>
+            <name>Cubemap</name>
+            <desc>Class for handling cube maps, Use this to create or modify existing cube map assets.</desc>
+        </type>
+        <type>
+            <name>CullingGroup</name>
+            <desc>Describes a set of bounding spheres that should have their visibility and distances maintained.</desc>
+        </type>
+        <type>
+            <name>CullingGroupEvent</name>
+            <desc>Provides information about the current and previous states of one sphere in a CullingGroup.</desc>
+        </type>
+        <type>
+            <name>Cursor</name>
+            <desc>Cursor API for setting the cursor that is used for rendering.</desc>
+        </type>
+        <type>
+            <name>Debug</name>
+            <desc>Class containing methods to ease debugging while developing a game.</desc>
+        </type>
+        <type>
+            <name>DetailPrototype</name>
+            <desc>Detail prototype used by the Terrain GameObject.</desc>
+        </type>
+        <type>
+            <name>Display</name>
+            <desc>Provides access to a display / screen for rendering operations.</desc>
+        </type>
+        <type>
+            <name>DistanceJoint2D</name>
+            <desc>Joint that keeps two Rigidbody2D objects a fixed distance apart.</desc>
+        </type>
+        <type>
+            <name>DrivenRectTransformTracker</name>
+            <desc>A component can be designed drive a RectTransform. The DrivenRectTransformTracker struct is used to specify which RectTransforms it is driving.</desc>
+        </type>
+        <type>
+            <name>DynamicGI</name>
+            <desc>Allows to control the dynamic Global Illumination.</desc>
+        </type>
+        <type>
+            <name>EdgeCollider2D</name>
+            <desc>Collider for 2D physics representing an arbitrary set of connected edges (lines) defined by its vertices.</desc>
+        </type>
+        <type>
+            <name>Effector2D</name>
+            <desc>A base class for all 2D effectors.</desc>
+        </type>
+        <type>
+            <name>EllipsoidParticleEmitter</name>
+            <desc>Class used to allow GameObject.AddComponent / GameObject.GetComponent to be used.</desc>
+        </type>
+        <type>
+            <name>Event</name>
+            <desc>A UnityGUI event.</desc>
+        </type>
+        <type>
+            <name>FixedJoint</name>
+            <desc>The Fixed joint groups together 2 rigidbodies, making them stick together in their bound position.</desc>
+        </type>
+        <type>
+            <name>Flare</name>
+            <desc>A flare asset. Read more about flares in the components reference.</desc>
+        </type>
+        <type>
+            <name>FlareLayer</name>
+            <desc>FlareLayer component.</desc>
+        </type>
+        <type>
+            <name>Font</name>
+            <desc>Script interface for font assets.</desc>
+        </type>
+        <type>
+            <name>GameObject</name>
+            <desc>Base class for all entities in Unity scenes.</desc>
+        </type>
+        <type>
+            <name>GeometryUtility</name>
+            <desc>Utility class for common geometric functions.</desc>
+        </type>
+        <type>
+            <name>Gizmos</name>
+            <desc>Gizmos are used to give visual debugging or setup aids in the scene view.</desc>
+        </type>
+        <type>
+            <name>GL</name>
+            <desc>Low-level graphics library.</desc>
+        </type>
+        <type>
+            <name>Gradient</name>
+            <desc>Gradient used for animating colors.</desc>
+        </type>
+        <type>
+            <name>GradientAlphaKey</name>
+            <desc>Alpha key used by Gradient.</desc>
+        </type>
+        <type>
+            <name>GradientColorKey</name>
+            <desc>Color key used by Gradient.</desc>
+        </type>
+        <type>
+            <name>Graphics</name>
+            <desc>Raw interface to Unity's drawing functions.</desc>
+        </type>
+        <type>
+            <name>GUI</name>
+            <desc>The GUI class is the interface for Unity's GUI with manual positioning.</desc>
+        </type>
+        <type>
+            <name>GUI.GroupScope</name>
+            <desc>Disposable helper class for managing BeginGroup / EndGroup.</desc>
+        </type>
+        <type>
+            <name>GUI.ScrollViewScope</name>
+            <desc>Disposable helper class for managing BeginScrollView / EndScrollView.</desc>
+        </type>
+        <type>
+            <name>GUIContent</name>
+            <desc>The contents of a GUI element.</desc>
+        </type>
+        <type>
+            <name>GUIElement</name>
+            <desc>Base class for images and text strings displayed in a GUI.</desc>
+        </type>
+        <type>
+            <name>GUILayer</name>
+            <desc>
+                Component added to a camera to make it render 2D GUI elements.</desc>
+        </type>
+        <type>
+            <name>GUILayout</name>
+            <desc>The GUILayout class is the interface for Unity gui with automatic layout.</desc>
+        </type>
+        <type>
+            <name>GUILayout.AreaScope</name>
+            <desc>Disposable helper class for managing BeginArea / EndArea.</desc>
+        </type>
+        <type>
+            <name>GUILayout.HorizontalScope</name>
+            <desc>Disposable helper class for managing BeginHorizontal / EndHorizontal.</desc>
+        </type>
+        <type>
+            <name>GUILayout.ScrollViewScope</name>
+            <desc>Disposable helper class for managing BeginScrollView / EndScrollView.</desc>
+        </type>
+        <type>
+            <name>GUILayout.VerticalScope</name>
+            <desc>Disposable helper class for managing BeginVertical / EndVertical.</desc>
+        </type>
+        <type>
+            <name>GUILayoutOption</name>
+            <desc>Class internally used to pass layout options into GUILayout functions. You don't use these directly, but construct them with the layouting functions in the GUILayout class.</desc>
+        </type>
+        <type>
+            <name>GUILayoutUtility</name>
+            <desc>Utility functions for implementing and extending the GUILayout class.</desc>
+        </type>
+        <type>
+            <name>GUISettings</name>
+            <desc>General settings for how the GUI behaves.</desc>
+        </type>
+        <type>
+            <name>GUISkin</name>
+            <desc>Defines how GUI looks and behaves.</desc>
+        </type>
+        <type>
+            <name>GUIStyle</name>
+            <desc>Styling information for GUI elements.</desc>
+        </type>
+        <type>
+            <name>GUIStyleState</name>
+            <desc>Specialized values for the given states used by GUIStyle objects.</desc>
+        </type>
+        <type>
+            <name>GUIText</name>
+            <desc>A text string displayed in a GUI.</desc>
+        </type>
+        <type>
+            <name>GUITexture</name>
+            <desc>A texture image used in a 2D GUI.</desc>
+        </type>
+        <type>
+            <name>GUIUtility</name>
+            <desc>Utility class for making new GUI controls.</desc>
+        </type>
+        <type>
+            <name>Gyroscope</name>
+            <desc>Interface into the Gyroscope.</desc>
+        </type>
+        <type>
+            <name>Handheld</name>
+            <desc>Interface into functionality unique to handheld devices.</desc>
+        </type>
+        <type>
+            <name>Hash128</name>
+            <desc>Represent the hash value.</desc>
+        </type>
+        <type>
+            <name>HingeJoint</name>
+            <desc>The HingeJoint groups together 2 rigid bodies, constraining them to move like connected by a hinge.</desc>
+        </type>
+        <type>
+            <name>HingeJoint2D</name>
+            <desc>Joint that allows a Rigidbody2D object to rotate around a point in space or a point on another object.</desc>
+        </type>
+        <type>
+            <name>HostData</name>
+            <desc>This is the data structure for holding individual host information.</desc>
+        </type>
+        <type>
+            <name>HumanBone</name>
+            <desc>The mapping between a bone in the model and the conceptual bone in the Mecanim human anatomy.</desc>
+        </type>
+        <type>
+            <name>HumanDescription</name>
+            <desc>Class that holds humanoid avatar parameters to pass to the AvatarBuilder.BuildHumanAvatar function.</desc>
+        </type>
+        <type>
+            <name>HumanLimit</name>
+            <desc>This class stores the rotation limits that define the muscle for a single human bone.</desc>
+        </type>
+        <type>
+            <name>HumanTrait</name>
+            <desc>Details of all the human bone and muscle types defined by Mecanim.</desc>
+        </type>
+        <type>
+            <name>Input</name>
+            <desc>Interface into the Input system.</desc>
+        </type>
+        <type>
+            <name>Joint</name>
+            <desc>Joint is the base class for all joints.</desc>
+        </type>
+        <type>
+            <name>Joint2D</name>
+            <desc>Parent class for joints to connect Rigidbody2D objects.</desc>
+        </type>
+        <type>
+            <name>JointAngleLimits2D</name>
+            <desc>Angular limits on the rotation of a Rigidbody2D object around a HingeJoint2D.</desc>
+        </type>
+        <type>
+            <name>JointDrive</name>
+            <desc>How the joint's movement will behave along its local X axis.</desc>
+        </type>
+        <type>
+            <name>JointLimits</name>
+            <desc>JointLimits is used by the HingeJoint to limit the joints angle.</desc>
+        </type>
+        <type>
+            <name>JointMotor</name>
+            <desc>The JointMotor is used to motorize a joint.</desc>
+        </type>
+        <type>
+            <name>JointMotor2D</name>
+            <desc>Parameters for the optional motor force applied to a Joint2D.</desc>
+        </type>
+        <type>
+            <name>JointSpring</name>
+            <desc>JointSpring is used add a spring force to HingeJoint and PhysicMaterial.</desc>
+        </type>
+        <type>
+            <name>JointSuspension2D</name>
+            <desc>Joint suspension is used to define how suspension works on a WheelJoint2D.</desc>
+        </type>
+        <type>
+            <name>JointTranslationLimits2D</name>
+            <desc>Motion limits of a Rigidbody2D object along a SliderJoint2D.</desc>
+        </type>
+        <type>
+            <name>Keyframe</name>
+            <desc>A single keyframe that can be injected into an animation curve.</desc>
+        </type>
+        <type>
+            <name>LayerMask</name>
+            <desc>LayerMask allow you to display the LayerMask popup menu in the inspector.</desc>
+        </type>
+        <type>
+            <name>LensFlare</name>
+            <desc>Script interface for a Lens flare component.</desc>
+        </type>
+        <type>
+            <name>Light</name>
+            <desc>Script interface for light components.</desc>
+        </type>
+        <type>
+            <name>LightmapData</name>
+            <desc>Data of a lightmap.</desc>
+        </type>
+        <type>
+            <name>LightmapSettings</name>
+            <desc>Stores lightmaps of the scene.</desc>
+        </type>
+        <type>
+            <name>LightProbeGroup</name>
+            <desc>Light Probe Group.</desc>
+        </type>
+        <type>
+            <name>LightProbes</name>
+            <desc>Stores light probes for the scene.</desc>
+        </type>
+        <type>
+            <name>LineRenderer</name>
+            <desc>The line renderer is used to draw free-floating lines in 3D space.</desc>
+        </type>
+        <type>
+            <name>LocationInfo</name>
+            <desc>Structure describing device location.</desc>
+        </type>
+        <type>
+            <name>LocationService</name>
+            <desc>Interface into location functionality.</desc>
+        </type>
+        <type>
+            <name>LOD</name>
+            <desc>Structure for building a LOD for passing to the SetLODs function.</desc>
+        </type>
+        <type>
+            <name>LODGroup</name>
+            <desc>LODGroup lets you group multiple Renderers into LOD levels.</desc>
+        </type>
+        <type>
+            <name>MasterServer</name>
+            <desc>The Master Server is used to make matchmaking between servers and clients easy.</desc>
+        </type>
+        <type>
+            <name>MatchTargetWeightMask</name>
+            <desc>To specify position and rotation weight mask for Animator::MatchTarget.</desc>
+        </type>
+        <type>
+            <name>Material</name>
+            <desc>The material class.</desc>
+        </type>
+        <type>
+            <name>MaterialPropertyBlock</name>
+            <desc>A block of material values to apply.</desc>
+        </type>
+        <type>
+            <name>Mathf</name>
+            <desc>A collection of common math functions.</desc>
+        </type>
+        <type>
+            <name>Matrix4x4</name>
+            <desc>A standard 4x4 transformation matrix.</desc>
+        </type>
+        <type>
+            <name>Mesh</name>
+            <desc>A class that allows creating or modifying meshes from scripts.</desc>
+        </type>
+        <type>
+            <name>MeshCollider</name>
+            <desc>A mesh collider allows you to do collision detection between meshes and primitives.</desc>
+        </type>
+        <type>
+            <name>MeshFilter</name>
+            <desc>A class to access the Mesh of the mesh filter.</desc>
+        </type>
+        <type>
+            <name>MeshParticleEmitter</name>
+            <desc>Class used to allow GameObject.AddComponent / GameObject.GetComponent to be used.</desc>
+        </type>
+        <type>
+            <name>MeshRenderer</name>
+            <desc>Renders meshes inserted by the MeshFilter or TextMesh.</desc>
+        </type>
+        <type>
+            <name>Microphone</name>
+            <desc>Use this class to record to an AudioClip using a connected microphone.</desc>
+        </type>
+        <type>
+            <name>MonoBehaviour</name>
+            <desc>MonoBehaviour is the base class every script derives from.</desc>
+        </type>
+        <type>
+            <name>Motion</name>
+            <desc>Base class for AnimationClips and BlendTrees.</desc>
+        </type>
+        <type>
+            <name>MovieTexture</name>
+            <desc>Movie Textures are textures onto which movies are played back.</desc>
+        </type>
+        <type>
+            <name>NavMesh</name>
+            <desc>Singleton class to access the baked NavMesh.</desc>
+        </type>
+        <type>
+            <name>NavMeshAgent</name>
+            <desc>Navigation mesh agent.</desc>
+        </type>
+        <type>
+            <name>NavMeshHit</name>
+            <desc>Result information for NavMesh queries.</desc>
+        </type>
+        <type>
+            <name>NavMeshObstacle</name>
+            <desc>An obstacle for NavMeshAgents to avoid.</desc>
+        </type>
+        <type>
+            <name>NavMeshPath</name>
+            <desc>A path as calculated by the navigation system.</desc>
+        </type>
+        <type>
+            <name>NavMeshTriangulation</name>
+            <desc>Contains data describing a triangulation of a navmesh.</desc>
+        </type>
+        <type>
+            <name>Network</name>
+            <desc>The network class is at the heart of the network implementation and provides the core functions.</desc>
+        </type>
+        <type>
+            <name>NetworkMessageInfo</name>
+            <desc>This data structure contains information on a message just received from the network.</desc>
+        </type>
+        <type>
+            <name>NetworkPlayer</name>
+            <desc>The NetworkPlayer is a data structure with which you can locate another player over the network.</desc>
+        </type>
+        <type>
+            <name>NetworkView</name>
+            <desc>The network view is the binding material of multiplayer games.</desc>
+        </type>
+        <type>
+            <name>NetworkViewID</name>
+            <desc>The NetworkViewID is a unique identifier for a network view instance in a multiplayer game.</desc>
+        </type>
+        <type>
+            <name>Object</name>
+            <desc>Base class for all objects Unity can reference.</desc>
+        </type>
+        <type>
+            <name>OcclusionArea</name>
+            <desc>OcclusionArea is an area in which occlusion culling is performed.</desc>
+        </type>
+        <type>
+            <name>OcclusionPortal</name>
+            <desc>The portal for dynamically changing occlusion at runtime.</desc>
+        </type>
+        <type>
+            <name>OffMeshLink</name>
+            <desc>Link allowing movement outside the planar navigation mesh.</desc>
+        </type>
+        <type>
+            <name>OffMeshLinkData</name>
+            <desc>State of OffMeshLink.</desc>
+        </type>
+        <type>
+            <name>Particle</name>
+            <desc>(Legacy Particle system).</desc>
+        </type>
+        <type>
+            <name>ParticleAnimator</name>
+            <desc>(Legacy Particles) Particle animators move your particles over time, you use them to apply wind, drag and color cycling to your particle emitters.</desc>
+        </type>
+        <type>
+            <name>ParticleCollisionEvent</name>
+            <desc>Information about a particle collision.</desc>
+        </type>
+        <type>
+            <name>ParticleEmitter</name>
+            <desc>(Legacy Particles) Script interface for particle emitters.</desc>
+        </type>
+        <type>
+            <name>ParticlePhysicsExtensions</name>
+            <desc>Method extension for Physics in Particle System.</desc>
+        </type>
+        <type>
+            <name>ParticleRenderer</name>
+            <desc>(Legacy Particles) Renders particles on to the screen.</desc>
+        </type>
+        <type>
+            <name>ParticleSystem</name>
+            <desc>Script interface for particle systems (Shuriken).</desc>
+        </type>
+        <type>
+            <name>ParticleSystem.Particle</name>
+            <desc>Script interface for a Particle.</desc>
+        </type>
+        <type>
+            <name>ParticleSystemRenderer</name>
+            <desc>Renders particles on to the screen (Shuriken).</desc>
+        </type>
+        <type>
+            <name>PhysicMaterial</name>
+            <desc>Physics material describes how to handle colliding objects (friction, bounciness).</desc>
+        </type>
+        <type>
+            <name>Physics</name>
+            <desc>Global physics properties and helper methods.</desc>
+        </type>
+        <type>
+            <name>Physics2D</name>
+            <desc>Global settings and helpers for 2D physics.</desc>
+        </type>
+        <type>
+            <name>PhysicsMaterial2D</name>
+            <desc>Asset type that defines the surface properties of a Collider2D.</desc>
+        </type>
+        <type>
+            <name>PhysicsUpdateBehaviour2D</name>
+            <desc>A base type for 2D physics components that required a callback during FixedUpdate.</desc>
+        </type>
+        <type>
+            <name>Ping</name>
+            <desc>Ping any given IP address (given in dot notation).</desc>
+        </type>
+        <type>
+            <name>Plane</name>
+            <desc>Representation of a plane in 3D space.</desc>
+        </type>
+        <type>
+            <name>PlatformEffector2D</name>
+            <desc>Applies "platform" behaviour such as one-way collisions etc.</desc>
+        </type>
+        <type>
+            <name>PlayerPrefs</name>
+            <desc>Stores and accesses player preferences between game sessions.</desc>
+        </type>
+        <type>
+            <name>PlayerPrefsException</name>
+            <desc>An exception thrown by the PlayerPrefs class in a  web player build.</desc>
+        </type>
+        <type>
+            <name>PointEffector2D</name>
+            <desc>Applies forces to attract/repulse against a point.</desc>
+        </type>
+        <type>
+            <name>PolygonCollider2D</name>
+            <desc>Collider for 2D physics representing an arbitrary polygon defined by its vertices.</desc>
+        </type>
+        <type>
+            <name>ProceduralMaterial</name>
+            <desc>Class for ProceduralMaterial handling.</desc>
+        </type>
+        <type>
+            <name>ProceduralPropertyDescription</name>
+            <desc>Describes a ProceduralProperty.</desc>
+        </type>
+        <type>
+            <name>ProceduralTexture</name>
+            <desc>Class for ProceduralTexture handling.</desc>
+        </type>
+        <type>
+            <name>Profiler</name>
+            <desc>Controls the Profiler from script.</desc>
+        </type>
+        <type>
+            <name>Projector</name>
+            <desc>A script interface for a projector component.</desc>
+        </type>
+        <type>
+            <name>QualitySettings</name>
+            <desc>Script interface for Quality Settings.</desc>
+        </type>
+        <type>
+            <name>Quaternion</name>
+            <desc>Quaternions are used to represent rotations.</desc>
+        </type>
+        <type>
+            <name>Random</name>
+            <desc>Class for generating random data.</desc>
+        </type>
+        <type>
+            <name>Ray</name>
+            <desc>Representation of rays.</desc>
+        </type>
+        <type>
+            <name>Ray2D</name>
+            <desc>A ray in 2D space.</desc>
+        </type>
+        <type>
+            <name>RaycastHit</name>
+            <desc>Structure used to get information back from a raycast.</desc>
+        </type>
+        <type>
+            <name>RaycastHit2D</name>
+            <desc>Information returned about an object detected by a raycast in 2D physics.</desc>
+        </type>
+        <type>
+            <name>Rect</name>
+            <desc>A 2D Rectangle defined by X and Y position, width and height.</desc>
+        </type>
+        <type>
+            <name>RectOffset</name>
+            <desc>Offsets for rectangles, borders, etc.</desc>
+        </type>
+        <type>
+            <name>RectTransform</name>
+            <desc>Position, size, anchor and pivot information for a rectangle.</desc>
+        </type>
+        <type>
+            <name>RectTransformUtility</name>
+            <desc>Utility class containing helper methods for working with  RectTransform.</desc>
+        </type>
+        <type>
+            <name>ReflectionProbe</name>
+            <desc>The reflection probe is used to capture the surroundings into a texture which is passed to the shaders and used for reflections.</desc>
+        </type>
+        <type>
+            <name>RenderBuffer</name>
+            <desc>Color or depth buffer part of a RenderTexture.</desc>
+        </type>
+        <type>
+            <name>Renderer</name>
+            <desc>General functionality for all renderers.</desc>
+        </type>
+        <type>
+            <name>RenderSettings</name>
+            <desc>The Render Settings contain values for a range of visual elements in your scene, like fog and ambient light.</desc>
+        </type>
+        <type>
+            <name>RenderTargetSetup</name>
+            <desc>Fully describes setup of RenderTarget.</desc>
+        </type>
+        <type>
+            <name>RenderTexture</name>
+            <desc>Render textures are textures that can be rendered to.</desc>
+        </type>
+        <type>
+            <name>Resolution</name>
+            <desc>Represents a display resolution.</desc>
+        </type>
+        <type>
+            <name>ResourceRequest</name>
+            <desc>Asynchronous load request from the Resources bundle.</desc>
+        </type>
+        <type>
+            <name>Resources</name>
+            <desc>The Resources class allows you to find and access Objects including assets.</desc>
+        </type>
+        <type>
+            <name>Rigidbody</name>
+            <desc>Control of an object's position through physics simulation.</desc>
+        </type>
+        <type>
+            <name>Rigidbody2D</name>
+            <desc>Rigidbody physics component for 2D sprites.</desc>
+        </type>
+        <type>
+            <name>RuntimeAnimatorController</name>
+            <desc>Runtime representation of the AnimatorController. It can be used to change the Animator's controller during runtime.</desc>
+        </type>
+        <type>
+            <name>SamsungTV</name>
+            <desc>Interface into SamsungTV specific functionality.</desc>
+        </type>
+        <type>
+            <name>SamsungTV.OpenAPI</name>
+            <desc>Access to TV specific information.</desc>
+        </type>
+        <type>
+            <name>Screen</name>
+            <desc>Access to display information.</desc>
+        </type>
+        <type>
+            <name>ScriptableObject</name>
+            <desc>A class you can derive from if you want to create objects that don't need to be attached to game objects.</desc>
+        </type>
+        <type>
+            <name>Security</name>
+            <desc>Webplayer security related class. Note supported from 5.4.0.</desc>
+        </type>
+        <type>
+            <name>Shader</name>
+            <desc>Shader scripts used for all rendering.</desc>
+        </type>
+        <type>
+            <name>ShaderVariantCollection</name>
+            <desc>ShaderVariantCollection records which shader variants are actually used in each shader.</desc>
+        </type>
+        <type>
+            <name>ShaderVariantCollection.ShaderVariant</name>
+            <desc>Identifies a specific variant of a shader.</desc>
+        </type>
+        <type>
+            <name>SkeletonBone</name>
+            <desc>Details of the Transform name mapped to a model's skeleton bone and its default position and rotation in the T-pose.</desc>
+        </type>
+        <type>
+            <name>SkinnedMeshRenderer</name>
+            <desc>The Skinned Mesh filter.</desc>
+        </type>
+        <type>
+            <name>Skybox</name>
+            <desc>A script interface for the skybox component.</desc>
+        </type>
+        <type>
+            <name>SleepTimeout</name>
+            <desc>Constants for special values of Screen.sleepTimeout.</desc>
+        </type>
+        <type>
+            <name>SliderJoint2D</name>
+            <desc>Joint that restricts the motion of a Rigidbody2D object to a single line.</desc>
+        </type>
+        <type>
+            <name>Social</name>
+            <desc>Generic access to the Social API.</desc>
+        </type>
+        <type>
+            <name>SoftJointLimit</name>
+            <desc>The limits defined by the CharacterJoint.</desc>
+        </type>
+        <type>
+            <name>SoftJointLimitSpring</name>
+            <desc>The configuration of the spring attached to the joint's limits: linear and angular. Used by CharacterJoint and ConfigurableJoint.</desc>
+        </type>
+        <type>
+            <name>SortingLayer</name>
+            <desc>SortingLayer allows you to set the render order of multiple sprites easily. There is always a default SortingLayer named "Default" which all sprites are added to initially. Added more SortingLayers to easily control the order of rendering of groups of sprites. Layers can be ordered before or after the default layer.</desc>
+        </type>
+        <type>
+            <name>SparseTexture</name>
+            <desc>Class for handling Sparse Textures.</desc>
+        </type>
+        <type>
+            <name>SphereCollider</name>
+            <desc>A sphere-shaped primitive collider.</desc>
+        </type>
+        <type>
+            <name>SplatPrototype</name>
+            <desc>A Splat prototype is just a texture that is used by the TerrainData.</desc>
+        </type>
+        <type>
+            <name>SpringJoint</name>
+            <desc>The spring joint ties together 2 rigid bodies, spring forces will be automatically applied to keep the object at the given distance.</desc>
+        </type>
+        <type>
+            <name>SpringJoint2D</name>
+            <desc>Joint that attempts to keep two Rigidbody2D objects a set distance apart by applying a force between them.</desc>
+        </type>
+        <type>
+            <name>Sprite</name>
+            <desc>Represents a Sprite object for use in 2D gameplay.</desc>
+        </type>
+        <type>
+            <name>SpriteRenderer</name>
+            <desc>Renders a Sprite for 2D graphics.</desc>
+        </type>
+        <type>
+            <name>StateMachineBehaviour</name>
+            <desc>StateMachineBehaviour is a component that can be added to a state machine state. It's the base class every script on a state derives from.</desc>
+        </type>
+        <type>
+            <name>StaticBatchingUtility</name>
+            <desc>StaticBatchingUtility can prepare your objects to take advantage of Unity's static batching.</desc>
+        </type>
+        <type>
+            <name>SurfaceEffector2D</name>
+            <desc>Applies tangent forces along the surfaces of colliders.</desc>
+        </type>
+        <type>
+            <name>SystemInfo</name>
+            <desc>Access system and hardware information.</desc>
+        </type>
+        <type>
+            <name>Terrain</name>
+            <desc>The Terrain component renders the terrain.</desc>
+        </type>
+        <type>
+            <name>TerrainCollider</name>
+            <desc>A heightmap based collider.</desc>
+        </type>
+        <type>
+            <name>TerrainData</name>
+            <desc>The TerrainData class stores heightmaps, detail mesh positions, tree instances, and terrain texture alpha maps.</desc>
+        </type>
+        <type>
+            <name>TextAsset</name>
+            <desc>Text file assets.</desc>
+        </type>
+        <type>
+            <name>TextGenerationSettings</name>
+            <desc>A struct that stores the settings for TextGeneration.</desc>
+        </type>
+        <type>
+            <name>TextGenerator</name>
+            <desc>Class that can be used to generate text for rendering.</desc>
+        </type>
+        <type>
+            <name>TextMesh</name>
+            <desc>A script interface for the text mesh component.</desc>
+        </type>
+        <type>
+            <name>Texture</name>
+            <desc>Base class for texture handling. Contains functionality that is common to both Texture2D and RenderTexture classes.</desc>
+        </type>
+        <type>
+            <name>Texture2D</name>
+            <desc>Class for texture handling.</desc>
+        </type>
+        <type>
+            <name>Texture3D</name>
+            <desc>Class for handling 3D Textures, Use this to create 3D texture assets.</desc>
+        </type>
+        <type>
+            <name>Time</name>
+            <desc>The interface to get time information from Unity.</desc>
+        </type>
+        <type>
+            <name>Touch</name>
+            <desc>Structure describing the status of a finger touching the screen.</desc>
+        </type>
+        <type>
+            <name>TouchScreenKeyboard</name>
+            <desc>Interface into the native iPhone, Android, Windows Phone and Windows Store Apps on-screen keyboards - it is not available on other platforms.</desc>
+        </type>
+        <type>
+            <name>TrailRenderer</name>
+            <desc>The trail renderer is used to make trails behind objects in the scene as they move about.</desc>
+        </type>
+        <type>
+            <name>Transform</name>
+            <desc>Position, rotation and scale of an object.</desc>
+        </type>
+        <type>
+            <name>Tree</name>
+            <desc>Tree Component for the tree creator.</desc>
+        </type>
+        <type>
+            <name>TreeInstance</name>
+            <desc>Contains information about a tree placed in the Terrain game object.</desc>
+        </type>
+        <type>
+            <name>TreePrototype</name>
+            <desc>Simple class that contains a pointer to a tree prototype.</desc>
+        </type>
+        <type>
+            <name>UICharInfo</name>
+            <desc>Class that specifes some information about a renderable character.</desc>
+        </type>
+        <type>
+            <name>UILineInfo</name>
+            <desc>Information about a generated line of text.</desc>
+        </type>
+        <type>
+            <name>UIVertex</name>
+            <desc>Vertex class used by a Canvas for managing vertices.</desc>
+        </type>
+        <type>
+            <name>Vector2</name>
+            <desc>Representation of 2D vectors and points.</desc>
+        </type>
+        <type>
+            <name>Vector3</name>
+            <desc>Representation of 3D vectors and points.</desc>
+        </type>
+        <type>
+            <name>Vector4</name>
+            <desc>Representation of four-dimensional vectors.</desc>
+        </type>
+        <type>
+            <name>WaitForEndOfFrame</name>
+            <desc>Waits until the end of the frame after all cameras and GUI is rendered, just before displaying the frame on screen.</desc>
+        </type>
+        <type>
+            <name>WaitForFixedUpdate</name>
+            <desc>Waits until next fixed frame rate update function. See Also: FixedUpdate.</desc>
+        </type>
+        <type>
+            <name>WaitForSeconds</name>
+            <desc>Suspends the coroutine execution for the given amount of seconds using scaled time.</desc>
+        </type>
+        <type>
+            <name>WebCamDevice</name>
+            <desc>A structure describing the webcam device.</desc>
+        </type>
+        <type>
+            <name>WebCamTexture</name>
+            <desc>WebCam Textures are textures onto which the live video input is rendered.</desc>
+        </type>
+        <type>
+            <name>WebGLInput</name>
+            <desc>WebGLInput provides support for WebGL-specific functionalities.</desc>
+        </type>
+        <type>
+            <name>WheelCollider</name>
+            <desc>A special collider for vehicle wheels.</desc>
+        </type>
+        <type>
+            <name>WheelFrictionCurve</name>
+            <desc>WheelFrictionCurve is used by the WheelCollider to describe friction properties of the wheel tire.</desc>
+        </type>
+        <type>
+            <name>WheelHit</name>
+            <desc>Contact information for the wheel, reported by WheelCollider.</desc>
+        </type>
+        <type>
+            <name>WheelJoint2D</name>
+            <desc>The wheel joint allows the simulation of wheels by providing a constraining suspension motion with an optional motor.</desc>
+        </type>
+        <type>
+            <name>WindZone</name>
+            <desc>Wind Zones add realism to the trees you create by making them wave their branches and leaves as if blown by the wind.</desc>
+        </type>
+        <type>
+            <name>WWW</name>
+            <desc>Simple access to web pages.</desc>
+        </type>
+        <type>
+            <name>WWWForm</name>
+            <desc>Helper class to generate form data to post to web servers using the WWW class.</desc>
+        </type>
+        <type>
+            <name>YieldInstruction</name>
+            <desc>Base class for all yield instructions.</desc>
+        </type>
+        <type>
+            <name></name>
+            <desc></desc>
+        </type>
+    </types>
 </root>

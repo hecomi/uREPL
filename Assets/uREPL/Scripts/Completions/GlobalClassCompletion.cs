@@ -6,10 +6,10 @@ namespace uREPL
 
 public class GlobalClassCompletion : CompletionPlugin
 {
-	static private string[] globalClassNames_;
+    static private string[] globalClassNames_;
 
-	protected override void OnEnable()
-	{
+    protected override void OnEnable()
+    {
         if (globalClassNames_ == null) {
             globalClassNames_ = System.AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(asm => asm.GetTypes())
@@ -21,25 +21,25 @@ public class GlobalClassCompletion : CompletionPlugin
                 .ToArray();
         }
 
-		base.OnEnable();
-	}
+        base.OnEnable();
+    }
 
-	public override CompletionInfo[] GetCompletions(string input)
-	{
-		var parts = input.Split(new char[] { '\n', ' ', '\t', '=', '{', '}', '(', ')', '<', '>' });
+    public override CompletionInfo[] GetCompletions(string input)
+    {
+        var parts = input.Split(new char[] { '\n', ' ', '\t', '=', '{', '}', '(', ')', '<', '>' });
         var lastPart = parts.Last();
-		if (string.IsNullOrEmpty(lastPart)) return null;
+        if (string.IsNullOrEmpty(lastPart)) return null;
 
-		return globalClassNames_
-			.Where(name => name.IndexOf(lastPart) == 0)
-			.Select(name => new CompletionInfo(
-				lastPart,
-				name,
-				"G",
-				new Color32(50, 70, 240, 255),
-				"global::" + name))
-			.ToArray();
-	}
+        return globalClassNames_
+            .Where(name => name.IndexOf(lastPart) == 0)
+            .Select(name => new CompletionInfo(
+                lastPart,
+                name,
+                "G",
+                new Color32(50, 70, 240, 255),
+                "global::" + name))
+            .ToArray();
+    }
 }
 
 }

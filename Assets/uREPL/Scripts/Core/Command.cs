@@ -9,245 +9,245 @@ namespace uREPL
 {
 
 [AttributeUsage(
-	AttributeTargets.Method,
-	AllowMultiple = false,
-	Inherited = false
+    AttributeTargets.Method,
+    AllowMultiple = false,
+    Inherited = false
 )]
 public sealed class CommandAttribute : Attribute
 {
     public string description;
-	public string name;
+    public string name;
 
     public CommandAttribute()
-	{
-	}
+    {
+    }
 }
 
 public class CommandInfo
 {
-	public string methodName;
-	public string className;
-	public string description;
-	public string command;
-	public MethodInfo method;
+    public string methodName;
+    public string className;
+    public string description;
+    public string command;
+    public MethodInfo method;
 
-	public CommandInfo(
-		string className, 
-		string methodName, 
-		string description, 
-		string command, 
-		MethodInfo method)
-	{
-		this.className   = className;
-		this.methodName  = methodName;
-		this.description = description;
-		this.command     = string.IsNullOrEmpty(command) ? methodName : command;
-		this.method      = method;
-	}
+    public CommandInfo(
+        string className, 
+        string methodName, 
+        string description, 
+        string command, 
+        MethodInfo method)
+    {
+        this.className   = className;
+        this.methodName  = methodName;
+        this.description = description;
+        this.command     = string.IsNullOrEmpty(command) ? methodName : command;
+        this.method      = method;
+    }
 
-	public bool HasArguments()
-	{
-		return method.GetParameters().Length > 0;
-	}
+    public bool HasArguments()
+    {
+        return method.GetParameters().Length > 0;
+    }
 
-	public string GetFormat(string[] args)
-	{
-		return string.Format("{0}.{1}({2});", 
-			className, 
-			methodName,
-			string.Join(", ", args));
-	}
+    public string GetFormat(string[] args)
+    {
+        return string.Format("{0}.{1}({2});", 
+            className, 
+            methodName,
+            string.Join(", ", args));
+    }
 
-	public string GetFormat()
-	{
-		return string.Format("{0} {1}.{2}{3}({4})", 
-			method.ReturnType.Name,
-			className, 
-			methodName,
-			(method.IsGenericMethod ? "<T>" : ""),
-			string.Join(", ", method.GetParameters().Select(
-				param => (param.ParameterType.Name + " " + param.Name)).ToArray())
-		);
-	}
+    public string GetFormat()
+    {
+        return string.Format("{0} {1}.{2}{3}({4})", 
+            method.ReturnType.Name,
+            className, 
+            methodName,
+            (method.IsGenericMethod ? "<T>" : ""),
+            string.Join(", ", method.GetParameters().Select(
+                param => (param.ParameterType.Name + " " + param.Name)).ToArray())
+        );
+    }
 
-	public string GetTaggedFormat()
-	{
-		return string.Format("{0} {1}. <b>{2}</b>{3}({4})", 
-			method.ReturnType.Name,
-			className, 
-			methodName,
-			(method.IsGenericMethod ? "<T>" : ""),
-			string.Join(", ", method.GetParameters().Select(
-				param => string.Format("{0} <b>{1}</b>",
-					param.ParameterType.Name,
-					param.Name)
-			).ToArray())
-		);
-	}
+    public string GetTaggedFormat()
+    {
+        return string.Format("{0} {1}. <b>{2}</b>{3}({4})", 
+            method.ReturnType.Name,
+            className, 
+            methodName,
+            (method.IsGenericMethod ? "<T>" : ""),
+            string.Join(", ", method.GetParameters().Select(
+                param => string.Format("{0} <b>{1}</b>",
+                    param.ParameterType.Name,
+                    param.Name)
+            ).ToArray())
+        );
+    }
 }
 
 public static class CommandUtil
 {
-	public class ParseBlockResult
-	{
-		public List<string> matches = new List<string>();
-		public string input;
-		public string output;
-		public string pattern;
-		public string placeholder;
+    public class ParseBlockResult
+    {
+        public List<string> matches = new List<string>();
+        public string input;
+        public string output;
+        public string pattern;
+        public string placeholder;
 
-		public ParseBlockResult(
-			string input,
-			string pattern,
-			string placeholder)
-		{
-			this.input = this.output = input;
-			this.pattern = pattern;
-			this.placeholder = placeholder;
-		}
-	}
+        public ParseBlockResult(
+            string input,
+            string pattern,
+            string placeholder)
+        {
+            this.input = this.output = input;
+            this.pattern = pattern;
+            this.placeholder = placeholder;
+        }
+    }
 
-	static public ParseBlockResult ConvertBlockToPlaceholder(
-		string input,
-		string pattern,
-		string placeholder)
-	{
-		var result = new ParseBlockResult(input, pattern, placeholder);
+    static public ParseBlockResult ConvertBlockToPlaceholder(
+        string input,
+        string pattern,
+        string placeholder)
+    {
+        var result = new ParseBlockResult(input, pattern, placeholder);
 
-		var regex = new Regex(pattern);
-		var n = 0;
-		for (var m = regex.Match(input); m.Success; m = m.NextMatch(), ++n) {
-			result.matches.Add(m.Value);
-			result.output = regex.Replace(result.output, string.Format(placeholder, n), 1);
-		}
+        var regex = new Regex(pattern);
+        var n = 0;
+        for (var m = regex.Match(input); m.Success; m = m.NextMatch(), ++n) {
+            result.matches.Add(m.Value);
+            result.output = regex.Replace(result.output, string.Format(placeholder, n), 1);
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	static public string ConvertPlaceholderToBlock(
-		string input,
-		ParseBlockResult result)
-	{
-		for (int i = 0; i < result.matches.Count; ++i) {
-			var placeholder = string.Format(result.placeholder, i);
-			input = input.Replace(placeholder, result.matches[i]);
-		}
+    static public string ConvertPlaceholderToBlock(
+        string input,
+        ParseBlockResult result)
+    {
+        for (int i = 0; i < result.matches.Count; ++i) {
+            var placeholder = string.Format(result.placeholder, i);
+            input = input.Replace(placeholder, result.matches[i]);
+        }
 
-		return input;
-	}
+        return input;
+    }
 
     static public ParseBlockResult ConvertParenToPlaceholder(string input)
     {
-		return ConvertBlockToPlaceholder(input, "\\([^\\)]+\\)", "<%paren{0}%>");
+        return ConvertBlockToPlaceholder(input, "\\([^\\)]+\\)", "<%paren{0}%>");
     }
 
     static public ParseBlockResult ConvertQuateToPlaceholder(string input)
     {
-		return ConvertBlockToPlaceholder(input, "\"[^\"(\\\")]+\"", "<%quate{0}%>");
+        return ConvertBlockToPlaceholder(input, "\"[^\"(\\\")]+\"", "<%quate{0}%>");
     }
 }
 
 public static class Commands
 {
-	private const string helpTextFile = "uREPL/Xmls/Help";
-	static private CommandInfo[] commands_;
+    private const string helpTextFile = "uREPL/Xmls/Help";
+    static private CommandInfo[] commands_;
 
-	[Command(name = "help", description = "show help")]
-	static public void ShowHelp()
-	{
-		var help = Resources.Load(helpTextFile) as TextAsset;
-		Log.Output(help.text);
-	}
+    [Command(name = "help", description = "show help")]
+    static public void ShowHelp()
+    {
+        var help = Resources.Load(helpTextFile) as TextAsset;
+        Log.Output(help.text);
+    }
 
-	[Command(name = "commands", description = "show commands")]
-	static public void ShowCommands()
-	{
-		var commands = commands_
-			.Select(x => string.Format(
-				"- <b><i><color=#88ff88ff>{0}</color></i></b>\n" +
-				"{1}",
-				x.command,
-				x.description))
-			.Aggregate((str, x) => str + "\n" + x);
-		Log.Output(commands);
-	}
+    [Command(name = "commands", description = "show commands")]
+    static public void ShowCommands()
+    {
+        var commands = commands_
+            .Select(x => string.Format(
+                "- <b><i><color=#88ff88ff>{0}</color></i></b>\n" +
+                "{1}",
+                x.command,
+                x.description))
+            .Aggregate((str, x) => str + "\n" + x);
+        Log.Output(commands);
+    }
 
-	static public CommandInfo[] GetAll()
-	{
-		return commands_ ?? (commands_ = System.AppDomain.CurrentDomain.GetAssemblies()
-			.SelectMany(asm => asm.GetTypes())
-			.SelectMany(type => type
-				.GetMethods(BindingFlags.Static | BindingFlags.Public)
-				.SelectMany(method => method
-					.GetCustomAttributes(typeof(CommandAttribute), false)
-					.Cast<CommandAttribute>()
-					.Select(attr => new CommandInfo(
-						type.FullName,
-						method.Name,
-						attr.description,
-						attr.name,
-						method))))
-			.OrderByDescending(x => x.command.Length)
-			.ToArray());
-	}
+    static public CommandInfo[] GetAll()
+    {
+        return commands_ ?? (commands_ = System.AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(asm => asm.GetTypes())
+            .SelectMany(type => type
+                .GetMethods(BindingFlags.Static | BindingFlags.Public)
+                .SelectMany(method => method
+                    .GetCustomAttributes(typeof(CommandAttribute), false)
+                    .Cast<CommandAttribute>()
+                    .Select(attr => new CommandInfo(
+                        type.FullName,
+                        method.Name,
+                        attr.description,
+                        attr.name,
+                        method))))
+            .OrderByDescending(x => x.command.Length)
+            .ToArray());
+    }
 
-	static public bool ConvertIntoCodeIfCommand(ref string code)
-	{
-		// NOTE: If two or more commands that have a same name are registered,
-		//       the first one will be used here. It is not correct but works well because
-		//       evaluation will be done after expanding the command to the code.
+    static public bool ConvertIntoCodeIfCommand(ref string code)
+    {
+        // NOTE: If two or more commands that have a same name are registered,
+        //       the first one will be used here. It is not correct but works well because
+        //       evaluation will be done after expanding the command to the code.
 
-		// To consider commands with spaces, check if the head of the given code is consistent
-		// with any command name. command list is ranked in descending order of the command string length.
+        // To consider commands with spaces, check if the head of the given code is consistent
+        // with any command name. command list is ranked in descending order of the command string length.
         var tmpCode = code;
-		var commandInfo = Commands.GetAll().FirstOrDefault(
-			x => (tmpCode.Length >= x.command.Length) &&
-			     (tmpCode.Substring(0, x.command.Length) == x.command));
+        var commandInfo = Commands.GetAll().FirstOrDefault(
+            x => (tmpCode.Length >= x.command.Length) &&
+                 (tmpCode.Substring(0, x.command.Length) == x.command));
 
-		// There is no command:
-		if (commandInfo == null) {
-			return false;
-		}
+        // There is no command:
+        if (commandInfo == null) {
+            return false;
+        }
 
-		// Remove last semicolon.
-		code = code.TrimEnd(';');
+        // Remove last semicolon.
+        code = code.TrimEnd(';');
 
-		// Check command format
-		if (commandInfo.HasArguments()) {
-			if (code.Substring(0, commandInfo.command.Length) != commandInfo.command) {
-				return false;
-			}
-		} else {
-			if (code.Length > commandInfo.command.Length) {
-				return false;
-			}
-		}
+        // Check command format
+        if (commandInfo.HasArguments()) {
+            if (code.Substring(0, commandInfo.command.Length) != commandInfo.command) {
+                return false;
+            }
+        } else {
+            if (code.Length > commandInfo.command.Length) {
+                return false;
+            }
+        }
 
-		// Remove command and get only arguments.
-		code = code.Substring(commandInfo.command.Length);
+        // Remove command and get only arguments.
+        code = code.Substring(commandInfo.command.Length);
 
-		// Store parentheses.
-		var parentheses = CommandUtil.ConvertParenToPlaceholder(code);
-		code = parentheses.output;
+        // Store parentheses.
+        var parentheses = CommandUtil.ConvertParenToPlaceholder(code);
+        code = parentheses.output;
 
-		// Store quatation blocks.
-		var quates = CommandUtil.ConvertQuateToPlaceholder(code);
-		code = quates.output;
+        // Store quatation blocks.
+        var quates = CommandUtil.ConvertQuateToPlaceholder(code);
+        code = quates.output;
 
-		// Split arguments with space.
-		var args = code.Split(new string[] { " " }, System.StringSplitOptions.RemoveEmptyEntries);
+        // Split arguments with space.
+        var args = code.Split(new string[] { " " }, System.StringSplitOptions.RemoveEmptyEntries);
 
-		// Convert the command into the Class.Method() style.
-		code = commandInfo.GetFormat(args);
+        // Convert the command into the Class.Method() style.
+        code = commandInfo.GetFormat(args);
 
-		// Replace temporary quates placeholders to actual expressions.
-		code = CommandUtil.ConvertPlaceholderToBlock(code, quates);
+        // Replace temporary quates placeholders to actual expressions.
+        code = CommandUtil.ConvertPlaceholderToBlock(code, quates);
 
-		// Replace temporary parentheses placeholders to actual expressions.
-		code = CommandUtil.ConvertPlaceholderToBlock(code, parentheses);
+        // Replace temporary parentheses placeholders to actual expressions.
+        code = CommandUtil.ConvertPlaceholderToBlock(code, parentheses);
 
-		return true;
-	}
+        return true;
+    }
 }
 
 }
