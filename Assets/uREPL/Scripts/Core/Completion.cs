@@ -1,72 +1,66 @@
-﻿using UnityEngine;
+using UnityEngine.Events;
+using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace uREPL
 {
 
 public class Completion
 {
-	private Thread thread_;
-	private bool hasCompletionFinished_ = false;
+	private CancellationTokenSource cancellationTokenSource_ = null;
 
 	public struct Result
 	{
 		public string partialCode;
 		public CompletionInfo[] completions;
 	}
-	private Result result_;
 
-	public delegate void CompletionFinishHandler(Result result);
-	private event CompletionFinishHandler onCompletionFinished_ = result => {};
+    public class CompletionFinishEvent : UnityEvent<Result> {};
+    public CompletionFinishEvent onCompletionFinished { get; private set; } = new CompletionFinishEvent();
 
-	public bool IsAlive()
-	{
-		return thread_ != null && thread_.IsAlive;
-	}
-
-	public void AddCompletionFinishedListener(CompletionFinishHandler callback)
-	{
-		onCompletionFinished_ += callback;
-	}
-
-	public void RemoveCompletionFinishedListener(CompletionFinishHandler callback)
-	{
-		onCompletionFinished_ -= callback;
-	}
-
-	public void Start(string code)
+	public async void Start(string code)
 	{
 		Stop();
-		hasCompletionFinished_ = false;
-		thread_ = new Thread(() => {
+
+		cancellationTokenSource_ = new CancellationTokenSource();
+		var token = cancellationTokenSource_.Token;
+
+		var task = Task.Run(() => {
 			var completions = CompletionPluginManager.GetCompletions(code);
-			result_.completions = completions;
-			result_.partialCode = 
-                (completions.Length == 0) ? "" : 
-                (completions[0].prefix ?? "");
-		});
-		thread_.Start();
+
+			token.ThrowIfCancellationRequested();
+
+            var result = new Result();
+			result.completions = completions;
+			result.partialCode = 
+				(completions.Length == 0) ? "" : 
+				(completions[0].prefix ?? "");
+            return result;
+		}, token);
+
+		try
+		{
+			var result = await task;
+			onCompletionFinished.Invoke(result);
+		}
+		catch (OperationCanceledException)
+		{
+            // ...
+		}
+		finally
+		{
+			if (cancellationTokenSource_ != null) {
+				cancellationTokenSource_.Dispose();
+				cancellationTokenSource_ = null;
+			}
+		}
 	}
 
 	public void Stop()
 	{
-		if (thread_ != null) {
-			if (!thread_.Join(1000)) {
-				Debug.LogError("uREPL completion thread stopped unexpectedly...");
-				thread_.Abort();
-			}
-		}
-		thread_ = null;
-		hasCompletionFinished_ = true;
-	}
-
-	public void Update()
-	{
-		// Even if the completion thread has finished but the finished flag has been set as true,
-		// call all handlers to notify them completion results from the main thread.
-		if (!IsAlive() && !hasCompletionFinished_) {
-			hasCompletionFinished_ = true;
-			onCompletionFinished_(result_);
+		if (cancellationTokenSource_ != null) {
+			cancellationTokenSource_.Cancel();
 		}
 	}
 }
