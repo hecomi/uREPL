@@ -1,8 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace uREPL
@@ -42,8 +38,8 @@ public class Window : MonoBehaviour
 	public enum CompletionState {
 		Idle,
 		Stop,
-		WaitingForCompletion,
-		Complementing,
+		WaitingForStart,
+		Running,
 	}
 	private CompletionState completionState_ = CompletionState.Idle;
 	public CompletionState completionState
@@ -103,7 +99,7 @@ public class Window : MonoBehaviour
 		InitObjects();
 		keyBinding_.Initialize(this);
 
-		completion.AddCompletionFinishedListener(OnCompletionFinished);
+		completion.onCompletionFinished.AddListener(OnCompletionFinished);
 
 		isWindowOpened_ = GetComponent<Canvas>().isActiveAndEnabled;
 		if (isWindowOpened_) {
@@ -135,7 +131,7 @@ public class Window : MonoBehaviour
 		completion.Stop();
 		UnregisterListeners();
 		history.Save();
-		completion.RemoveCompletionFinishedListener(OnCompletionFinished);
+		completion.onCompletionFinished.RemoveListener(OnCompletionFinished);
 	}
 
 	void Update()
@@ -180,19 +176,18 @@ public class Window : MonoBehaviour
 				completionState = CompletionState.Idle;
 				break;
 			}
-			case CompletionState.WaitingForCompletion: {
+			case CompletionState.WaitingForStart: {
 				elapsedTimeFromLastInput_ += Time.deltaTime;
 				if (elapsedTimeFromLastInput_ >= parameters.completionDelay) {
 					StartCompletion();
 				}
 				break;
 			}
-			case CompletionState.Complementing: {
+			case CompletionState.Running: {
 				elapsedTimeFromLastInput_ += Time.deltaTime;
 				if (elapsedTimeFromLastInput_ > parameters.completionDelay + COMPLETION_TIMEOUT) {
 					StopCompletion();
 				}
-				completion.Update();
 				break;
 			}
 		}
@@ -210,7 +205,7 @@ public class Window : MonoBehaviour
 		var code = inputField.GetStringFromHeadToCaretPosition();
 		completion.Start(code);
 
-		completionState = CompletionState.Complementing;
+		completionState = CompletionState.Running;
 	}
 
 	public void StopCompletion()
@@ -258,7 +253,7 @@ public class Window : MonoBehaviour
 		}
 
 		if (completionState != CompletionState.Stop) {
-			completionState = CompletionState.WaitingForCompletion;
+			completionState = CompletionState.WaitingForStart;
 			elapsedTimeFromLastInput_ = 0f;
 		}
 
