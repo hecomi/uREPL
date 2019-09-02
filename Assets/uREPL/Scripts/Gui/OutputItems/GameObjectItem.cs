@@ -29,15 +29,15 @@ public class GameObjectItem : MonoBehaviour
         get
         {
             return new Vector3(
-                float.Parse(posX.text),
-                float.Parse(posY.text),
-                float.Parse(posZ.text));
+                posX.text.AsFloat(),
+                posY.text.AsFloat(),
+                posZ.text.AsFloat());
         }
         protected set
         {
-            posX.text = value.x.ToString();
-            posY.text = value.y.ToString();
-            posZ.text = value.z.ToString();
+            posX.text = value.x.AsString();
+            posY.text = value.y.AsString();
+            posZ.text = value.z.AsString();
         }
     }
 
@@ -46,16 +46,16 @@ public class GameObjectItem : MonoBehaviour
         get
         {
             return Quaternion.Euler(
-                float.Parse(rotX.text),
-                float.Parse(rotY.text),
-                float.Parse(rotZ.text));
+                rotX.text.AsFloat(),
+                rotY.text.AsFloat(),
+                rotZ.text.AsFloat());
         }
         protected set
         {
             var euler = value.eulerAngles;
-            rotX.text = euler.x.ToString();
-            rotY.text = euler.y.ToString();
-            rotZ.text = euler.z.ToString();
+            rotX.text = euler.x.AsString();
+            rotY.text = euler.y.AsString();
+            rotZ.text = euler.z.AsString();
         }
     }
 
@@ -64,15 +64,15 @@ public class GameObjectItem : MonoBehaviour
         get
         {
             return new Vector3(
-                float.Parse(scaleX.text),
-                float.Parse(scaleY.text),
-                float.Parse(scaleZ.text));
+                scaleX.text.AsFloat(),
+                scaleY.text.AsFloat(),
+                scaleZ.text.AsFloat());
         }
         protected set
         {
-            scaleX.text = value.x.ToString();
-            scaleY.text = value.y.ToString();
-            scaleZ.text = value.z.ToString();
+            scaleX.text = value.x.AsString();
+            scaleY.text = value.y.AsString();
+            scaleZ.text = value.z.AsString();
         }
     }
 

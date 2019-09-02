@@ -16,15 +16,15 @@ public class Vector3FieldItem : FieldItem
         {
             return Activator.CreateInstance(
                 fieldType,
-                float.Parse(xInputField.text),
-                float.Parse(yInputField.text),
-                float.Parse(zInputField.text));
+                xInputField.text.AsFloat(),
+                yInputField.text.AsFloat(),
+                zInputField.text.AsFloat());
         }
         protected set
         {
-            xInputField.text = fieldType.GetField("x").GetValue(value).ToString();
-            yInputField.text = fieldType.GetField("y").GetValue(value).ToString();
-            zInputField.text = fieldType.GetField("z").GetValue(value).ToString();
+            xInputField.text = fieldType.GetField("x").GetValue(value).AsString();
+            yInputField.text = fieldType.GetField("y").GetValue(value).AsString();
+            zInputField.text = fieldType.GetField("z").GetValue(value).AsString();
         }
     }
 

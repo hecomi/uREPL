@@ -11,7 +11,7 @@ public class SingleFieldItem : FieldItem
     public override object value
     {
         get { return Convert.ChangeType(valueInputField.text, fieldType);  }
-        protected set { valueInputField.text = value.ToString(); }
+        protected set { valueInputField.text = value.AsString(); }
     }
 
     void Start()
