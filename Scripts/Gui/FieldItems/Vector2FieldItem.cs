@@ -15,13 +15,13 @@ public class Vector2FieldItem : FieldItem
         {
             return Activator.CreateInstance(
                 fieldType,
-                float.Parse(xInputField.text),
-                float.Parse(yInputField.text));
+                xInputField.text.AsFloat(),
+                yInputField.text.AsFloat());
         }
         protected set
         {
-            xInputField.text = fieldType.GetField("x").GetValue(value).ToString();
-            yInputField.text = fieldType.GetField("y").GetValue(value).ToString();
+            xInputField.text = fieldType.GetField("x").GetValue(value).AsString();
+            yInputField.text = fieldType.GetField("y").GetValue(value).AsString();
         }
     }
 
