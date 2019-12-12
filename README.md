@@ -1,14 +1,14 @@
 uREPL
 =====
 
-uREPL is an in-game powerful REPL envinronment for Unity3D that supports following functions:
+uREPL is an in-game powerful REPL environment for Unity3D that supports following functions:
 
 - Any Unity-supported C# code evaluation at run time.
 - Emacs-like keyboard shortcuts.
 - Multi-Line input.
 - Customizable completions.
 - Command definition just by adding an attribute.
-- *GameObject* and *Component* inspecor.
+- *GameObject* and *Component* inspector.
 - Output logs.
 - History.
 
@@ -59,7 +59,7 @@ Keybinds
 | `ctrl + m`                | toggle single-line / multi-line mode.        |
 | `ctrl + n`, `up arrow`    | show next history.                           |
 | `ctrl + p`, `down arrow`  | show previous history.                       |
-| `ctrl + tab`              | show complementions.                         |
+| `ctrl + tab`              | show completions.                            |
 | `enter`                   | run input command.                           |
 | `F1`                      | toggle window display on/off.                |
 
@@ -69,7 +69,7 @@ Keybinds
 | `ctrl + n`, `up arrow`    | select lower item.                           |
 | `ctrl + p`, `down arrow`  | select upper item.                           |
 | `tab`, `enter`            | insert selected completion.                  |
-| `esc`                     | hide complementions.                         |
+| `esc`                     | hide completions.                            |
 
 
 Commands
@@ -167,8 +167,8 @@ public class RuntimeCommandTest : MonoBehaviour
 }
 ```
 
-- If you omit argument types, they become `System.Object`.
-- If types given, arguments are automatically converted into them, and output an error if failed.
+- If types are omitted, they become `System.Object`.
+- If types are given, arguments are automatically converted into them, and output an error if it failed.
 - You cannot use overload.
 - At most 3 arguments now.
 
@@ -182,8 +182,6 @@ public class RuntimeCommandTest : MonoBehaviour
   - close uREPL window.
 - exit
   - exit game.
-
-Please all commands by the `commands` command.
 
 
 Completion
@@ -267,9 +265,9 @@ You can also inspect *Component* by clicking the inspect icon or calling `Compon
 	width="720"
 	height="405" />
 
-See following movies for more detail.
-- [GameObject Demo](https://www.youtube.com/watch?v=CF3S3TsJajU)
-- [Component Demo](https://www.youtube.com/watch?v=WdfmlPrrxX0)
+See the following videos for more details:
+- [GameObject Inspect video](https://www.youtube.com/watch?v=CF3S3TsJajU)
+- [Component Inspect video](https://www.youtube.com/watch?v=WdfmlPrrxX0)
 
 
 Multi-Line
