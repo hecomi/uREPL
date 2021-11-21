@@ -25,18 +25,29 @@ Demo
 
 Environment
 -----------
+
 - Mac / Windows
 - Unity 2017.x .NET 4.6 (from v0.5.0)
     - Unity 5.x .NET 3.5 (until v0.4.0)
 
 
-Installation
-------------
-Please download the latest *uREPL.unitypackage* from the [release page](https://github.com/hecomi/uREPL/releases).
+Install
+-------
+
+- Unity Package
+  - Download the latest .unitypackage from [Release page](https://github.com/hecomi/uREPL/releases).
+- Git URL (UPM)
+  - Add `https://github.com/hecomi/uREPL.git#upm` to Package Manager.
+- Scoped Registry (UPM)
+  - Add a scoped registry to your project.
+    - URL: `https://registry.npmjs.com`
+    - Scope: `com.hecomi`
+  - Install uREPL in Package Manager.
 
 
 Usage
 -----
+
 1. Select menu from `Assets > Create > uREPL` to instantiate a `uREPL` prefab.
 2. If you have no `EventSystem`, add it from `Hierarchy > Create > UI > EventSystem`.
 3. Input the code into the input filed, then press the Enter key to submit and evaluate it.
