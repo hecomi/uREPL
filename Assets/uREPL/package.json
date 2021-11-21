@@ -1,0 +1,26 @@
+{
+    "name": "com.hecomi.urepl",
+    "version": "1.0.0",
+    "displayName": "uREPL",
+    "description": "In-game powerful REPL environment for Unity",
+    "author": {
+        "name": "hecomi",
+        "url": "https://tips.hecomi.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/hecomi/uREPL"
+    },
+    "keywords": [
+        "unity",
+        "repl"
+    ],
+    "license": "MIT License",
+    "samples": [
+        {
+            "displayName": "Samples",
+            "description": "Collection of samples for uREPL",
+            "path": "Samples~"
+        }
+    ]
+}
