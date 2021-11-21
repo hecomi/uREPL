@@ -1,0 +1,37 @@
+name: Create UPM branches and run NPM publish
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Get tag name
+        id: tag
+        run: echo ::set-output name=name::${GITHUB_REF#refs/tags/v}
+
+      - name: Create UPM branch
+        uses: hecomi/create-upm-branch-action@main
+        with:
+          git-tag: ${{steps.tag.outputs.name}}
+          pkg-root-dir-path: Assets/uREPL
+          main-branch: master
+          root-files: README.md LICENSE.md CHANGELOG.md Third\ Party\ Notices.md
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: NPM publish
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
